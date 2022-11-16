@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1004576555670",
+    "project_id": "cubicados-react-native",
+    "storage_bucket": "cubicados-react-native.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004576555670:android:584ed1ed95399a3b0eb8b7",
+        "android_client_info": {
+          "package_name": "com.cubicadosreactnative"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004576555670-f2ai3iug09fclnjhgvgf8bf5mi6f8i2c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cubicadosreactnative",
+            "certificate_hash": "db786cae7924ccde7c01a17955042519219b698e"
+          }
+        },
+        {
+          "client_id": "1004576555670-ho5eva9j5o2v1bmtmt874nigod7oto7l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAx8XvJl2lMNGZ2yVPGszDVpsFkDXKu3C0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004576555670-ho5eva9j5o2v1bmtmt874nigod7oto7l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

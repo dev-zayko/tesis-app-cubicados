@@ -1,0 +1,15 @@
+import React from 'react';
+import {Dimensions, ImageBackground, StatusBar, StyleSheet} from 'react-native';
+import {KeyboardAvoidingView} from 'native-base';
+import {styles} from './styles';
+
+const Background = ({children}) => {
+  return (
+    <ImageBackground
+      source={require('../assets/fondo-login.png')}
+      style={styles.imageContainer}>
+      <KeyboardAvoidingView>{children}</KeyboardAvoidingView>
+    </ImageBackground>
+  );
+};
+export default Background;
