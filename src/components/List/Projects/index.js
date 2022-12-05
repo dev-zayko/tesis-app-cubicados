@@ -48,17 +48,12 @@ const ListProjects = props => {
               overflow="hidden"
               borderColor="coolGray.300"
               borderWidth="1"
-              _dark={{
-                borderColor: 'coolGray.600',
-                backgroundColor: 'gray.700',
-              }}
+              backgroundColor={'gray.100'}
               _web={{
                 shadow: 2,
                 borderWidth: 1,
               }}
-              _light={{
-                backgroundColor: colors.cream,
-              }}>
+            >
               <HStack>
                 <Box>
                   <Image
@@ -105,7 +100,7 @@ const ListProjects = props => {
                         h={6}
                       />
                       <Heading size="md" ml="-1" color={'light.700'}>
-                        {item.total_price}
+                        {item.total_price === 0 ? item.total_price : ((item.total_price.toFixed(0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'))}
                       </Heading>
                     </HStack>
                   </VStack>

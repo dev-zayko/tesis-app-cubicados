@@ -18,15 +18,24 @@ const utilitySlice = createSlice({
     widthWindow1: 0,
     lengthWindow2: 0,
     widthWindow2: 0,
-    complement: '',
     thinnerType: '',
     typePainting: '',
     tool: '',
     countPainting: 0,
     countDiluent: 0,
     performancePainting: 0,
+    define: '',
+    mineRegion: 0,
+    mineCommune: 0
   },
   reducers: {
+    setDefineLocation: (state, action) => {
+      state.define = action.payload;
+    },
+    setMineLocation: (state, action) => {
+      state.mineRegion = action.payload.mineRegion;
+      state.mineCommune = action.payload.mineCommune;
+    },
     setMeasures: (state, action) => {
       state.area = action.payload?.area;
       state.m3 = action.payload?.m3;
@@ -42,7 +51,6 @@ const utilitySlice = createSlice({
       state.widthWindow1 = action.payload?.widthWindow1;
       state.lengthWindow2 = action.payload?.lengthWindow2;
       state.widthWindow2 = action.payload?.widthWindow2;
-      state.complement = action.payload?.complement;
       state.thinnerType = action.payload?.thinnerType;
       state.typePainting = action.payload?.typePainting;
       state.tool = action.payload?.tool;
@@ -53,5 +61,5 @@ const utilitySlice = createSlice({
   },
 });
 
-export const {setMeasures} = utilitySlice.actions;
+export const {setMeasures, setDefineLocation, setMineLocation} = utilitySlice.actions;
 export default utilitySlice.reducer;

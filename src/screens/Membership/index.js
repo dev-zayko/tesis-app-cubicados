@@ -1,25 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Background from '../../components/Background';
 import {Button, Flex, HStack, Stack, Text, VStack} from 'native-base';
 import {styles} from '../../components/styles';
 import {colors} from '../../components/colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {TouchableOpacity} from 'react-native';
+import ModalMemberships from '../../components/Modals/Membership';
 
-const Membership = () => {
+const Membership = ({navigation}) => {
+  const [isOpenModal, setIsOpenModal] = useState(false);
   return (
     <Background>
-      <Stack h={'100%'} justifyContent={'center'} space={5} top={10}>
+      <Stack h={'100%'} justifyContent={'center'} space={5}>
         <Stack alignItems={'center'}>
           <Stack
             w="85%"
             h={500}
             style={[styles.ContainerStyle, styles.shadow]}
-            backgroundColor={colors.primary}>
-            <Flex alignItems={'center'} marginTop={3}>
+            backgroundColor={colors.primary}
+            alignItems={'center'}>
+            <Flex alignItems={'center'}>
               <Text fontSize={'3xl'}>Membresia</Text>
             </Flex>
-            <HStack marginTop={3} space={2} justifyContent={'center'}>
+            <Stack w={'100%'} alignItems={'center'} h={10} justifyContent={'center'}>
               <Stack
                 backgroundColor={colors.orange}
                 borderRadius={50}
@@ -29,11 +32,10 @@ const Membership = () => {
                   Membresia Basica
                 </Text>
               </Stack>
-            </HStack>
-            <VStack space={5} left={3} top={5}>
-              <Text>Caracteristicas del plan:</Text>
+            </Stack>
+            <VStack space={5} h={'50%'} justifyContent={'center'} w={'90%'} alignItems={'center'}>
               <HStack>
-                <VStack space={5} left={3} top={5}>
+                <VStack space={5} left={3}>
                   <HStack space={2}>
                     <AntDesign
                       name={'checkcircle'}
@@ -62,7 +64,7 @@ const Membership = () => {
                     <Text>8 Cubicaciones</Text>
                   </HStack>
                 </VStack>
-                <VStack space={5} left={5} top={5}>
+                <VStack space={5} left={5}>
                   <HStack space={2}>
                     <AntDesign
                       name={'checkcircle'}
@@ -93,14 +95,20 @@ const Membership = () => {
                 </VStack>
               </HStack>
             </VStack>
-
-            <Stack style={styles.containerButtonPlan} alignItems={'center'}>
-              <TouchableOpacity style={styles.buttonPlan}>
-                <Text color={colors.primary}>Subir a premium</Text>
+            <Stack w={'100%'} h={'30%'} justifyContent={'center'} alignItems={'center'}>
+              <TouchableOpacity onPress={() => setIsOpenModal(true)} style={styles.buttonLogin}>
+                <Text style={styles.textLogin}>Subir a premium</Text>
               </TouchableOpacity>
             </Stack>
           </Stack>
         </Stack>
+        {isOpenModal && (
+          <ModalMemberships
+            navigation={navigation}
+            onClose={() => setIsOpenModal(false)}
+            isOpen={isOpenModal}
+          />
+        )}
       </Stack>
     </Background>
   );

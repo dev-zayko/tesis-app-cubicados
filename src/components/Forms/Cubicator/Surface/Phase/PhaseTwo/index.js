@@ -1,16 +1,24 @@
-import React from "react";
+import React, {useCallback} from "react";
 import {Stack, VStack, Text, Divider, HStack, Image} from "native-base";
 import {Text as TextReact} from "react-native";
 import {useSelector} from "react-redux";
 import {colors} from "../../../../../colors";
 import {styles} from "../../../../../styles";
+import {useFocusEffect} from "@react-navigation/native";
 
-const ResultSurface = () => {
-  const {count, m3, dosage} = useSelector(state => ({...state.utility}))
+const ResultSurface = props => {
+  const {count, m3, dosage, gravel, sand, water} = useSelector(state => ({...state.utility}));
+
+  useFocusEffect(
+    useCallback(() => {
+      props.phaseTwo();
+    }, []),
+  );
+
   return (
-    <Stack w={'100%'} h={'100%'} space={2}>
+    <Stack space={3} backgroundColor={'white'}>
       <VStack>
-        <Text fontSize={15}>Tu proyecto mide</Text>
+        <Text style={styles.textLarge}>Tu proyecto mide</Text>
         <Divider
           my="1"
           _light={{
@@ -28,12 +36,12 @@ const ResultSurface = () => {
           w={10}
           h={10}
         />
-        <Text fontSize={18}>{m3} m3</Text>
+        <TextReact style={styles.textLarge}>{m3} m3</TextReact>
       </HStack>
       <VStack>
         <HStack space={20}>
-          <Text fontSize={15}>Necesitas</Text>
-          <Text fontSize={15}>Rendimiento</Text>
+          <Text style={styles.textLarge}>Necesitas</Text>
+          <Text style={styles.textLarge}>Rendimiento</Text>
         </HStack>
         <Divider
           my="2"
@@ -53,15 +61,75 @@ const ResultSurface = () => {
             w={10}
             h={10}
           />
-          <Text fontSize={18}>{count} sacos aprox.</Text>
+          <TextReact style={styles.textLarge}>{count} sacos aprox.</TextReact>
         </HStack>
         <HStack>
-          <Text fontSize={18}>{dosage} m3/saco</Text>
+          <TextReact style={styles.textLarge}>{dosage} m3/saco</TextReact>
         </HStack>
       </HStack>
       <Stack alignItems={'center'} w={'100%'}>
         <TextReact style={styles.subtitleText}>Por cada Saco de 25 kg de Cemento, te recomendamos utilizar</TextReact>
       </Stack>
+      <VStack>
+        <HStack space={12}>
+          <Text style={styles.textLarge}>
+            Grava
+          </Text>
+          <HStack space={2}>
+            <Text style={styles.textLarge}>
+              Arena
+            </Text>
+            <Text fontSize={13}>
+              (5mm)
+            </Text>
+          </HStack>
+          <Text style={styles.textLarge}>
+            Agua
+          </Text>
+        </HStack>
+        <HStack space={20}>
+          <Image
+            source={require('../../../../../../assets/icon-grava.png')}
+            alt="logo-grava"
+            w={10}
+            h={10}
+          />
+          <Image
+            source={require('../../../../../../assets/icon-arena.png')}
+            alt="logo-arena"
+            w={10}
+            h={10}
+          />
+          <Image
+            source={require('../../../../../../assets/icon-agua.png')}
+            alt="logo-agua"
+            w={10}
+            h={10}
+          />
+        </HStack>
+        <HStack space={'37%'}>
+          <Text style={styles.textLarge}>{gravel}</Text>
+          <Text style={styles.textLarge}>{sand}</Text>
+          <Text style={styles.textLarge}>{water}</Text>
+        </HStack>
+        <Divider
+          my="2"
+          _light={{
+            bg: 'muted.800',
+          }}
+          _dark={{
+            bg: 'muted.50',
+          }}
+        />
+        <Stack w={'100%'} alignItems={'center'}>
+          <TextReact style={[styles.subtitleText, styles.textMedium]}>Considera baldes de 10 litros</TextReact>
+        </Stack>
+        <Stack h={200}>
+          <TextReact style={[styles.subtitleText, styles.textMedium]}>
+            **Las dosificaciones indicada y la cantidad de cemento calculada es una cantidad minima. No nos hacemos responsable por los resultados obtenidos luego de la aplicación de los productos ni por la calidad de áridos u otras materias primas utilizadas, condiciones de humedad existentes.
+          </TextReact>
+        </Stack>
+      </VStack>
     </Stack>
   );
 }

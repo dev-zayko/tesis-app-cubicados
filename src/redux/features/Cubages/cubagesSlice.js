@@ -26,6 +26,49 @@ export const getCubagesByRooms = createAsyncThunk(
   },
 );
 
+export const createCubages = createAsyncThunk(
+  'cubages/store',
+  async ({toast, token, area, depth, width, m3, dosage, gravel, sand, water, length, count, description, idConstruction, idRoom, idMaterial, totalCost}, {rejectWithValue}) => {
+    try {
+      const response = await ApiClient.post('cubage/store', {
+        area: area,
+        depth: depth,
+        width: width,
+        m3: m3,
+        dosage: dosage,
+        gravel: gravel,
+        sand: sand,
+        water: water,
+        length: length,
+        count: count,
+        description: description,
+        idConstruction: idConstruction,
+        idRoom: idRoom,
+        idMaterial: idMaterial,
+        totalCost: totalCost
+      }, {
+        headers: {Authorization: `Bearer ${token}`},
+      },
+      );
+      const {status, data} = response.data;
+      if (status === 'success') {
+        toast.show({
+          description: 'Proyecto creado',
+        });
+        return {data: data};
+      } else {
+        return {data: status};
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      toast.show({
+        description: 'Ocurrio un error',
+      });
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const deleteCubage = createAsyncThunk(
   'cubages/delete',
   async ({token, idCubage}, {rejectWithValue}) => {
@@ -68,6 +111,23 @@ const cubagesSlice = createSlice({
       }),
       builder.addCase(getCubagesByRooms.rejected, (state, action) => {
         state.loading = false;
+      }),
+      builder.addCase(createCubages.pending, (state, action) => {
+        state.loading = true;
+      }),
+      builder.addCase(createCubages.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action.payload.data === 'success') {
+          state.cubages = [action.payload.data];
+          state.limited = false;
+        } else {
+          state.limited = true;
+          state.status = action.payload.data;
+        }
+      }),
+      builder.addCase(createCubages.rejected, (state, action) => {
+        state.loading = false;
+        state.cubages = [action.payload];
       }),
       builder.addCase(deleteCubage.pending, (state, action) => {
         state.loading = false;

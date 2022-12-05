@@ -24,9 +24,9 @@ const ResultPhaseThree = props => {
   );
 
   return (
-    <Stack w={'100%'} h={'100%'} space={2}>
+    <Stack space={4}>
       <VStack>
-        <Text fontSize={15}>Tu proyecto mide</Text>
+        <Text style={styles.textLarge}>Tu proyecto mide</Text>
         <Divider
           my="1"
           _light={{
@@ -44,15 +44,15 @@ const ResultPhaseThree = props => {
           w={10}
           h={10}
         />
-        <Text fontSize={18}>Area: {area} m2</Text>
+        <TextReact style={styles.textLarge}>Area: {area} m2</TextReact>
       </HStack>
       <VStack>
         <HStack space={20}>
-          <Text fontSize={15}>Tipo de pintura</Text>
-          <Text fontSize={15}>Rendimiento</Text>
+          <Text style={styles.textLarge}>Tipo de pintura</Text>
+          <Text style={styles.textLarge}>Rendimiento</Text>
         </HStack>
         <Divider
-          my="2"
+          my="1"
           _light={{
             bg: 'muted.800',
           }}
@@ -62,21 +62,21 @@ const ResultPhaseThree = props => {
         />
       </VStack>
       <HStack w={'100%'}>
-        <HStack w={190}>
+        <HStack w={200}>
           <Image
             source={require('../../../../../../assets/icon-bote.png')}
             alt="logo-bote"
             w={10}
             h={10}
           />
-          <Text fontSize={18}>{typePainting}</Text>
+          <TextReact style={styles.textLarge}>{typePainting}</TextReact>
         </HStack>
-        <HStack>
-          <Text fontSize={18}>{performancePainting} m2/Litro</Text>
+        <HStack justifyContent={'center'}>
+          <TextReact style={styles.textLarge}>{performancePainting} m2/Litro</TextReact>
         </HStack>
       </HStack>
       <VStack>
-        <Text fontSize={15}>Necesitas</Text>
+        <Text style={styles.textLarge}>Necesitas</Text>
         <Divider
           my="2"
           _light={{
@@ -94,12 +94,12 @@ const ResultPhaseThree = props => {
           w={10}
           h={10}
         />
-        <Text fontSize={18}>{countPainting} Litro(s) aproximados</Text>
+        <Text style={styles.textLarge}>{countPainting} Litro(s) aproximados</Text>
       </HStack>
       <VStack>
         <HStack space={100}>
-          <Text fontSize={15}>herramienta</Text>
-          <Text fontSize={15}>Diluyente</Text>
+          <Text style={styles.textLarge}>Herramienta</Text>
+          <Text style={styles.textLarge}>Diluyente</Text>
         </HStack>
         <Divider
           my="2"
@@ -112,25 +112,26 @@ const ResultPhaseThree = props => {
         />
       </VStack>
       <HStack w={'100%'}>
-        <HStack w={190}>
+        <HStack w={200}>
           <Image
             source={require('../../../../../../assets/icon-herramienta.png')}
             alt="logo-tool"
             w={10}
             h={10}
+            bottom={2}
           />
-          <Text fontSize={18}>{tool.name}</Text>
+          <TextReact style={styles.textLarge}>{tool.name}</TextReact>
         </HStack>
         <HStack w={100}>
-          <Text fontSize={18}>{thinnerType}</Text>
+          <TextReact style={styles.textLarge}>{thinnerType}</TextReact>
         </HStack>
       </HStack>
-      <Stack h={100}>
-        <TextReact style={styles.subtitleText}>
+      <Stack justifyContent={'center'}>
+        <TextReact style={[styles.subtitleText, styles.textMedium]}>
           {tool.id === 1
             ? `${countDiluent} cm3 equivale al 5% de diluyente por la cantidad de pintura`
             : tool.id === 2 &&
-              `${countDiluent} cm3 equivale al 10% de diluyente por la cantidad de pintura`}
+            `${countDiluent} cm3 equivale al 10% de diluyente por la cantidad de pintura`}
         </TextReact>
       </Stack>
     </Stack>

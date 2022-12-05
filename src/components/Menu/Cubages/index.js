@@ -2,17 +2,17 @@ import React from 'react';
 import {Box, Divider, Menu, Pressable, Text} from 'native-base';
 import {TouchableOpacity} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
 
 const MenuCubages = ({children}) => {
   const navigation = useNavigation();
-  const onNavigateAdd = () => {
-    navigation.navigate('Cubicator');
-  };
+  const dispatch = useDispatch();
   return (
     <Box>
       <Menu
         w="150"
         trigger={triggerProps => {
+          console.log(triggerProps)
           return (
             <TouchableOpacity
               accessibilityLabel="More options menu"

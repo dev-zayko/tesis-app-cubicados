@@ -1,7 +1,8 @@
-import apiClient from '../connection/ApiClient';
+import ApiClient from "../connection/ApiClient";
+
 
 const sendEmailVerification = async (email, name, token) => {
-  return await apiClient
+  return await ApiClient
     .post('mail/verification', {
       email: email,
       name: name,
@@ -16,7 +17,7 @@ const sendEmailVerification = async (email, name, token) => {
 };
 
 const emailVerificate = async token => {
-  return await apiClient
+  return await ApiClient
     .post(
       'mail/status',
       {},

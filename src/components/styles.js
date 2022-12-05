@@ -6,6 +6,12 @@ import {Dimensions, StyleSheet} from 'react-native';
 import {colors} from './colors';
 
 export const styles = StyleSheet.create({
+  item: {
+    width: "80%",
+    height: "98%",
+    backgroundColor: colors.primary,
+    borderRadius: 20
+  },
   imageContainer: {
     flex: 1,
     zIndex: 1,
@@ -97,7 +103,6 @@ export const styles = StyleSheet.create({
     borderRadius: 50,
   },
   containerButtonPlan: {
-    top: 150,
     left: 80,
   },
   buttonPlan: {
@@ -106,7 +111,6 @@ export const styles = StyleSheet.create({
     height: 50,
     borderTopLeftRadius: 40,
     borderBottomRightRadius: 30,
-    marginTop: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -122,6 +126,16 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  buttonProducts: {
+    backgroundColor: colors.cream,
+    borderWidth: 1,
+    borderColor: colors.darkLight,
+    borderRadius: 10,
+    width: 120,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   subtitleText: {
     fontSize: 13,
     fontStyle: 'italic',
@@ -129,4 +143,7 @@ export const styles = StyleSheet.create({
   textMedium: {
     fontSize: 15,
   },
+  textLarge: {
+    fontSize: 18,
+  }
 });

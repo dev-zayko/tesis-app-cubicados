@@ -10,29 +10,36 @@ import ModalCubages from '../../Modals/Cubages';
 
 const ListCubages = props => {
   const dispatch = useDispatch();
-  const {cubages, status} = useSelector(state => ({...state.cubages}));
   const {user} = useSelector(state => ({...state.auth}));
   const {idRoom} = props;
   const [showModalCubages, setShowModalCubages] = useState(false);
   const [cubagesSelect, setCubagesSelect] = useState();
-
+  const [cubagesList, setCubagesList] = useState('');
   const openModalCubages = cubages => {
     setCubagesSelect(cubages);
     setShowModalCubages(true);
   };
   useFocusEffect(
     useCallback(() => {
-      dispatch(getCubagesByRooms({token: user, idRoom: idRoom}));
+      dispatch(getCubagesByRooms({token: user, idRoom: idRoom}))
+        .then((res) => {
+          console.log(res.payload.data)
+          setCubagesList(res.payload.data)
+        });
     }, []),
   );
   return (
     <>
-      <FlatList
-        data={cubages}
-        horizontal
-        renderItem={({item, index}) => (
-          <Stack marginLeft={2}>
-            {idRoom === item.room_id ? (
+      {cubagesList === 0 ?
+        <Stack h={100} justifyContent={'center'}>
+          <Text fontSize={15}>¡No hay cubicaciones, crea una!</Text>
+        </Stack>
+        :
+        <FlatList
+          data={cubagesList}
+          horizontal
+          renderItem={({item, index}) => (
+            <Stack marginLeft={2}>
               <TouchableOpacity onPress={() => openModalCubages(item)}>
                 <Stack
                   style={styles.shadow}
@@ -64,13 +71,11 @@ const ListCubages = props => {
                   </Flex>
                 </Stack>
               </TouchableOpacity>
-            ) : (
-              index === 0 && <Text>No tienes cubicaciones creadas</Text>
-            )}
-          </Stack>
-        )}
-        keyExtractor={(value, index) => index.toString()}
-      />
+            </Stack>
+          )}
+          keyExtractor={(value, index) => index.toString()}
+        />
+      }
       {showModalCubages && (
         <ModalCubages
           showModal={showModalCubages}

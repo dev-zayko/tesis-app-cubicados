@@ -35,9 +35,8 @@ import {
 } from 'react-native';
 //Import date
 import DateTimePicker from '@react-native-community/datetimepicker';
-//register actions
-import {register} from '../../../redux/actions/auth';
 import mailService from '../../../services/auth/mailService';
+import {register} from '../../../redux/features/Auth/authSlice';
 
 const FormSignUp = ({navigation}) => {
   const [hidePassword, setHidePassword] = useState(false);
@@ -74,49 +73,9 @@ const FormSignUp = ({navigation}) => {
   };
 
   const onRegister = (values, setSubmitting) => {
-    dispatch(register(values))
-      .then(response => {
-        if (response.status === 'duplicated') {
-          Alert.alert('Error!', 'Este correo ya esta asociado a una cuenta', [
-            {
-              text: 'OK',
-              onPress: () => {
-                console.log('ok pressed');
-              },
-            },
-          ]);
-        } else if (response.status === 'success') {
-          console.log('dd');
-          Alert.alert(
-            'Enhorabuena!',
-            'Se te ha enviado un correo para que verifiques tu cuenta',
-            [
-              {
-                text: 'OK',
-                onPress: () => {
-                  mailService
-                    .sendEmailVerification(
-                      response.email,
-                      response.name,
-                      response.token,
-                    )
-                    .then(() => {
-                      navigation.navigate('LoginScreen');
-                    });
-                },
-              },
-            ],
-          );
-        }
-        setSubmitting(false);
-      })
-      .catch(error => {
-        console.log(error);
-        setSubmitting(false);
-        toast.show({
-          description: 'Ocurrio un error',
-        });
-      });
+    dispatch(register({navigation: navigation, newUser: values, toast: toast})).then(() => {
+      setSubmitting(false)
+    });
   };
 
   return (

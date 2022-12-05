@@ -11,6 +11,8 @@ import {
   Flex,
   Icon,
   HamburgerIcon,
+  Menu,
+  Divider,
 } from 'native-base';
 import {styles} from '../../styles';
 import {TouchableOpacity} from 'react-native';
@@ -20,16 +22,13 @@ import * as Animatable from 'react-native-animatable';
 //import for the Accordion view
 import Accordion from 'react-native-collapsible/Accordion';
 import ListCubages from '../../List/Cubages';
-import {useSelector} from 'react-redux';
 import moment from 'moment/moment';
 import HandAnimation from '../../Animation/HandAnimation';
 import {colors} from '../../colors';
-import MenuCubages from '../../Menu/Cubages';
 
 const CollapsibleRooms = props => {
   const [activeSections, setActiveSections] = useState([]);
   const {name, neto_amount, id, created_at} = props.rooms;
-  const {status} = useSelector(state => ({...state.cubages}));
   const setSections = sections => {
     //setting up a active section state
     setActiveSections(sections.includes(undefined) ? [] : sections);
@@ -85,7 +84,7 @@ const CollapsibleRooms = props => {
                   h={6}
                 />
                 <Heading size="md" ml="-1" color={'light.700'}>
-                  {neto_amount}
+                  {neto_amount === 0 ? neto_amount : ((neto_amount.toFixed(0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'))}
                 </Heading>
               </HStack>
             </VStack>
@@ -105,14 +104,28 @@ const CollapsibleRooms = props => {
           <HStack alignSelf={'flex-end'}>
             <HandAnimation name={'hand-o-right'} />
             <Stack>
-              <MenuCubages navigation={props.navigation}>
-                <HStack style={styles.containerStyle} space={4}>
-                  <Text fontSize={'lg'} left={2}>
-                    Cubicaciones
-                  </Text>
-                  <HamburgerIcon />
-                </HStack>
-              </MenuCubages>
+              <Box>
+                <Menu
+                  w="150"
+                  trigger={triggerProps => {
+                    return (
+                      <TouchableOpacity
+                        accessibilityLabel="More options menu"
+                        {...triggerProps}>
+                        <HStack style={styles.containerStyle} space={4}>
+                          <Text fontSize={'lg'} left={2}>
+                            Cubicaciones
+                          </Text>
+                          <HamburgerIcon />
+                        </HStack>
+                      </TouchableOpacity>
+                    );
+                  }}>
+                  <Menu.Item onPressIn={() => props.onNavigate(id)}>Agregar</Menu.Item>
+                  <Divider mt="0" w="100%" />
+                  <Menu.Item>Eliminar</Menu.Item>
+                </Menu>
+              </Box>
             </Stack>
           </HStack>
           <Stack h={165} marginTop={2} alignSelf={'center'}>
@@ -137,13 +150,12 @@ const CollapsibleRooms = props => {
           overflow="hidden"
           borderColor="coolGray.300"
           borderWidth="1"
+          backgroundColor={'gray.100'}
           _web={{
             shadow: 10,
             borderWidth: 1,
           }}
-          _light={{
-            backgroundColor: colors.cream,
-          }}>
+        >
           <Accordion
             activeSections={activeSections}
             touchableComponent={TouchableOpacity}
@@ -156,7 +168,7 @@ const CollapsibleRooms = props => {
             expandMultiple={false}
             //Duration for Collapse and expand
             onChange={setSections}
-            //setting the state of active sections
+          //setting the state of active sections
           />
         </Box>
       </Box>

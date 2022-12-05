@@ -20,6 +20,7 @@ import {
 } from '../../../redux/features/ConstructionType/constructionTypeSlice';
 import {resetConstructions} from '../../../redux/features/Construction/constructionSlice';
 import {color} from 'react-native-reanimated';
+import {setTypeProduct} from '../../../redux/features/Quoter/quoterSlice';
 
 const ListConstructionType = ({navigation}) => {
   const dispatch = useDispatch();
@@ -35,7 +36,8 @@ const ListConstructionType = ({navigation}) => {
     }, []),
   );
 
-  const onNavigate = constructionType => {
+  const onNavigate = (constructionType) => {
+    constructionType.name === 'Superficie' && dispatch(setTypeProduct('Cemento'));
     dispatch(setConstructionTypeSelect(constructionType));
     navigation.navigate('Construction', {
       params: {
@@ -56,16 +58,10 @@ const ListConstructionType = ({navigation}) => {
                 overflow="hidden"
                 borderColor="coolGray.300"
                 borderWidth="1"
-                _dark={{
-                  borderColor: 'coolGray.600',
-                  backgroundColor: 'gray.700',
-                }}
+                backgroundColor={'gray.100'}
                 _web={{
                   shadow: 2,
                   borderWidth: 1,
-                }}
-                _light={{
-                  backgroundColor: colors.cream,
                 }}>
                 <HStack>
                   <Box>

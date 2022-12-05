@@ -8,13 +8,13 @@ import {useSelector} from 'react-redux';
 import Moment from 'moment';
 
 const Profile = ({navigation}) => {
-  const {user: currentUser} = useSelector(state => state.auth);
+  const {userData} = useSelector(state => ({...state.auth}));
   const formatDate = date => {
     return Moment().format('DD-MM-YYYY');
   };
   return (
     <Background>
-      {currentUser && (
+      {userData && (
         <Stack h={'100%'} justifyContent={'center'} space={5} top={10}>
           <Stack alignItems={'center'}>
             <Stack
@@ -35,18 +35,18 @@ const Profile = ({navigation}) => {
                   alt="Constructor"
                 />
                 <VStack w={'65%'} space={2} justifyContent={'center'}>
-                  <Text>{currentUser.email}</Text>
+                  <Text fontSize={15}>{userData.email}</Text>
                   <HStack
                     w={'50%'}
                     justifyContent={'center'}
                     backgroundColor={
-                      currentUser.user_status.id === 1
+                      userData.user_status.id === 1
                         ? colors.otherGreen
                         : colors.orange
                     }
                     borderRadius={50}>
                     <Text color={'light.50'} fontSize={'md'} bold>
-                      {currentUser.user_status.description}
+                      {userData.user_status.description}
                     </Text>
                   </HStack>
                 </VStack>
@@ -60,7 +60,7 @@ const Profile = ({navigation}) => {
                     Nombre:{' '}
                   </Text>
                   <Text fontSize={'md'} color={'light.500'}>
-                    {currentUser.first_name} {currentUser.second_name || ''}
+                    {userData.first_name} {userData.second_name || ''}
                   </Text>
                 </HStack>
                 <Divider />
@@ -69,7 +69,7 @@ const Profile = ({navigation}) => {
                     Apellido 1:{' '}
                   </Text>
                   <Text fontSize={'md'} color={'light.500'}>
-                    {currentUser.father_last_name}
+                    {userData.father_last_name}
                   </Text>
                 </HStack>
                 <Divider />
@@ -78,7 +78,7 @@ const Profile = ({navigation}) => {
                     Apellido 2:{' '}
                   </Text>
                   <Text fontSize={'md'} color={'light.500'}>
-                    {currentUser.mother_last_name || ''}
+                    {userData.mother_last_name || ''}
                   </Text>
                 </HStack>
                 <Divider />
@@ -87,7 +87,7 @@ const Profile = ({navigation}) => {
                     Telefóno
                   </Text>
                   <Text fontSize={'md'} color={'light.500'}>
-                    {currentUser.phone || 'No especificado'}
+                    {userData.phone || 'No especificado'}
                   </Text>
                   <Stack>
                     <ModalProfile edit={1} />
@@ -107,11 +107,11 @@ const Profile = ({navigation}) => {
                 </HStack>
                 <Divider />
                 <HStack justifyContent={'center'} space={1}>
-                  <Text fontSize={'xs'} color={'light.500'}>
+                  <Text fontSize={13} color={'gray.500'}>
                     Miembro desde el
                   </Text>
-                  <Text fontSize={'xs'} color={'light.500'}>
-                    {formatDate(currentUser.actived_at)}
+                  <Text fontSize={13} color={'gray.500'}>
+                    {formatDate(userData.actived_at)}
                   </Text>
                 </HStack>
               </VStack>

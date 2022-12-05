@@ -61,9 +61,15 @@ const roomsSlice = createSlice({
   name: 'rooms',
   initialState: {
     rooms: 0,
+    roomSelect: 0,
     loading: false,
     limited: false,
     status: '',
+  },
+  reducers: {
+    setRoomSelect: (state, action) => {
+      state.roomSelect = action.payload;
+    }
   },
   extraReducers: builder => {
     builder.addCase(createRoom.pending, (state, action) => {
@@ -96,5 +102,5 @@ const roomsSlice = createSlice({
       });
   },
 });
-
+export const {setRoomSelect} = roomsSlice.actions;
 export default roomsSlice.reducer;

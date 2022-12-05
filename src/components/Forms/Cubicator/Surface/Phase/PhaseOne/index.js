@@ -92,7 +92,7 @@ const FormPhaseOne = props => {
 	}
 
 	return (
-		<Stack w={'100%'} h={'100%'}>
+		<Stack backgroundColor={'white'}>
 			<Formik
 				initialValues={{
 					m3: '',
@@ -124,83 +124,80 @@ const FormPhaseOne = props => {
 					isSubmitting
 				}) => (
 					<FormControl>
-						<Stack>
-							<Stack
-								top={14}
-								space={5}>
-								{constructionSelect.id === 4 && (
-									<Stack w={'100%'} alignItems={'center'}>
-										<Image
-											source={require('../../../../../../assets/logo-muro-ciego.png')}
-											alt="logo-muro-ciego"
-											w={200}
-											h={150}
-										/>
-									</Stack>
-								)}
-								<VStack space={2}>
-									<Text fontSize={15}>Largo*</Text>
-									<Input
-										name={'length'}
-										variant="outline"
-										placeholder={'Largo'}
-										value={values.length}
-										editable={values.m3 !== '' ? false : true}
-										onChangeText={handleChange('length')}
-										onBlur={handleBlur('length')}
-										keyboardType={'decimal-pad'}
-										size={'lg'}
-										error={errors.length}
-										touched={touched.length}
+						<Stack space={5}>
+							{constructionSelect.id === 4 && (
+								<Stack w={'100%'} alignItems={'center'}>
+									<Image
+										source={require('../../../../../../assets/logo-muro-ciego.png')}
+										alt="logo-muro-ciego"
+										w={200}
+										h={150}
 									/>
-								</VStack>
-								<VStack space={2}>
-									<Text fontSize={15}>Ancho*</Text>
-									<Input
-										name={'width'}
-										variant="outline"
-										size={'lg'}
-										editable={values.m3 !== '' ? false : true}
-										keyboardType={'decimal-pad'}
-										onChangeText={handleChange('width')}
-										placeholder={'Ancho'}
-										value={values.width}
-										error={errors.length}
-										touched={touched.length}
-									/>
-								</VStack>
-								<VStack space={2}>
-									<Text fontSize={15}>Altura (cms)*</Text>
-									<Input
-										name={'depth'}
-										variant="outline"
-										size={'lg'}
-										editable={values.m3 !== '' ? false : true}
-										keyboardType={'decimal-pad'}
-										onChangeText={handleChange('depth')}
-										placeholder={'Altura'}
-										value={values.depth}
-										error={errors.depth}
-										touched={touched.depth}
-									/>
-								</VStack>
-								<VStack>
-									<TextReact style={styles.subtitleText}>Si sabes las medidas de tu proyecto ingresa solo los m3</TextReact>
-								</VStack>
-								<VStack>
-									<Input
-										name={'m3'}
-										variant="outline"
-										size={'lg'}
-										keyboardType={'decimal-pad'}
-										onChangeText={handleChange('m3')}
-										placeholder={'M3'}
-										value={values.m3}
-										error={errors.m3}
-										touched={touched.m3}
-									/>
-								</VStack>
-							</Stack>
+								</Stack>
+							)}
+							<VStack space={2}>
+								<Text style={styles.textLarge}>Largo*</Text>
+								<Input
+									name={'length'}
+									variant="outline"
+									placeholder={'Largo'}
+									value={values.length}
+									editable={values.m3 !== '' ? false : true}
+									onChangeText={handleChange('length')}
+									onBlur={handleBlur('length')}
+									keyboardType={'decimal-pad'}
+									size={'xl'}
+									error={errors.length}
+									touched={touched.length}
+								/>
+							</VStack>
+							<VStack space={2}>
+								<Text style={styles.textLarge}>Ancho*</Text>
+								<Input
+									name={'width'}
+									variant="outline"
+									size={'xl'}
+									editable={values.m3 !== '' ? false : true}
+									keyboardType={'decimal-pad'}
+									onChangeText={handleChange('width')}
+									placeholder={'Ancho'}
+									value={values.width}
+									error={errors.length}
+									touched={touched.length}
+								/>
+							</VStack>
+							<VStack space={2}>
+								<Text style={styles.textLarge}>Altura (cms)*</Text>
+								<Input
+									name={'depth'}
+									variant="outline"
+									size={'xl'}
+									editable={values.m3 !== '' ? false : true}
+									keyboardType={'decimal-pad'}
+									onChangeText={handleChange('depth')}
+									placeholder={'Altura'}
+									value={values.depth}
+									error={errors.depth}
+									touched={touched.depth}
+								/>
+							</VStack>
+							<VStack>
+								<TextReact style={[styles.subtitleText, styles.textMedium]}>Si sabes las medidas de tu proyecto ingresa solo los m3</TextReact>
+							</VStack>
+							<VStack>
+								<Input
+									name={'m3'}
+									variant="outline"
+									size={'xl'}
+									editable={values.length !== '' || values.width !== '' || values.depth !== '' ? false : true}
+									keyboardType={'decimal-pad'}
+									onChangeText={handleChange('m3')}
+									placeholder={'M3'}
+									value={values.m3}
+									error={errors.m3}
+									touched={touched.m3}
+								/>
+							</VStack>
 						</Stack>
 					</FormControl>
 				)}

@@ -7,14 +7,19 @@ import CoatingStackScreen from '../../../navigation/Coating';
 import {Text as TextReact, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 import AlertLocation from '../../../components/AlertDialog/Location/AlertLocation';
+import Container from '../../../components/Container';
+import {useNavigation} from '@react-navigation/native';
+import {getStores} from '../../../redux/features/Stores/storesSlice';
 
 const Coating = () => {
   const {constructionSelect} = useSelector(state => ({...state.construction}));
   const formRefPhaseOne = useRef(null);
   const formRefPhaseTwo = useRef(null);
   const [phase, setPhase] = useState(0);
-  const [isOpenAlertLocation, setIsOpenAlertLocation] = useState(false);
-  const cancelRef = useRef(null);
+  const navigation = useNavigation();
+  const onNavigate = () => {
+    navigation.navigate('Quoter');
+  }
 
   const onSubmitFormOne = async () => {
     await formRefPhaseOne.current.submitForm();
@@ -24,67 +29,51 @@ const Coating = () => {
   };
   return (
     <Background>
-      <Flex h={'100%'} alignItems={'center'} top={12}>
+      <Container>
+        <Flex alignItems={'center'} w={'100%'} h={100} justifyContent={'center'}>
+          <Text bold fontSize={'xl'}>
+            {constructionSelect === 0
+              ? 'Revestimiento'
+              : constructionSelect.name}
+          </Text>
+          {phase === 0 && (
+            <TextReact style={styles.subtitleText}>
+              Ingrese las medidas de su proyecto (mts)
+            </TextReact>
+          )}
+        </Flex>
         <Stack
-          w="85%"
-          h={600}
-          style={[styles.formAuthStyle, styles.shadow]}
-          backgroundColor={colors.primary}
-          alignItems="center">
-          <Flex alignItems={'center'} top={5}>
-            <Text bold fontSize={'xl'}>
-              {constructionSelect === 0
-                ? 'Revestimiento'
-                : constructionSelect.name}
-            </Text>
-            {phase === 0 && (
-              <TextReact style={styles.subtitleText}>
-                Ingrese las medidas de su proyecto (mts)
-              </TextReact>
-            )}
-          </Flex>
-          <Stack
-            w={300}
-            h={480}
-            top={8}
-            justifyContent={'center'}
-            alignItems={'center'}>
-            <CoatingStackScreen
-              formRefPhaseOne={formRefPhaseOne}
-              formRefPhaseTwo={formRefPhaseTwo}
-              phaseOne={() => setPhase(0)}
-              phaseTwo={() => setPhase(1)}
-              phaseThree={() => setPhase(2)}
-            />
-          </Stack>
-          <Box top={5}>
-            <TouchableOpacity
-              style={styles.buttonLogin}
-              onPressIn={() =>
-                phase === 0
-                  ? onSubmitFormOne()
-                  : phase === 1
+          w={300}
+          h={490}
+          alignItems={'center'}>
+          <CoatingStackScreen
+            formRefPhaseOne={formRefPhaseOne}
+            formRefPhaseTwo={formRefPhaseTwo}
+            phaseOne={() => setPhase(0)}
+            phaseTwo={() => setPhase(1)}
+            phaseThree={() => setPhase(2)}
+          />
+        </Stack>
+        <Box>
+          <TouchableOpacity
+            style={styles.buttonLogin}
+            onPressIn={() =>
+              phase === 0
+                ? onSubmitFormOne()
+                : phase === 1
                   ? onSubmitFormTwo()
-                  : phase === 2 && setIsOpenAlertLocation(true)
-              }>
-              <Text style={styles.textLogin} fontSize={18}>
-                {phase === 0
-                  ? 'Siguiente'
-                  : phase === 1
+                  : phase === 2 && onNavigate()
+            }>
+            <Text style={styles.textLogin} fontSize={18}>
+              {phase === 0
+                ? 'Siguiente'
+                : phase === 1
                   ? 'Cubicar'
                   : phase === 2 && 'Cotizar'}
-              </Text>
-            </TouchableOpacity>
-          </Box>
-        </Stack>
-        {isOpenAlertLocation && (
-          <AlertLocation
-            cancelRef={cancelRef}
-            isOpen={isOpenAlertLocation}
-            onClose={() => setIsOpenAlertLocation(false)}
-          />
-        )}
-      </Flex>
+            </Text>
+          </TouchableOpacity>
+        </Box>
+      </Container>
     </Background>
   );
 };

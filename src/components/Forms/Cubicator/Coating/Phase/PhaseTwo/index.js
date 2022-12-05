@@ -22,6 +22,7 @@ import {styles} from '../../../../../styles';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {setMeasures} from '../../../../../../redux/features/Utility/utilitySlice';
+import {setTypeProduct} from '../../../../../../redux/features/Quoter/quoterSlice';
 
 const FormPhaseTwo = props => {
   const route = useRoute();
@@ -35,6 +36,7 @@ const FormPhaseTwo = props => {
   const {
     area,
     length,
+    width,
     lengthWindow1,
     widthWindow1,
     lengthWindow2,
@@ -80,6 +82,7 @@ const FormPhaseTwo = props => {
     dispatch(
       setMeasures({
         area: area.toFixed(2),
+        width: width,
         length: length,
         lengthWindow1: lengthWindow1,
         widthWindow1: widthWindow1,
@@ -99,6 +102,7 @@ const FormPhaseTwo = props => {
         performancePainting: performancePainting,
       }),
     );
+    dispatch(setTypeProduct(typePainting));
     navigation.navigate('ResultCoating');
   };
 
@@ -130,7 +134,7 @@ const FormPhaseTwo = props => {
           <FormControl>
             <Stack space={4}>
               <VStack>
-                <FormControl.Label>Tipo de pintura</FormControl.Label>
+                <FormControl.Label><TextReact style={styles.textLarge}>Tipo de pintura</TextReact></FormControl.Label>
                 <Select
                   selectedValue={typePainting}
                   minWidth="200"
@@ -156,28 +160,13 @@ const FormPhaseTwo = props => {
                 </Select>
               </VStack>
               <VStack>
-                <HStack space={2} w={150}>
-                  <FormControl.Label>
-                    <TextReact style={styles.textMedium}>
-                      Tipo de diluyente
-                    </TextReact>
-                  </FormControl.Label>
-                  <FormControl.Label>
-                    <TextReact style={styles.textMedium}>
-                      {typePainting === ''
-                        ? 'Selecciona la pintura'
-                        : typePainting === 'Esmalte al Agua' ||
-                          typePainting === 'Latex'
-                        ? 'Agua'
-                        : typePainting === 'Esmalte Sintetico' ||
-                          typePainting === 'Óleo'
-                        ? 'Aguarras o diluyente sintetico'
-                        : 'Selecciona la pintura'}
-                    </TextReact>
-                  </FormControl.Label>
-                </HStack>
+                <FormControl.Label>
+                  <TextReact style={styles.textLarge}>
+                    Tipo de diluyente
+                  </TextReact>
+                </FormControl.Label>
                 <Divider
-                  my="1"
+                  my="2"
                   _light={{
                     bg: 'muted.800',
                   }}
@@ -185,10 +174,23 @@ const FormPhaseTwo = props => {
                     bg: 'muted.50',
                   }}
                 />
+                <FormControl.Label>
+                  <TextReact style={styles.textLarge}>
+                    {typePainting === ''
+                      ? 'Selecciona la pintura'
+                      : typePainting === 'Esmalte al Agua' ||
+                        typePainting === 'Latex'
+                        ? 'Agua'
+                        : typePainting === 'Esmalte Sintetico' ||
+                          typePainting === 'Óleo'
+                          ? 'Aguarras o diluyente sintetico'
+                          : 'Selecciona la pintura'}
+                  </TextReact>
+                </FormControl.Label>
               </VStack>
               <VStack>
                 <FormControl.Label>
-                  <TextReact style={styles.textMedium}>Herramienta</TextReact>
+                  <TextReact style={styles.textLarge}>Herramienta</TextReact>
                 </FormControl.Label>
                 <Divider
                   my="2"
@@ -230,7 +232,7 @@ const FormPhaseTwo = props => {
                   </HStack>
                 </Radio.Group>
               </VStack>
-              <VStack space={2}>
+              <VStack space={2} h={150} justifyContent={'center'}>
                 <TextReact style={[styles.subtitleText, styles.textMedium]}>
                   **Considera estas manos por tipo de pared
                 </TextReact>

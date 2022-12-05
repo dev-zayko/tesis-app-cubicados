@@ -24,19 +24,17 @@ const ModalCubages = props => {
   const [collapsedMaterials, setCollapsedMaterials] = useState(true);
   const [isCoating, setIsCoating] = useState();
   const [description, setDescription] = useState({
-    complement: '',
     thinnerType: '',
     tool: '',
     gallonsCount: '',
   });
 
   useEffect(() => {
+    console.log(props.cubages)
     if (props.cubages.description !== '') {
       setIsCoating(true);
-      const {complement, thinnerType, thinnerCount, tool, gallonsCount} =
-        JSON.parse(props.cubages.description);
+      const {thinnerType, thinnerCount, tool, gallonsCount} = props.cubages.description;
       setDescription({
-        complement: complement,
         thinnerType: thinnerType,
         thinnerCount: thinnerCount,
         tool: tool,
@@ -118,34 +116,41 @@ const ModalCubages = props => {
                     </HStack>
                     {constructionType.id === 1 && (
                       <>
-                        <HStack
-                          alignItems="center"
-                          justifyContent="space-between">
-                          <Text fontWeight="medium">Area</Text>
-                          <Text color="green.500">{props.cubages.area}</Text>
-                        </HStack>
-                        <HStack
-                          alignItems="center"
-                          justifyContent="space-between">
-                          <Text fontWeight="medium">Altura</Text>
-                          <Text color="green.500" bold>
-                            {props.cubages.depth} cms
-                          </Text>
-                        </HStack>
+                        {props.cubages.area !== 0 &&
+                          <HStack
+                            alignItems="center"
+                            justifyContent="space-between">
+                            <Text fontWeight="medium">Area</Text>
+                            <Text color="green.500">{props.cubages.area}</Text>
+                          </HStack>}
+                        {props.cubages.depth !== 0 &&
+                          <HStack
+                            alignItems="center"
+                            justifyContent="space-between">
+                            <Text fontWeight="medium">Altura</Text>
+                            <Text color="green.500" bold>
+                              {props.cubages.depth} cms
+                            </Text>
+                          </HStack>
+                        }
                       </>
                     )}
-                    <HStack alignItems="center" justifyContent="space-between">
-                      <Text fontWeight="medium">Ancho</Text>
-                      <Text color="green.500" bold>
-                        {props.cubages.width} mts
-                      </Text>
-                    </HStack>
-                    <HStack alignItems="center" justifyContent="space-between">
-                      <Text fontWeight="medium">Largo</Text>
-                      <Text color="green.500" bold>
-                        {props.cubages.length} mts
-                      </Text>
-                    </HStack>
+                    {props.cubages.width !== 0 &&
+                      <HStack alignItems="center" justifyContent="space-between">
+                        <Text fontWeight="medium">Ancho</Text>
+                        <Text color="green.500" bold>
+                          {props.cubages.width} mts
+                        </Text>
+                      </HStack>
+                    }
+                    {props.cubages.length !== 0 &&
+                      <HStack alignItems="center" justifyContent="space-between">
+                        <Text fontWeight="medium">Largo</Text>
+                        <Text color="green.500" bold>
+                          {props.cubages.length} mts
+                        </Text>
+                      </HStack>
+                    }
                   </Collapsible>
                 </Stack>
               </VStack>
@@ -174,7 +179,7 @@ const ModalCubages = props => {
               </Text>
               <Text color="green.500">
                 {isCoating === true
-                  ? description.complement
+                  ? description.tool.name
                   : props.cubages.gravel + ' sacos'}
               </Text>
             </HStack>
@@ -197,10 +202,10 @@ const ModalCubages = props => {
                 <VStack justifyContent="space-between">
                   <Text fontWeight="medium">Cantidad de diluyente</Text>
                   <Text color="green.500">
-                    {description.tool === 1
+                    {description.tool.id === 1
                       ? `${description.thinnerCount} cm3 equivale al 5% de diluyente por la cantidad de pintura`
-                      : description.tool === 2 &&
-                        `${description.thinnerCount} cm3 equivale al 10% de diluyente por la cantidad de pintura`}
+                      : description.tool.id === 2 &&
+                      `${description.thinnerCount} cm3 equivale al 10% de diluyente por la cantidad de pintura`}
                   </Text>
                 </VStack>
               </>
@@ -249,14 +254,6 @@ const ModalCubages = props => {
                         <Text color={'green.500'}>
                           $ {priceFormat(materials.price)}
                         </Text>
-                      </HStack>
-                      <HStack justifyContent="space-between">
-                        <Text>Despacho</Text>
-                        <Text color={'green.500'}>{materials.despatch}</Text>
-                      </HStack>
-                      <HStack justifyContent="space-between">
-                        <Text>Retiro</Text>
-                        <Text color={'green.500'}>{materials.pick_up}</Text>
                       </HStack>
                       <HStack justifyContent="space-between">
                         <Text>Tienda</Text>

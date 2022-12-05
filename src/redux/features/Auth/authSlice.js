@@ -3,6 +3,7 @@ import ApiClient from '../../../services/connection/ApiClient';
 import jwt_decode from 'jwt-decode';
 import {Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import mailService from '../../../services/auth/mailService';
 
 export const login = createAsyncThunk(
   'auth/login',
@@ -22,7 +23,7 @@ export const login = createAsyncThunk(
               } else {
                 navigation.navigate('TabBar');
               }
-              return {user: token};
+              return {user: token, userData: decoded.user};
             case 2:
               Alert.alert(
                 'Aviso',
@@ -79,11 +80,47 @@ export const login = createAsyncThunk(
 
 export const register = createAsyncThunk(
   'auth/register',
-  async ({navigate, newUser}, {rejectWithValue}) => {
+  async ({navigation, newUser, toast}, {rejectWithValue}) => {
     try {
       const response = await ApiClient.post('register', newUser);
-      return response.data;
+      const {status, token} = response.data;
+      const decoded = jwt_decode(token);
+      const {email, first_name} = decoded.user;
+      console.log(response.data);
+      if (status === 'duplicated') {
+        Alert.alert('Error!', 'Este correo ya esta asociado a una cuenta', [
+          {
+            text: 'OK',
+            onPress: () => {
+              console.log('ok pressed');
+            },
+          },
+        ]);
+      } else if (status === 'success') {
+        Alert.alert(
+          'Enhorabuena!',
+          'Se te ha enviado un correo para que verifiques tu cuenta',
+          [
+            {
+              text: 'OK',
+              onPress: () => {
+                mailService
+                  .sendEmailVerification(
+                    email,
+                    first_name,
+                    token,
+                  );
+                navigation.navigate('LoginScreen');
+
+              },
+            },
+          ],
+        );
+      }
     } catch (error) {
+      toast.show({
+        description: 'Ocurrio un error'
+      });
       return rejectWithValue(error.response.data);
     }
   },
@@ -92,28 +129,76 @@ export const register = createAsyncThunk(
 export const logout = createAsyncThunk('auth/logout', async () => {
   return await AsyncStorage.removeItem('user');
 });
-const user = null;
 
-const initialState = user
-  ? {isLoggedIn: true, user: AsyncStorage.getItem('user')}
-  : {isLoggedIn: false, user: null};
+export const updatePhone = createAsyncThunk('update/phone',
+  async ({tokenOld, newPhone}, {rejectWithValue}) => {
+    try {
+      const response = await ApiClient.put('update/phone',
+        {
+          newPhone: newPhone
+        },
+        {
+          headers: {Authorization: `Bearer ${tokenOld}`},
+        });
+
+      const {token} = response.data;
+      const decoded = jwt_decode(token);
+
+      return {user: token, userData: decoded.user}
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response.data);
+    }
+  },
+)
+
+
+const user = null;
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState,
+  initialState: {
+    user: user
+      ? {isLoggedIn: true, user: AsyncStorage.getItem('user')}
+      : {isLoggedIn: false, user: null},
+    userData: 0,
+    loading: 0,
+  },
   extraReducers: builder => {
     builder.addCase(login.fulfilled, (state, action) => {
       state.isLoggedIn = true;
+      state.loading = false;
       state.user = action.payload.user;
+      state.userData = action.payload.userData;
     }),
       builder.addCase(login.rejected, (state, action) => {
         state.isLoggedIn = false;
+        state.loading = false;
         state.user = null;
       }),
-      builder.addCase(logout.fulfilled, (state, action) => {
-        state.isLoggedIn = false;
-        state.user = null;
-      });
+      builder.addCase(login.pending, (state, action) => {
+        state.loading = true;
+      }),
+      builder.addCase(register.pending, (state, action) => {
+        state.loading = true;
+      }),
+      builder.addCase(register.fulfilled, (state, action) => {
+        state.loading = false;
+      }),
+      builder.addCase(register.rejected, (state, action) => {
+        state.loading = false;
+      }),
+      builder.addCase(updatePhone.pending, (state, action) => {
+        state.loading = true;
+      }),
+      builder.addCase(updatePhone.fulfilled, (state, action) => {
+        state.userData = action.payload.userData;
+        state.user = action.payload.user;
+        state.loading = false;
+      }),
+      builder.addCase(updatePhone.rejected, (state, action) => {
+        state.loading = false;
+      })
   },
 });
 export default authSlice.reducer;

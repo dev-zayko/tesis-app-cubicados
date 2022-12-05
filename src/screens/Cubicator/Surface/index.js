@@ -6,69 +6,64 @@ import {colors} from '../../../components/colors';
 import {styles} from '../../../components/styles';
 import SurfaceStackScreen from '../../../navigation/Surface';
 import {useSelector} from 'react-redux';
+import {useNavigation} from '@react-navigation/native';
+import AlertLocation from '../../../components/AlertDialog/Location/AlertLocation';
+import Container from '../../../components/Container';
 
 const Surface = () => {
 
   const {constructionSelect} = useSelector(state => ({...state.construction}));
   const [phase, setPhase] = useState(0)
   const formRefPhaseOne = useRef(null);
-
+  const navigation = useNavigation();
   const onSubmitForm = async () => {
     await formRefPhaseOne.current.submitForm();
   };
 
+  const onNavigate = () => {
+    navigation.navigate('Quoter');
+  }
   return (
     <Background>
-      <Flex h={'100%'} alignItems={'center'} top={12}>
+      <Container>
+        <Flex alignItems={'center'} h={100} justifyContent={'center'}>
+          <Text bold fontSize={'xl'}>
+            {constructionSelect === 0
+              ? 'Superficie'
+              : constructionSelect.name}
+          </Text>
+          {phase === 0 && (
+            <TextReact style={styles.subtitleText}>
+              Ingrese las medidas de su proyecto (mts)
+            </TextReact>
+          )}
+        </Flex>
         <Stack
-          w={'85%'}
-          h={600}
-          style={[styles.formAuthStyle, styles.shadow]}
-          backgroundColor={colors.primary}
+          w={300}
+          h={490}
+          justifyItems={'center'}
           alignItems={'center'}>
-          <Flex alignItems={'center'} top={5}>
-            <Text bold fontSize={'xl'}>
-              {constructionSelect === 0
-                ? 'Superficie'
-                : constructionSelect.name}
-            </Text>
-            {phase === 0 && (
-              <TextReact style={styles.subtitleText}>
-                Ingrese las medidas de su proyecto (mts)
-              </TextReact>
-            )}
-          </Flex>
-          <Stack
-            w={300}
-            h={480}
-            top={8}
-            justifyItems={'center'}
-            alignItems={'center'}>
-            <SurfaceStackScreen
-              formRefPhaseOne={formRefPhaseOne}
-              phaseOne={() => setPhase(0)}
-              phaseTwo={() => setPhase(1)}
-            />
-          </Stack>
-          <Box>
-            <TouchableOpacity
-              style={styles.buttonLogin}
-              onPressIn={() =>
-                phase === 0
-                && onSubmitForm()}>
-              <Text style={styles.textLogin} fontSize={18}>
-                {phase === 0
-                  ? 'Cubicar'
-                  : phase === 1
-                  && 'Cotizar'}
-              </Text>
-
-            </TouchableOpacity>
-
-          </Box>
+          <SurfaceStackScreen
+            formRefPhaseOne={formRefPhaseOne}
+            phaseOne={() => setPhase(0)}
+            phaseTwo={() => setPhase(1)}
+          />
         </Stack>
-
-      </Flex>
+        <Box>
+          <TouchableOpacity
+            style={styles.buttonLogin}
+            onPressIn={() =>
+              phase === 0
+                ? onSubmitForm() : phase === 1 && onNavigate()}>
+            <Text style={styles.textLogin} fontSize={18}>
+              {phase === 0
+                ? 'Cubicar'
+                : phase === 1
+                && 'Cotizar'}
+            </Text>
+          </TouchableOpacity>
+        </Box>
+      </Container>
     </Background>
   );
 }

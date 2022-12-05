@@ -87,6 +87,25 @@ export const updateProject = createAsyncThunk(
   },
 );
 
+export const getCount = createAsyncThunk(
+  'count/get',
+  async ({token}, {rejectWithValue}) => {
+    try {
+      const response = await ApiClient.post('count/get', {
+
+      },
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        });
+      const {data} = response;
+      return {data: data};
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response.data);
+    }
+  }
+)
+
 export const deleteProject = createAsyncThunk(
   'projects/delete',
   async ({id, token}, {rejectWithValue}) => {
@@ -111,14 +130,25 @@ const projectSlice = createSlice({
   name: 'projects',
   initialState: {
     projects: 0,
+    countDataProject: '',
     loading: false,
     limited: false,
     status: '',
   },
   extraReducers: builder => {
-    builder.addCase(createProject.pending, (state, action) => {
+    builder.addCase(getCount.pending, (state, action) => {
       state.loading = true;
     }),
+      builder.addCase(getCount.fulfilled, (state, action) => {
+        state.loading = false;
+        state.countDataProject = action.payload.data
+      }),
+      builder.addCase(getCount.rejected, (state, action) => {
+        state.loading = false;
+      }),
+      builder.addCase(createProject.pending, (state, action) => {
+        state.loading = true;
+      }),
       builder.addCase(createProject.fulfilled, (state, action) => {
         state.loading = false;
         if (action.payload.data === 'success') {

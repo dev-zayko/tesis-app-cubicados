@@ -43,16 +43,10 @@ const ListConstruction = ({route, navigation}) => {
                 overflow="hidden"
                 borderColor="coolGray.300"
                 borderWidth="1"
-                _dark={{
-                  borderColor: 'coolGray.600',
-                  backgroundColor: 'gray.700',
-                }}
+                background={'gray.100'}
                 _web={{
                   shadow: 2,
                   borderWidth: 1,
-                }}
-                _light={{
-                  backgroundColor: colors.cream,
                 }}>
                 <HStack>
                   <Box>
