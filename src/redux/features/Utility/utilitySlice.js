@@ -26,9 +26,13 @@ const utilitySlice = createSlice({
     performancePainting: 0,
     define: '',
     mineRegion: 0,
-    mineCommune: 0
+    mineCommune: 0,
+    tokenDevice: '',
   },
   reducers: {
+    setTokenDevice: (state, action) => {
+      state.tokenDevice = action.payload;
+    },
     setDefineLocation: (state, action) => {
       state.define = action.payload;
     },
@@ -61,5 +65,5 @@ const utilitySlice = createSlice({
   },
 });
 
-export const {setMeasures, setDefineLocation, setMineLocation} = utilitySlice.actions;
+export const {setMeasures, setDefineLocation, setMineLocation, setTokenDevice} = utilitySlice.actions;
 export default utilitySlice.reducer;

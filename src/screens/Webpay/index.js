@@ -5,27 +5,39 @@ import {useDispatch, useSelector} from 'react-redux';
 import {Stack, useToast} from 'native-base';
 import {createTransaction} from '../../redux/features/Webpay/webpaySlice';
 import Background from '../../components/Background';
+import {createPaidMemberships} from '../../redux/features/PaidMemberships/paidMembershipsSlice';
 
 const Webpay = ({route, navigation}) => {
   const [url, setUrl] = useState('');
   const [tokenWs, setTokenWs] = useState();
   const dispatch = useDispatch();
   const {user} = useSelector(state => ({...state.auth}));
-  const {viewData} = useSelector(state => ({...state.webpay}));
+  const {tokenDevice} = useSelector(state => ({...state.utility}));
   const [voucherData, setVoucherData] = useState();
-  const [storeMember, setStoreMember] = useState(1);
   const {amount, idMembership} = route?.params;
   const toast = useToast();
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(createTransaction({token: user, amount: amount})).then(() => {
-        const {url, token} = viewData;
+      dispatch(createTransaction({token: user, amount: amount})).then((response) => {
+        const {url, token} = response.payload.data;
         setUrl(url);
         setTokenWs(token);
       });
     }, [url]),
   );
+
+  const onAddPaidMemeberships = () => {
+    dispatch(createPaidMemberships({
+      idMembership: idMembership,
+      netoAmount: voucherData.ammount,
+      buyOrder: voucherData.buyOrder,
+      sessionId: voucherData.sessionId,
+      token: user,
+      tokenDevice: tokenDevice
+    }));
+  }
+
   const onMessage = message => {
     console.log(message);
   };
@@ -33,10 +45,10 @@ const Webpay = ({route, navigation}) => {
   const jsCode = `
    let table =document.getElementById('table-commit');
    if(table !== null){
-   let ordenCompra = document.getElementById('ordenCompra').innerText;
+   let buyOrder = document.getElementById('ordenCompra').innerText;
    let sessionId = document.getElementById('sessionId').innerText;
-   let monto = document.getElementById('monto').innerText;
-   const voucherData = [{ordenCompra: ordenCompra, sessionId: sessionId, monto: monto}];
+   let ammount = document.getElementById('monto').innerText;
+   const voucherData = [{buyOrder: buyOrder, sessionId: sessionId, ammount: ammount}];
    window.ReactNativeWebView.postMessage(JSON.stringify(voucherData));
    }
     `;
@@ -71,7 +83,7 @@ const Webpay = ({route, navigation}) => {
           }}
           onMessage={event => {
             setVoucherData(JSON.parse(event.nativeEvent.data)[0]);
-            setStoreMember(2);
+            onAddPaidMemeberships();
           }}
           injectedJavaScript={jsCode}
         />

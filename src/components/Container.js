@@ -9,6 +9,7 @@ const Container = ({children}) => {
       <Stack
         w={'85%'}
         h={'85%'}
+        borderRadius={10}
         style={[styles.formAuthStyle, styles.shadow]}
         backgroundColor={colors.primary}
         alignItems={'center'}>

@@ -5,15 +5,18 @@ import {colors} from '../colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {useSelector} from 'react-redux';
 
 const OptionAccount = props => {
   // const [showModal, setShowModal] = useState(false);
-  const handleNavigateProfile = () => {
+  const {userData} = useSelector(state => ({...state.auth}));
+  const onNavigateProfile = () => {
     props.navigator.navigate('Profile');
   };
-  const handleNavigateMember = () => {
+  const onNavigateMember = () => {
     props.navigator.navigate('Membership');
   };
+  const onNavigateMyPays = () => props.navigator.navigate('MyPays');
   return (
     <>
       <HStack w={'100%'} space={3} top={5}>
@@ -25,7 +28,7 @@ const OptionAccount = props => {
           <Stack alignItems={'center'}>
             <IconButton
               mb="0"
-              onPress={handleNavigateProfile}
+              onPress={onNavigateProfile}
               colorScheme="cyan"
               borderRadius="full"
               icon={
@@ -51,7 +54,7 @@ const OptionAccount = props => {
           <Stack alignItems={'center'}>
             <IconButton
               mb="0"
-              onPress={handleNavigateMember}
+              onPress={onNavigateMember}
               colorScheme="cyan"
               borderRadius="full"
               icon={
@@ -69,31 +72,34 @@ const OptionAccount = props => {
             <Text fontSize={'sm'}>Membresia</Text>
           </Stack>
         </Stack>
-        <Stack
-          w={'26%'}
-          h={100}
-          style={[styles.ContainerStyle, styles.shadow]}
-          backgroundColor={colors.primary}>
-          <Stack alignItems={'center'}>
-            <IconButton
-              mb="0"
-              colorScheme="cyan"
-              borderRadius="full"
-              icon={
-                <Icon
-                  as={MaterialIcons}
-                  _dark={{
-                    color: 'warning.600',
-                  }}
-                  size="5xl"
-                  name="payment"
-                  color="warning.600"
-                />
-              }
-            />
-            <Text fontSize={'sm'}>Mis Pagos</Text>
+        {userData.memberships.id !== 1 &&
+          <Stack
+            w={'26%'}
+            h={100}
+            style={[styles.ContainerStyle, styles.shadow]}
+            backgroundColor={colors.primary}>
+            <Stack alignItems={'center'}>
+              <IconButton
+                mb="01"
+                onPress={onNavigateMyPays}
+                colorScheme="cyan"
+                borderRadius="full"
+                icon={
+                  <Icon
+                    as={MaterialIcons}
+                    _dark={{
+                      color: 'warning.600',
+                    }}
+                    size="5xl"
+                    name="payment"
+                    color="warning.600"
+                  />
+                }
+              />
+              <Text fontSize={'sm'}>Mis Pagos</Text>
+            </Stack>
           </Stack>
-        </Stack>
+        }
       </HStack>
       {/*{showModal &&*/}
       {/* <ModalProfile show={showModal} close={() => setShowModal(false)}/>}*/}

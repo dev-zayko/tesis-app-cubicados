@@ -12,6 +12,7 @@ import quoterReducer from './features/Quoter/quoterSlice';
 import materialReducer from './features/Material/materialSlice';
 import membershipsReducer from './features/Memberships/membershipsSlice';
 import webpayReducer from './features/Webpay/webpaySlice';
+import paidMembershipsReducer from './features/PaidMemberships/paidMembershipsSlice'
 
 export default configureStore({
   reducer: {
@@ -27,7 +28,8 @@ export default configureStore({
     products: quoterReducer,
     material: materialReducer,
     memberships: membershipsReducer,
-    webpay: webpayReducer
+    webpay: webpayReducer,
+    paidMembership: paidMembershipsReducer
   },
   devTools: true,
 });

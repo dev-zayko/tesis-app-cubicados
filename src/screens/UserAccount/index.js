@@ -17,10 +17,13 @@ import Days from '../../components/Progress/Days';
 import {useDispatch, useSelector} from 'react-redux';
 import {useFocusEffect} from '@react-navigation/native';
 import {getCount} from '../../redux/features/Projects/projectSlice';
+import {getDays} from '../../redux/features/Memberships/membershipsSlice';
+import {ActivityIndicator} from 'react-native';
 
 const UserAccount = ({navigation}) => {
   const {user, userData} = useSelector(state => ({...state.auth}));
   const {countDataProject} = useSelector(state => ({...state.project}));
+  const {dayRest, loadingDays} = useSelector(state => ({...state.memberships}));
   const [counts, setCounts] = useState({cubages: 0, projects: 0, rooms: 0});
   const [circleProgress, setCircleProgress] = useState({
     cubages: 0,
@@ -30,17 +33,12 @@ const UserAccount = ({navigation}) => {
   const dispatch = useDispatch();
 
   useFocusEffect(useCallback(() => {
-    dispatch(getCount({token: user})).then(() => {
-      if (countDataProject !== '') {
-        setCounts({
-          cubages: countDataProject.cubages,
-          projects: countDataProject.projects,
-          rooms: countDataProject.rooms,
-        });
-        ProgressCircleFormat(countDataProject.cubages, countDataProject.projects, countDataProject.rooms);
-      }
+    dispatch(getCount({token: user})).then((response) => {
+      const {projects, cubages, rooms} = response.payload.data
+      ProgressCircleFormat(cubages, projects, rooms);
     });
-  }, [counts]),
+    dispatch(getDays({token: user}))
+  }, [circleProgress.cubages]),
   );
 
   const ProgressCircleFormat = (countCubages, countProjects, countRooms) => {
@@ -50,6 +48,7 @@ const UserAccount = ({navigation}) => {
       rooms: (countRooms * 100) / 4 / 100,
     });
   };
+
   return (
     <Background>
       {user && (
@@ -95,8 +94,8 @@ const UserAccount = ({navigation}) => {
                     </HStack>
                   </VStack>
                 </HStack>
-                <Flex top={10}>
-                  <HStack justifyContent={'center'} space={5}>
+                <Stack justifyContent={'center'}>
+                  <HStack justifyContent={'center'} space={5} top={5}>
                     <Flex>
                       <Progress.Circle
                         size={80}
@@ -106,9 +105,11 @@ const UserAccount = ({navigation}) => {
                         progress={circleProgress.projects}
                         direction={'counter-clockwise'}
                       />
-                      <Text style={styles.textProgress} fontSize={'md'}>
-                        {countDataProject.projects}/2
-                      </Text>
+                      <Stack bottom={12} alignItems={'center'}>
+                        <Text fontSize={'md'} color={colors.orange}>
+                          {countDataProject.projects} {userData.memberships.id === 1 && '/2'}
+                        </Text>
+                      </Stack>
                     </Flex>
                     <Flex>
                       <Progress.Circle
@@ -119,9 +120,11 @@ const UserAccount = ({navigation}) => {
                         progress={circleProgress.rooms}
                         direction={'counter-clockwise'}
                       />
-                      <Text style={styles.textProgress} fontSize={'md'}>
-                        {countDataProject.rooms}/4
-                      </Text>
+                      <Stack bottom={12} alignItems={'center'}>
+                        <Text fontSize={'md'} color={colors.orange}>
+                          {countDataProject.rooms} {userData.memberships.id === 1 && '/2'}
+                        </Text>
+                      </Stack>
                     </Flex>
                     <Flex>
                       <Progress.Circle
@@ -132,9 +135,11 @@ const UserAccount = ({navigation}) => {
                         progress={circleProgress.cubages}
                         direction={'counter-clockwise'}
                       />
-                      <Text style={styles.textProgress} fontSize={'md'}>
-                        {countDataProject.cubages}/8
-                      </Text>
+                      <Stack bottom={12} alignItems={'center'}>
+                        <Text fontSize={'md'} color={colors.orange}>
+                          {countDataProject.cubages} {userData.memberships.id === 1 && '/2'}
+                        </Text>
+                      </Stack>
                     </Flex>
                   </HStack>
                   <HStack justifyContent={'center'} space={5}>
@@ -142,7 +147,7 @@ const UserAccount = ({navigation}) => {
                     <Text left={2}>Habitaciones</Text>
                     <Text left={2}>Cubicaciones</Text>
                   </HStack>
-                </Flex>
+                </Stack>
               </Flex>
             </Stack>
             {userData.membership_id > 1 && (
@@ -153,8 +158,15 @@ const UserAccount = ({navigation}) => {
                 backgroundColor={colors.primary}>
                 <VStack space={2} alignItems={'center'}>
                   <Text fontSize={'md'}>Dias</Text>
-                  <Days />
-                  <Text>0/3</Text>
+                  {loadingDays === true ?
+                    <ActivityIndicator size={'large'} color={colors.darkLight} /> :
+                    <>
+                      <Days days={userData.memberships.days} dayRest={dayRest} />
+                      <Text>
+                        {dayRest} / {userData.memberships.days}
+                      </Text>
+                    </>
+                  }
                 </VStack>
               </Stack>
             )}

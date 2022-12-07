@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 //Stack for navigation
@@ -9,6 +9,10 @@ import SignUp from '../screens/SignUp';
 import {colors} from '../components/colors';
 import TabBar from './TabBar/index';
 import EmailVerification from '../screens/Email';
+import firebaseService from '../services/firebase/firebaseService';
+import {useDispatch} from 'react-redux';
+import {setTokenDevice} from '../redux/features/Utility/utilitySlice';
+
 
 const AuthStack = () => (
   <NavigationContainer>
@@ -42,7 +46,14 @@ const AuthStack = () => (
     </Stack.Navigator>
   </NavigationContainer>
 );
+
 const NavigationProvider = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    firebaseService.checkToken().then((res) => {
+      dispatch(setTokenDevice(res))
+    })
+  }, [])
   return <AuthStack />;
 };
 export default NavigationProvider;

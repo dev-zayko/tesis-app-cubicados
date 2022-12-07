@@ -79,6 +79,7 @@ const Projects = ({navigation}) => {
         <Stack
           w="85%"
           h={600}
+          borderRadius={10}
           style={[styles.formAuthStyle, styles.shadow]}
           backgroundColor={colors.primary}
           alignItems="center">

@@ -18,10 +18,6 @@ import {theme} from './src/components/Theme/theme';
 import firebaseService from './src/services/firebase/firebaseService';
 
 const App = () => {
-  useEffect(() => {
-    firebaseService.checkToken();
-  }, []);
-
   return (
     <StoreProvider store={store}>
       <SafeAreaProvider style={{flex: 1}}>

@@ -9,7 +9,7 @@ const AlertLogout = props => {
     props.close();
     dispatch(logout()).then(response => {
       if (response.status === 'success') {
-        props.navigator.replace('LoginScreen');
+        props.navigator.navigate('LoginScreen');
       }
     });
   };
