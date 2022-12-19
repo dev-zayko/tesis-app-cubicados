@@ -60,6 +60,8 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     left: 10,
+    width: 50,
+    borderRadius: 20,
   },
   menuNavigator: {
     position: 'absolute',

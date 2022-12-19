@@ -29,6 +29,7 @@ const QuoterStackScreen = props => {
       />
       <QuoterStack.Screen
         name={'ResultQuoter'}
+        alertConfirm={() => props.alertConfirm()}
         children={() => (
           <PhaseQuoterResult />
         )} />

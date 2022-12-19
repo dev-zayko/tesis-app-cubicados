@@ -1,32 +1,41 @@
 import React, {useEffect, useState} from 'react';
 import Background from '../../components/Background';
-import {Flex, HStack, Icon, Stack, Text} from 'native-base';
+import {Flex, HStack, Icon, Stack, Text, useToast} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {styles} from '../../components/styles';
 import {colors} from '../../components/colors';
 import {TouchableOpacity} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import mailService from '../../services/auth/mailService';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {login} from '../../redux/features/Auth/authSlice';
 
-const EmailVerification = () => {
-  const {user: currentUser} = useSelector(state => state.auth);
-  const {token: currentToken} = useSelector(state => state.utility);
+const EmailVerification = ({route}) => {
+  const {user: dataForm} = route?.params.params;
+  const navigation = useNavigation();
+  const {user, userData} = useSelector(state => ({...state.auth}));
   const [reset, setReset] = useState(false);
   const [disable, setDisable] = useState(false);
+  const toast = useToast();
+  const dispatch = useDispatch();
   useEffect(() => {
     if (reset === true) {
-      mailService.sendEmailVerification(
-        currentUser.email,
-        currentUser.first_name,
-        currentToken,
-      );
+      mailService.sendEmailVerification(userData.email, userData.first_name, user);
     }
   }, [reset]);
 
   const verificate = () => {
-    mailService.emailVerificate(currentToken).then(response => {});
+    mailService.emailVerificate(user).then(response => {
+      if (response.verified === true) {
+        dispatch(login({user: dataForm, navigation: navigation, toast: toast}));
+      } else {
+        console.log(response)
+        toast.show({
+          description: 'No ha sido verificada esta cuenta'
+        });
+      }
+    });
   };
   return (
     <Background>
@@ -34,6 +43,7 @@ const EmailVerification = () => {
         <Stack
           w="85%"
           h={600}
+          borderRadius={10}
           style={[styles.formAuthStyle, styles.shadow]}
           backgroundColor={colors.primary}
           alignItems="center">
@@ -57,7 +67,7 @@ const EmailVerification = () => {
             <Stack w={300} alignItems={'center'} top={10}>
               <Text fontSize={18}>Aun no has verificado tu cuenta: </Text>
               <Text fontSize={18} style={styles.textBold}>
-                {currentUser.email}
+                {userData.email}
               </Text>
             </Stack>
             <Stack alignItems={'center'}>

@@ -32,8 +32,8 @@ const FormRooms = props => {
         toast: props.toast,
       }),
     ).then(response => {
-      const {data} = response.payload;
-      props.alertLimited(data);
+      const {status} = response.payload;
+      props.alertLimited(status, 'Habitaciones');
       props.closeSubmit();
     });
   };

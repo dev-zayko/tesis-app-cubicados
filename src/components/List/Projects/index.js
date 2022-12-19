@@ -47,8 +47,8 @@ const ListProjects = props => {
               rounded="lg"
               overflow="hidden"
               borderColor="coolGray.300"
-              borderWidth="1"
-              backgroundColor={'gray.100'}
+              borderWidth="2"
+              backgroundColor={'gray.200'}
               _web={{
                 shadow: 2,
                 borderWidth: 1,
@@ -112,7 +112,7 @@ const ListProjects = props => {
                       }}
                       fontWeight="400"
                       fontSize={13}>
-                      Hace {onDateFormat(item.created_at)}
+                      {moment(item.created_at).format('DD-MM-yyyy')}
                     </Text>
                   </HStack>
                 </VStack>

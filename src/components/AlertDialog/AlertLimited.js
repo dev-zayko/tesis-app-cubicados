@@ -14,17 +14,17 @@ const AlertLimited = props => {
           <AlertDialog.Body>
             {props.status === 'discontinued'
               ? 'Tu cuenta esta suspendida por no pago'
-              : props.status === 'limited' &&
-                'Has alcanzado el limite de proyectos disponibles'}
+              : props.status === 'limited' ?
+                `Has alcanzado el limite de ${props.typeConstruction}, ¡Sube a PREMIUM para crear más!`
+                : props.status === 'duplicated' && 'Ya tienes una habitación con este nombre'}
           </AlertDialog.Body>
           <AlertDialog.Footer>
             <Button.Group space={2}>
               <Button
-                variant="unstyled"
-                colorScheme="coolGray"
+                colorScheme="warning"
                 onPress={props.onClose}
                 ref={props.cancelRef}>
-                Cancelar
+                {props.status === 'duplicated' ? 'Ok' : 'Cancelar'}
               </Button>
               {props.status === 'discontinued' ? (
                 <Button colorScheme="danger">Renovar Pago</Button>

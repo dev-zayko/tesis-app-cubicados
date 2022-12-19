@@ -21,7 +21,7 @@ export const getRegions = createAsyncThunk(
 
 export const getCommunes = createAsyncThunk(
   'communes/get',
-  async ({region, store}, {rejectedWithValue}) => {
+  async ({region, store, toast}, {rejectedWithValue}) => {
     try {
       const response = await ApiClient.post(`city/${(store).toLowerCase()}`, {}, {
         params: {
@@ -30,9 +30,12 @@ export const getCommunes = createAsyncThunk(
       });
       const {data, status} = response.data;
       if (status !== 'empty') {
-        return {data: data};
+        return {data: data, status: status};
       } else {
-        return null;
+        toast.show({
+          description: 'No hay tiendas en esta región'
+        })
+        return {data: 0, status: status};
       }
     } catch (error) {
       console.log(error);

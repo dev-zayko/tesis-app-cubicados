@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
-import {Flex, Text, VStack, Stack, Image, HStack, Box, Center, Heading} from "native-base";
+import {Flex, Text, VStack, Stack, Image, HStack, Box, Center, Heading, useToast} from "native-base";
 import {ActivityIndicator, FlatList, Linking, TouchableOpacity} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import ListRegion from "../Region";
@@ -11,6 +11,7 @@ import {getProducts, resetListProducts, setProductSelect} from "../../../redux/f
 import CollapsibleProducts from "../../Collapsible/Quoter/Products";
 import {useFocusEffect, useNavigation} from "@react-navigation/native";
 import AlertEmpty from "../../AlertDialog/AlertEmpty";
+import {TypeLoading} from "../../Animation/Loading";
 
 const ListProducts = () => {
   const {regions} = useSelector(state => ({...state.location}));
@@ -25,6 +26,7 @@ const ListProducts = () => {
   const [disabledSelect, setDisabledSelect] = useState(false);
   const [isOpenAlertEmpty, setIsOpenAlertEmpty] = useState(true);
   const [renderList, setRenderList] = useState(true);
+  const toast = useToast();
 
   const onClose = () => setIsOpenAlertEmpty(false);
   const cancelRef = useRef(null);
@@ -61,17 +63,21 @@ const ListProducts = () => {
 
   return (
     <Stack>
-      <Stack alignItems={'center'} h={60} justifyContent={'center'}>
+      <Stack alignItems={'center'} h={70} justifyContent={'center'}>
         <HStack>
           <Image
             source={name === 'Sodimac' ? require('../../../assets/logo-sodimac.png')
               : name === 'Easy' ? require('../../../assets/logo-easy.png') : name === 'Construmart' &&
                 require('../../../assets/logo-construmart.png')}
             alt="logo-stores"
-            width={20}
-            height={10}
+            width={100}
+            borderRadius={100}
+            height={100}
           />
-          <Text fontSize={'3xl'}>{name}</Text>
+          <Stack justifyContent={'center'}>
+            <Text fontSize={'3xl'}>{name}</Text>
+          </Stack>
+
         </HStack>
       </Stack>
       {define === 'other' &&
@@ -86,7 +92,7 @@ const ListProducts = () => {
               {regions !== 0 &&
                 <ListRegion listRegions={regions} setRegion={(region) => {
                   setRegionSelect(region);
-                  dispatch(getCommunes({region: region, store: name}))
+                  dispatch(getCommunes({region: region, store: name, toast: toast}))
                 }}
                   disabledSelect={disabledSelect} />
               }
@@ -112,21 +118,30 @@ const ListProducts = () => {
           </Stack>
         </Stack>}
       <Stack>
-        {renderList &&
+        {loading === true ?
+          <Stack w={'100%'} h={300} alignItems={'center'} justifyContent={'center'} space={10}>
+            <TypeLoading.Square active />
+            <Text fontSize={18}>Cargando</Text>
+          </Stack>
+          :
           <>
-            {status === 'success' ?
-              <FlatList
-                data={products}
-                renderItem={({item}) => <>
-                  {typeProduct !== 'Cemento' && !item.title.match(/(litros)|(5)|(4)/) ?
-                    <CollapsibleProducts products={item} showItem={(link) => onViewProduct(link)} addItem={(item) => onAddProducts(item)} />
-                    :
-                    <CollapsibleProducts products={item} showItem={(link) => onViewProduct(link)} addItem={(item) => onAddProducts(item)} />}
-                </>
+            {renderList &&
+              <>
+                {status === 'success' ?
+                  <FlatList
+                    data={products}
+                    renderItem={({item}) => <>
+                      {typeProduct !== 'Cemento' && !item.title.match(/(litros)|(5)|(4)/) ?
+                        <CollapsibleProducts products={item} showItem={(link) => onViewProduct(link)} addItem={(item) => onAddProducts(item)} />
+                        :
+                        <CollapsibleProducts products={item} showItem={(link) => onViewProduct(link)} addItem={(item) => onAddProducts(item)} />}
+                    </>
+                    }
+                    keyExtractor={(value, index) => index.toString()}
+                  /> : status === 'empty' &&
+                  <AlertEmpty isOpen={isOpenAlertEmpty} onClose={() => onClose()} cancelRef={cancelRef} otherStore={onNavigateStore} />
                 }
-                keyExtractor={(value, index) => index.toString()}
-              /> : status === 'empty' &&
-              <AlertEmpty isOpen={isOpenAlertEmpty} onClose={() => onClose()} cancelRef={cancelRef} otherStore={onNavigateStore} />
+              </>
             }
           </>
         }

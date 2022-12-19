@@ -32,4 +32,8 @@ export default configureStore({
     paidMembership: paidMembershipsReducer
   },
   devTools: true,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    immutableCheck: false,
+    serializableCheck: false,
+  })
 });

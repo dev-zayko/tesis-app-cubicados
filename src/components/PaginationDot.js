@@ -1,8 +1,7 @@
 import React from 'react';
 
-import {StyleSheet, View} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {colors} from './colors';
-
 
 function genCircleStyle(size) {
   if (!size) {
@@ -11,12 +10,12 @@ function genCircleStyle(size) {
   return {width: size, height: size, borderRadius: size / 2};
 }
 
-function Dot({isActive, color, activeDotSize, inActiveDotSize, dotSeparator}) {
+function Dot({isActive, activeDotSize, inActiveDotSize, dotSeparator}) {
   const processedActiveDotStyle = [
     styles.activeDot,
     {
-      backgroundColor: color,
-      borderColor: colors.darkLight,
+      backgroundColor: colors.orange,
+      borderColor: colors.primary,
       marginHorizontal: dotSeparator / 2,
       ...genCircleStyle(activeDotSize),
     },
@@ -24,8 +23,8 @@ function Dot({isActive, color, activeDotSize, inActiveDotSize, dotSeparator}) {
   const processedInActiveDotStyle = [
     styles.inActiveDot,
     {
-      backgroundColor: '#fff',
-      borderColor: colors.dark,
+      backgroundColor: colors.primary,
+      borderColor: colors.darkLight,
       marginHorizontal: dotSeparator / 2,
       ...genCircleStyle(inActiveDotSize),
     },
@@ -40,12 +39,11 @@ function Dot({isActive, color, activeDotSize, inActiveDotSize, dotSeparator}) {
   );
 }
 
-export default function PaginationDot(props) {
+const PaginationDot = (props) => {
   const {
     style,
     length,
     currentIndex = 0,
-    color = colors.orange,
     activeDotSize = 14,
     inActiveDotSize = 10,
     dotSeparator = 10,
@@ -55,7 +53,6 @@ export default function PaginationDot(props) {
       <Dot
         key={index}
         isActive={index === currentIndex}
-        color={color}
         activeDotSize={activeDotSize}
         inActiveDotSize={inActiveDotSize}
         dotSeparator={dotSeparator}
@@ -68,6 +65,8 @@ export default function PaginationDot(props) {
     </View>
   );
 }
+
+export default PaginationDot;
 
 const styles = StyleSheet.create({
   container: {
@@ -89,3 +88,4 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 });
+

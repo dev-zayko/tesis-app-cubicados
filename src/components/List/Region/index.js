@@ -28,18 +28,8 @@ const ListRegion = props => {
     >
       {
         regions.map((item, index) => {
-          return <Select.Item label={`${item.name} ${item.identifier}`} value={(item.name).toString()}
-            dropdownIcon={
-              <Icon
-                as={MaterialIcons}
-                name={"location-city"}
-                size="5"
-                color="darkgray"
-                key={
-                  Math.random()
-                }
-              />
-            } />
+          return <Select.Item label={`${item.name} ${item.identifier}`} value={(item.name).toString()} key={(item.name).toString()}
+          />
         })
       }
     </Select>

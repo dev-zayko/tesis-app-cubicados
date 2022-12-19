@@ -18,7 +18,7 @@ export const getProducts = createAsyncThunk(
       if (status !== 'empty') {
         return {data: data};
       } else {
-        return {data: null};
+        return {data: 0};
       }
 
     } catch (error) {
@@ -58,7 +58,7 @@ const quoterSlice = createSlice({
     }),
       builder.addCase(getProducts.fulfilled, (state, action) => {
         state.loading = false;
-        if (action.payload.data === null) {
+        if (action.payload.data === 0) {
           state.status = 'empty';
         } else {
           state.status = 'success';

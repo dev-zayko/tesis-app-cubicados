@@ -17,11 +17,10 @@ export const createRoom = createAsyncThunk(
         },
       );
       const {status, data} = response.data;
-      console.log(status, data);
       if (status === 'success') {
-        return {data: data};
+        return {data: data, status: status};
       } else {
-        return {data: status};
+        return {data: 0, status: status};
       }
     } catch (error) {
       console.log(error.response.data);
@@ -77,8 +76,12 @@ const roomsSlice = createSlice({
     }),
       builder.addCase(createRoom.fulfilled, (state, action) => {
         state.loading = false;
-        if (action.payload.data === 'success') {
-          state.rooms.push(action.payload.data);
+        if (action.payload.status === 'success') {
+          try {
+            state.rooms.push(action.payload.data);
+          } catch (error) {
+            state.rooms = [action.payload.data];
+          }
           state.limited = false;
         } else {
           state.limited = true;

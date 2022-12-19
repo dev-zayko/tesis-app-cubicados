@@ -32,6 +32,10 @@ const ActionSheetProjects = props => {
     });
     props.onClose();
   };
+
+  const onChargeToPDF = () => {
+
+  }
   return (
     <>
       <Center>
@@ -55,6 +59,11 @@ const ActionSheetProjects = props => {
               startIcon={<Icon as={AntDesign} size="6" name="eye" />}
               onPressIn={onNavigateProject}>
               Ver
+            </Actionsheet.Item>
+            <Actionsheet.Item
+              startIcon={<Icon as={AntDesign} size="6" name="pdffile1" />}
+              onPressIn={onNavigateProject}>
+              Exportar a PDF
             </Actionsheet.Item>
             <Actionsheet.Item
               startIcon={<Icon as={FontAwesome} name="edit" size="6" />}

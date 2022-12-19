@@ -41,6 +41,7 @@ const Surface = () => {
         <Stack
           w={300}
           h={490}
+          backgroundColor={'blue.800'}
           justifyItems={'center'}
           alignItems={'center'}>
           <SurfaceStackScreen

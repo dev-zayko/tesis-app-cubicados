@@ -19,18 +19,20 @@ const Membership = ({navigation}) => {
       <Stack h={'100%'} justifyContent={'center'} space={5}>
         <Stack alignItems={'center'}>
           <Stack
-            w="85%"
+            w="80%"
             h={500}
             style={[styles.ContainerStyle, styles.shadow]}
             backgroundColor={colors.primary}
             alignItems={'center'}>
             <Flex alignItems={'center'}>
-              <Image
-                source={require('../../assets/logo-premium.png')}
-                alt="logo-premium"
-                width={50}
-                height={50}
-              />
+              {memberships.id !== 1 &&
+                <Image
+                  source={require('../../assets/logo-premium.png')}
+                  alt="logo-premium"
+                  width={50}
+                  height={50}
+                />
+              }
               <Text fontSize={'3xl'}>Membresia</Text>
             </Flex>
             <Stack w={'100%'} alignItems={'center'} h={10} justifyContent={'center'}>
@@ -96,7 +98,7 @@ const Membership = ({navigation}) => {
               </VStack>
             </VStack>
             <Stack w={'100%'} h={'30%'} justifyContent={'center'} alignItems={'center'}>
-              {memberships.id === 1 ?
+              {memberships.id === 1 &&
                 <TouchableOpacity onPress={() => setIsOpenModal(true)} style={styles.buttonLogin}>
                   <HStack space={2}>
                     <AntDesign
@@ -108,18 +110,7 @@ const Membership = ({navigation}) => {
                     <Text style={styles.textLogin}>Subir a premium</Text>
                   </HStack>
                 </TouchableOpacity>
-                :
-                <TouchableOpacity style={styles.buttonLogin}>
-                  <HStack space={2}>
-                    <Ionicons
-                      name={'sad'}
-                      style={styles.icon}
-                      size={24}
-                      color={colors.primary}
-                    />
-                    <Text style={styles.textLogin}>Desuscribirse</Text>
-                  </HStack>
-                </TouchableOpacity>}
+              }
             </Stack>
           </Stack>
         </Stack>

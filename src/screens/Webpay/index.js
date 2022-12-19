@@ -13,7 +13,6 @@ const Webpay = ({route, navigation}) => {
   const dispatch = useDispatch();
   const {user} = useSelector(state => ({...state.auth}));
   const {tokenDevice} = useSelector(state => ({...state.utility}));
-  const [voucherData, setVoucherData] = useState();
   const {amount, idMembership} = route?.params;
   const toast = useToast();
 
@@ -27,12 +26,13 @@ const Webpay = ({route, navigation}) => {
     }, [url]),
   );
 
-  const onAddPaidMemeberships = () => {
+  const onAddPaidMemeberships = (data) => {
+    console.log(data);
     dispatch(createPaidMemberships({
       idMembership: idMembership,
-      netoAmount: voucherData.ammount,
-      buyOrder: voucherData.buyOrder,
-      sessionId: voucherData.sessionId,
+      netoAmount: data.amount,
+      buyOrder: data.buyOrder,
+      sessionId: data.sessionId,
       token: user,
       tokenDevice: tokenDevice
     }));
@@ -47,46 +47,47 @@ const Webpay = ({route, navigation}) => {
    if(table !== null){
    let buyOrder = document.getElementById('ordenCompra').innerText;
    let sessionId = document.getElementById('sessionId').innerText;
-   let ammount = document.getElementById('monto').innerText;
-   const voucherData = [{buyOrder: buyOrder, sessionId: sessionId, ammount: ammount}];
+   let amount = document.getElementById('monto').innerText;
+   const voucherData = [{buyOrder: buyOrder, sessionId: sessionId, amount: amount}];
    window.ReactNativeWebView.postMessage(JSON.stringify(voucherData));
    }
     `;
   return (
     <Background>
       <Stack w={'100%'} h={'100%'}>
-        <WebView
-          originWhitelist={['*']}
-          mixedContentMode={'always'}
-          domStorageEnabled={true}
-          allowFileAccess={true}
-          allowUniversalAccessFromFileURLs={true}
-          source={{
-            method: 'POST',
-            uri: url,
-            body: `token_ws=${tokenWs}`,
-          }}
-          onNavigationStateChange={e => {
-            console.log(e.url)
-            if (e.url.indexOf('http://10.0.2.2:3131/api/webpay/exit') > -1) {
-              toast.show({
-                description: 'Cancelaste el pago'
-              })
-              navigation.navigate('Membership');
-            } else if (e.url.indexOf('http://10.0.2.2:3131/api/webpay/success') > -1) {
-              toast.show({
-                description:
-                  '¡Felicidades! ingresa de nuevo para disfrutar premium',
-              });
-              navigation.navigate('Login');
-            }
-          }}
-          onMessage={event => {
-            setVoucherData(JSON.parse(event.nativeEvent.data)[0]);
-            onAddPaidMemeberships();
-          }}
-          injectedJavaScript={jsCode}
-        />
+        {url !== '' &&
+          <WebView
+            originWhitelist={['*']}
+            mixedContentMode={'always'}
+            domStorageEnabled={true}
+            allowFileAccess={true}
+            allowUniversalAccessFromFileURLs={true}
+            source={{
+              method: 'POST',
+              uri: url,
+              body: `token_ws=${tokenWs}`,
+            }}
+            onNavigationStateChange={e => {
+              console.log(e.url)
+              if (e.url.indexOf('http://10.0.2.2:3131/api/webpay/exit') > -1) {
+                toast.show({
+                  description: 'Cancelaste el pago'
+                })
+                navigation.navigate('Membership');
+              } else if (e.url.indexOf('http://10.0.2.2:3131/api/webpay/success') > -1) {
+                toast.show({
+                  description:
+                    '¡Felicidades! ingresa de nuevo para disfrutar premium',
+                });
+                navigation.navigate('LoginScreen');
+              }
+            }}
+            onMessage={event => {
+              onAddPaidMemeberships(JSON.parse(event.nativeEvent.data)[0]);
+            }}
+            injectedJavaScript={jsCode}
+          />
+        }
       </Stack>
     </Background>
   );

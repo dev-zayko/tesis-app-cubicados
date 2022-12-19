@@ -16,7 +16,7 @@ const sendEmailVerification = async (email, name, token) => {
     });
 };
 
-const emailVerificate = async token => {
+const emailVerificate = async (token) => {
   return await ApiClient
     .post(
       'mail/status',

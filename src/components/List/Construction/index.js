@@ -42,8 +42,8 @@ const ListConstruction = ({route, navigation}) => {
                 rounded="lg"
                 overflow="hidden"
                 borderColor="coolGray.300"
-                borderWidth="1"
-                background={'gray.100'}
+                borderWidth="2"
+                background={'gray.200'}
                 _web={{
                   shadow: 2,
                   borderWidth: 1,

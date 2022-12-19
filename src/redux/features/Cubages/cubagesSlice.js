@@ -1,6 +1,53 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import ApiClient from '../../../services/connection/ApiClient';
 
+
+export const updateFinalized = createAsyncThunk(
+  'cubages/finalized',
+  async ({token, isFinalized, idCubages}, {rejectWithValue}) => {
+    try {
+      const response = await ApiClient.post('cubage/finalized',
+        {
+          isFinalized: isFinalized,
+          idCubages: idCubages
+        },
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        });
+      const {status, data} = response.data;
+      if (status === 'success') {
+        return {finalized: data.finalized, status: status, idCubage: idCubages};
+      }
+    } catch (error) {
+      console.log(error.reponse.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+
+
+export const preferenceByUser = createAsyncThunk(
+  'cubages/preference',
+  async ({token}, {rejectWithValue}) => {
+    try {
+      const response = await ApiClient.post('cubage/preference', {},
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        });
+      const {status, data} = response.data;
+      if (status === 'empty') {
+        return {data: null, status: status};
+      } else {
+        return {data: data, status: status};
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const getCubagesByRooms = createAsyncThunk(
   'cubages/get',
   async ({token, idRoom}, {rejectWithValue}) => {
@@ -89,6 +136,7 @@ export const deleteCubage = createAsyncThunk(
   },
 );
 
+
 const cubagesSlice = createSlice({
   name: 'cubages',
   initialState: {
@@ -96,12 +144,40 @@ const cubagesSlice = createSlice({
     loading: false,
     limited: false,
     status: '',
+    preferences: 0,
+    statusPreference: '',
+    cubageSelect: 0,
+  }, reducers: {
+    setCubageSelect: (state, action) => {
+      state.cubageSelect = action.payload;
+    }
   },
   extraReducers: builder => {
-    builder.addCase(getCubagesByRooms.pending, (state, action) => {
+    builder.addCase(updateFinalized.pending, (state, action) => {
       state.loading = true;
-      state.cubages = 0;
+      state.cubageSelect.finalized = !state.cubageSelect.finalized
     }),
+      builder.addCase(updateFinalized.fulfilled, (state, action) => {
+        state.loading = false;
+      }),
+      builder.addCase(updateFinalized.rejected, (state, action) => {
+        state.loading = false;
+      }),
+      builder.addCase(preferenceByUser.pending, (state, action) => {
+        state.loading = true;
+      }),
+      builder.addCase(preferenceByUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.preferences = action.payload.data;
+        state.statusPreference = action.payload.status;
+      }),
+      builder.addCase(preferenceByUser.rejected, (state, action) => {
+        state.loading = false;
+      }),
+      builder.addCase(getCubagesByRooms.pending, (state, action) => {
+        state.loading = true;
+        state.cubages = 0;
+      }),
       builder.addCase(getCubagesByRooms.fulfilled, (state, action) => {
         state.loading = false;
         if (action.payload.data !== undefined) {
@@ -144,5 +220,5 @@ const cubagesSlice = createSlice({
       });
   },
 });
-
+export const {setCubageSelect} = cubagesSlice.actions;
 export default cubagesSlice.reducer;

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React from 'react';
 import {Icon, Stack} from 'native-base';
 import {Animated, Easing, View} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';

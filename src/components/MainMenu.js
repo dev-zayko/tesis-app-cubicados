@@ -5,6 +5,12 @@ import {colors} from './colors';
 import {styles} from './styles';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AlertLogout from './AlertDialog/AlertLogout';
+import Animated, {
+  useAnimatedStyle,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 
 const MainMenu = props => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,6 +35,23 @@ const MainMenu = props => {
         break;
     }
   };
+
+
+  const glowAnimation = useAnimatedStyle(() => ({
+    transform: [
+      {
+        scale: withRepeat(
+          withSequence(
+            withTiming(1.2, {duration: 1500}),
+            withTiming(1.4, {duration: 1500})
+          ),
+          -1,
+          true
+        ),
+      },
+    ],
+  }));
+
   return (
     <Box>
       <Box alignItems="center" style={styles.menuNavigator}>
@@ -146,11 +169,11 @@ const MainMenu = props => {
           />
         </Stagger>
       </Box>
-      <HStack style={styles.dotNavigator}>
+      <Animated.View style={[styles.dotNavigator, glowAnimation]}>
         <IconButton
           variant="solid"
           borderRadius="full"
-          size="lg"
+          size={10}
           onPress={props.toggle}
           bg={colors.orange}
           style={styles.shadow}
@@ -166,7 +189,7 @@ const MainMenu = props => {
             />
           }
         />
-      </HStack>
+      </Animated.View>
       {isOpen && (
         <AlertLogout
           open={isOpen}

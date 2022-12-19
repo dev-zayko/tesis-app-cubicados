@@ -17,6 +17,7 @@ const Cubicator = () => {
         <Stack
           w="85%"
           h={600}
+          borderRadius={10}
           style={[styles.formAuthStyle, styles.shadow]}
           backgroundColor={colors.primary}
           alignItems="center">
@@ -25,8 +26,8 @@ const Cubicator = () => {
               {constructionTypeSelect === 0
                 ? 'Construcción'
                 : constructionTypeSelect.id === 1
-                ? 'Superficie'
-                : 'Revestimiento'}
+                  ? 'Superficie'
+                  : 'Revestimiento'}
             </Text>
             <TextReact style={styles.subtitleText}>
               Escoge el tipo de construcción

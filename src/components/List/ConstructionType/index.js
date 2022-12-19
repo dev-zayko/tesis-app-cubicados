@@ -57,8 +57,8 @@ const ListConstructionType = ({navigation}) => {
                 rounded="lg"
                 overflow="hidden"
                 borderColor="coolGray.300"
-                borderWidth="1"
-                backgroundColor={'gray.100'}
+                borderWidth="2"
+                backgroundColor={'gray.200'}
                 _web={{
                   shadow: 2,
                   borderWidth: 1,

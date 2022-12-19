@@ -11,68 +11,83 @@ export const login = createAsyncThunk(
     try {
       const response = await ApiClient.post('login', user);
       const {status, token, verified} = response.data;
-      switch (status) {
-        case 'isClient':
-          const decoded = jwt_decode(token);
-          const {user_status, first_name} = decoded.user;
-          await AsyncStorage.setItem('user', token);
-          switch (user_status.id) {
-            case 1:
-              if (verified === false) {
-                navigation.navigate('EmailVerification');
-              } else {
-                navigation.navigate('TabBar');
-              }
-              return {user: token, userData: decoded.user};
-            case 2:
-              Alert.alert(
-                'Aviso',
-                `Estimado ${first_name} su cuenta ha sido suspendida`,
-                [
-                  {
-                    text: 'Cancelar',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                  },
-                  {
-                    text: 'OK',
-                    onPress: () => navigation.navigate('TabBar'),
-                  },
-                ],
-              );
-              return {user: token};
-            case 3:
-              Alert.alert(
-                'Aviso',
-                `Estimado ${decoded.user.first_name} , su cuenta a sido baneada por incumplimiento de nuestras normas`,
-                [
-                  {
-                    text: 'Cancelar',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                  },
-                  {
-                    text: 'OK',
-                    onPress: () => navigation.navigate('TabBar'),
-                  },
-                ],
-              );
-          }
-          break;
-        case 'isAdmin':
-          break;
-        case 'incorrect':
-          toast.show({
-            description: 'Usuario o clave incorrecto(s)',
-          });
-          return {user: 'incorrect'};
+      if (status === 'empty') {
+        Alert.alert(
+          'Aviso',
+          `Lo sentimos no existe una cuenta asociada a este email`,
+          [
+            {
+              text: 'OK',
+              style: 'cancel'
+            },
+          ],
+        );
+        return {user: 0, userData: 0};
+      } else {
+        switch (status) {
+          case 'isClient':
+            const decoded = jwt_decode(token);
+            const {user_status, first_name} = decoded.user;
+            await AsyncStorage.setItem('user', token);
+            switch (user_status.id) {
+              case 1:
+                if (verified === false) {
+                  navigation.navigate('EmailVerification', {params: {user: user}});
+                } else {
+                  navigation.navigate('TabBar');
+                }
+                return {user: token, userData: decoded.user};
+              case 2:
+                Alert.alert(
+                  'Aviso',
+                  `Estimado ${first_name} su cuenta ha sido suspendida`,
+                  [
+                    {
+                      text: 'Cancelar',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'OK',
+                      onPress: () => navigation.navigate('TabBar'),
+                    },
+                  ],
+                );
+                return {user: token};
+              case 3:
+                Alert.alert(
+                  'Aviso',
+                  `Estimado ${decoded.user.first_name} , su cuenta a sido baneada por incumplimiento de nuestras normas`,
+                  [
+                    {
+                      text: 'Cancelar',
+                      onPress: () => console.log('Cancel Pressed'),
+                      style: 'cancel',
+                    },
+                    {
+                      text: 'OK',
+                      onPress: () => navigation.navigate('TabBar'),
+                    },
+                  ],
+                );
+            }
+            break;
+          case 'isAdmin':
+            break;
+          case 'incorrect':
+            toast.show({
+              description: 'Usuario o clave incorrecto(s)',
+            });
+            return {user: 'incorrect'};
+        }
       }
       // return response.data;
     } catch (error) {
+      console.log(error.response.data)
       toast.show({
         description: 'Ocurrio un error',
       });
-      navigation.replace('LoginScreen');
+      navigation.navigate('LoginScreen');
       return rejectWithValue(error.response.data);
     }
   },

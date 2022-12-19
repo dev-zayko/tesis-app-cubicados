@@ -102,10 +102,10 @@ const UserAccount = ({navigation}) => {
                         showsText={false}
                         color={colors.orange}
                         thickness={6}
-                        progress={circleProgress.projects}
+                        progress={userData.membership_id !== 1 ? 1 : circleProgress.projects}
                         direction={'counter-clockwise'}
                       />
-                      <Stack bottom={12} alignItems={'center'}>
+                      <Stack style={{bottom: 50}} alignItems={'center'}>
                         <Text fontSize={'md'} color={colors.orange}>
                           {countDataProject.projects} {userData.memberships.id === 1 && '/2'}
                         </Text>
@@ -117,10 +117,10 @@ const UserAccount = ({navigation}) => {
                         showsText={false}
                         color={colors.orange}
                         thickness={6}
-                        progress={circleProgress.rooms}
+                        progress={userData.membership_id !== 1 ? 1 : circleProgress.rooms}
                         direction={'counter-clockwise'}
                       />
-                      <Stack bottom={12} alignItems={'center'}>
+                      <Stack style={{bottom: 50}} alignItems={'center'}>
                         <Text fontSize={'md'} color={colors.orange}>
                           {countDataProject.rooms} {userData.memberships.id === 1 && '/2'}
                         </Text>
@@ -132,10 +132,10 @@ const UserAccount = ({navigation}) => {
                         showsText={false}
                         color={colors.orange}
                         thickness={6}
-                        progress={circleProgress.cubages}
+                        progress={userData.membership_id !== 1 ? 1 : circleProgress.cubages}
                         direction={'counter-clockwise'}
                       />
-                      <Stack bottom={12} alignItems={'center'}>
+                      <Stack style={{bottom: 50}} alignItems={'center'}>
                         <Text fontSize={'md'} color={colors.orange}>
                           {countDataProject.cubages} {userData.memberships.id === 1 && '/2'}
                         </Text>

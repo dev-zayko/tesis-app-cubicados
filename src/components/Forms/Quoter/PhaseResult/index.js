@@ -8,8 +8,11 @@ import {createCubages} from "../../../../redux/features/Cubages/cubagesSlice";
 import {createMaterial} from "../../../../redux/features/Material/materialSlice";
 import {matchCommune} from "../../../../redux/features/Location/locationSlice";
 import {useNavigation} from "@react-navigation/native";
+import {useRef} from "react";
+import AlertConfirm from "../../../AlertDialog/AlertConfirm";
+import {Alert} from "react-native";
 
-const PhaseQuoterResult = () => {
+const PhaseQuoterResult = (props) => {
 
 	const {constructionSelect} = useSelector(state => ({...state.construction}));
 	const {storeSelect} = useSelector(state => ({...state.store}));
@@ -42,6 +45,7 @@ const PhaseQuoterResult = () => {
 	const [totalCost, setTotalCost] = useState(null);
 	const [countGallon, setCountGallon] = useState(null);
 	const [isSubmitting, setIsSubmitting] = useState(false);
+
 	const castPrice = (price) => {
 		let gallon = 3.78;
 		let gallonNeeded = Math.round(countPainting / gallon);
@@ -117,7 +121,20 @@ const PhaseQuoterResult = () => {
 				addMaterial(response.payload.data[0].id);
 			});
 	}
-
+	const confirmCubage = () => {
+		Alert.alert(
+			"Aviso",
+			"¿Estas seguro de agregar esta cubicación ?",
+			[
+				{
+					text: "Cancelar",
+					onPress: () => console.log("Cancel Pressed"),
+					style: "cancel"
+				},
+				{text: "Confirmar", onPress: () => matchingCommune()}
+			]
+		);
+	}
 	useEffect(() => {
 		costConcrete();
 	}, [])
@@ -157,7 +174,7 @@ const PhaseQuoterResult = () => {
 				</HStack>
 				<VStack>
 					<HStack space={constructionTypeSelect.id === 1 ? 100 :
-						constructionTypeSelect.id === 2 && 20}>
+						constructionTypeSelect.id === 2 && 12}>
 						<Text style={styles.textLarge}>{constructionTypeSelect.id === 1 ?
 							'Necesitas' : constructionTypeSelect.id === 2 && 'Tipo de Pintura'}</Text>
 						<Text style={styles.textLarge}>Rendimiento</Text>
@@ -276,7 +293,7 @@ const PhaseQuoterResult = () => {
 					</>
 				}
 				<VStack>
-					<HStack space={12}>
+					<HStack space={10}>
 						<StyleText>Material</StyleText>
 						<HStack space={2} top={1.5}>
 							<Heading size="xs" color={'red.700'}>
@@ -293,18 +310,18 @@ const PhaseQuoterResult = () => {
 						bg: "muted.50"
 					}} />
 				</VStack>
-				<HStack space={3}>
+				<HStack space={1}>
 					<Stack>
 						<Image
 							source={{
 								uri: image
 							}}
 							alt="logo-casa"
-							w={120}
+							w={110}
 							h={120}
 						/>
 					</Stack>
-					<VStack space={2} w={220}>
+					<VStack space={1} w={220}>
 						<TextReact style={{fontSize: 15, fontWeight: 'bold'}}>
 							{tradeMark}
 						</TextReact>
@@ -315,21 +332,24 @@ const PhaseQuoterResult = () => {
 							{price}
 						</Heading>
 						{constructionTypeSelect.id === 1 ?
-							<Heading size="md" ml="-1" color={'red.700'}>
-								{count} sacos: $ {totalCost}
-							</Heading> :
-							<>
+							<Stack>
+								<Heading size="md" ml="-1" color={'red.700'}>
+									{count} sacos: $ {totalCost}
+								</Heading>
+							</Stack>
+							:
+							<Stack>
 								<Heading size="md" ml="-1" color={'red.700'}>
 									{countGallon} gl: ${totalCost}
 								</Heading>
-							</>
+							</Stack>
 						}
 					</VStack>
 				</HStack>
 			</Stack>
 			<Stack alignItems={'center'}>
 				{isSubmitting === false ?
-					<TouchableOpacity style={styles.buttonLogin} onPress={() => matchingCommune()}>
+					<TouchableOpacity style={styles.buttonLogin} onPress={() => confirmCubage()}>
 						<Text style={styles.textLogin}>Agregar al proyecto</Text>
 					</TouchableOpacity> :
 					<TouchableOpacity style={styles.buttonLogin} disabled={true}>

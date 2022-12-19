@@ -6,10 +6,8 @@ import {styles} from '../../styles';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useSelector} from 'react-redux';
 import Carousel from 'react-native-anchor-carousel';
-import {ExpandingDot} from 'react-native-animated-pagination-dots';
+import PaginationDot from '../../PaginationDot';
 
-
-const AnimatedCarousel = Animated.createAnimatedComponent(Carousel);
 
 const INITIAL_INDEX = 0;
 const {width: windowWidth} = Dimensions.get('window');
@@ -24,6 +22,7 @@ const CarouselMemberships = (props) => {
 
   const handleCarouselScrollEnd = (item, index) => {
     setCurrentIndex(index);
+
   };
 
   const renderItem = ({item, index}) => {
@@ -34,6 +33,7 @@ const CarouselMemberships = (props) => {
           activeOpacity={1}
           style={[styles.item, styles.shadow]}
           onPress={() => {
+            scrollX.current.scrollToIndex(index);
             carouselRef.current.scrollToIndex(index);
           }}>
           <Stack>
@@ -153,31 +153,20 @@ const CarouselMemberships = (props) => {
         data={memberships}
         renderItem={renderItem}
         inActiveOpacity={0.3}
+        ScrollView
         onScroll={Animated.event(
           [{nativeEvent: {contentOffset: {x: scrollX}}}],
           {
-            useNativeDriver: false,
+            useNativeDriver: true,
           }
         )}
         onScrollEnd={handleCarouselScrollEnd}
         containerWidth={windowWidth}
         ref={carouselRef}
       />
-      <Stack w={'100%'} backgroundColor={'orange.500'}>
+      <Stack w={'100%'}>
         {memberships !== 0 &&
-          <ExpandingDot
-            data={memberships}
-            expandingDotWidth={30}
-            scrollX={scrollX}
-            inActiveDotOpacity={0.6}
-            dotStyle={{
-              width: 10,
-              height: 10,
-              backgroundColor: '#347af0',
-              borderRadius: 5,
-              marginHorizontal: 5
-            }}
-          />
+          <PaginationDot currentIndex={currentIndex} length={memberships.length} />
         }
       </Stack>
     </Stack>

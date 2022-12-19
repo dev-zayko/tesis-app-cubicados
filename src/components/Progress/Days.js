@@ -14,7 +14,7 @@ const Days = (props) => {
     <Center w="100%">
       <Box w="90%" maxW="400">
         <Progress
-          bg="coolGray.100"
+          bg="coolGray.300"
           _filledTrack={{
             bg: 'warning.600',
           }}

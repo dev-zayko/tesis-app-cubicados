@@ -29,17 +29,7 @@ const ListCommune = (props) => {
         communes === 0 ? <Select.Item label={"Selecciona una región primero"} value={'0'} disabled />
           :
           communes.map((item, index) => {
-            return <Select.Item label={item.city} value={(item.city).toString()} dropdownIcon={
-              <Icon
-                as={MaterialIcons}
-                name={"location-city"}
-                size="5"
-                color="darkgray"
-                key={
-                  Math.random()
-                }
-              />
-            } />
+            return <Select.Item label={item.city} value={(item.city).toString()} key={(item.city).toString()} />
           })
       }
     </Select>

@@ -131,7 +131,7 @@ const FormPhaseOne = props => {
         isSubmitting,
       }) => (
         <FormControl>
-          <Stack>
+          <Stack backgroundColor={'white'}>
             <Stack
               top={constructionSelect.id === 4 ? 14 : 0}
               space={constructionSelect.id === 4 ? 5 : 3}>

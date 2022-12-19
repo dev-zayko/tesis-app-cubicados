@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 //Stack for navigation
 const Stack = createNativeStackNavigator();
@@ -13,9 +13,16 @@ import firebaseService from '../services/firebase/firebaseService';
 import {useDispatch} from 'react-redux';
 import {setTokenDevice} from '../redux/features/Utility/utilitySlice';
 
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'white'
+  },
+};
 
 const AuthStack = () => (
-  <NavigationContainer>
+  <NavigationContainer theme={MyTheme}>
     <Stack.Navigator
       initialRouteName="LoginScreen"
       screenOptions={{
@@ -51,6 +58,7 @@ const NavigationProvider = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     firebaseService.checkToken().then((res) => {
+      console.log(res);
       dispatch(setTokenDevice(res))
     })
   }, [])

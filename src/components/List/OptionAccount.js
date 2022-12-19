@@ -96,7 +96,7 @@ const OptionAccount = props => {
                   />
                 }
               />
-              <Text fontSize={'sm'}>Mis Pagos</Text>
+              <Text fontSize={'sm'}>Mi Resumen</Text>
             </Stack>
           </Stack>
         }

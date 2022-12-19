@@ -28,6 +28,26 @@ export const createMaterial = createAsyncThunk(
   }
 );
 
+export const getPopularTrademark = createAsyncThunk(
+  'material/popular',
+  async ({idConstruction}, {rejectWithValue}) => {
+    try {
+      const response = await ApiClient.post('construction/type/popular',
+        {
+          idConstruction: idConstruction
+        }, {});
+      const {data, status} = response.data;
+      if (status === 'success') {
+        return {data: data, status: status};
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+
+);
+
 const materialSlice = createSlice({
   name: 'material',
   initialState: {

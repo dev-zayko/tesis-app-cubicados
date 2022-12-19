@@ -24,7 +24,7 @@ const ResultPhaseThree = props => {
   );
 
   return (
-    <Stack space={4}>
+    <Stack space={4} backgroundColor={'white'} h={'100%'}>
       <VStack>
         <Text style={styles.textLarge}>Tu proyecto mide</Text>
         <Divider

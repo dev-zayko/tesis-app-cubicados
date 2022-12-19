@@ -37,7 +37,7 @@ const ModalRooms = props => {
                   props.onClose();
                   props.onCloseAll();
                 }}
-                alertLimited={status => props.alertLimited(status)}
+                alertLimited={(status, typeConstruction) => props.alertLimited(status, typeConstruction)}
                 disableForm={disabled => setDisabled(disabled)}
                 toast={props.toast}
               />

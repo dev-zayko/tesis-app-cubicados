@@ -36,7 +36,7 @@ const CollapsibleProducts = props => {
               }}
               alt="logo-casa"
               w={90}
-              h={140}
+              h={160}
             />
             <Center
               bg={colors.orange}

@@ -14,6 +14,7 @@ export const getMemberships = createAsyncThunk(
     }
   }
 );
+
 export const getDays = createAsyncThunk(
   'membership/days',
   async ({token}, {rejectWithValue}) => {
@@ -32,13 +33,29 @@ export const getDays = createAsyncThunk(
       return rejectWithValue(error.response.data);
     }
   }
-)
+);
+
+export const getPopularMemberships = createAsyncThunk(
+  'membership.popular',
+  async ({rejectWithValue}) => {
+    try {
+      const response = await ApiClient.post('membership/popular', {}, {});
+      const {status, data} = response.data;
+      return {data: data, status: status};
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const membershipsSlice = createSlice({
   name: 'memberships',
   initialState: {
     memberships: 0,
     dayRest: '',
     loading: 0,
+    popularMemberships: 0,
     loadingDays: false
   },
   extraReducers: builder => {
@@ -62,6 +79,16 @@ const membershipsSlice = createSlice({
       }),
       builder.addCase(getDays.rejected, (state, action) => {
         state.loadingDays = false;
+      }),
+      builder.addCase(getPopularMemberships.pending, (state, action) => {
+        state.loading = true;
+      }),
+      builder.addCase(getPopularMemberships.fulfilled, (state, action) => {
+        state.loading = false;
+        state.popularMemberships = action.payload.data;
+      }),
+      builder.addCase(getPopularMemberships.rejected, (state, action) => {
+        state.loading = false;
       })
   }
 })

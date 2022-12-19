@@ -8,7 +8,7 @@ const Quoter = () => {
   return (
     <Background>
       <Container>
-        <Stack h={'100%'} w={'100%'}>
+        <Stack h={'100%'} w={'90%'} backgroundColor={'rose.600'}>
           <QuoterStackScreen />
         </Stack>
       </Container>

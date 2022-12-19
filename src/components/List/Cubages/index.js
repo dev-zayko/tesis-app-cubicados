@@ -1,8 +1,9 @@
 import React, {useEffect, useCallback, useState} from 'react';
-import {FlatList, HStack, Stack, Text, Flex, Image} from 'native-base';
+import {FlatList, HStack, Stack, Text, Flex, Image, Icon} from 'native-base';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useDispatch, useSelector} from 'react-redux';
 import {TouchableOpacity} from 'react-native';
-import {getCubagesByRooms} from '../../../redux/features/Cubages/cubagesSlice';
+import {getCubagesByRooms, setCubageSelect} from '../../../redux/features/Cubages/cubagesSlice';
 import {colors} from '../../colors';
 import {useFocusEffect} from '@react-navigation/native';
 import {styles} from '../../styles';
@@ -13,20 +14,20 @@ const ListCubages = props => {
   const {user} = useSelector(state => ({...state.auth}));
   const {idRoom} = props;
   const [showModalCubages, setShowModalCubages] = useState(false);
-  const [cubagesSelect, setCubagesSelect] = useState();
+  const [updateList, setUpdateList] = useState(false);
   const [cubagesList, setCubagesList] = useState('');
   const openModalCubages = cubages => {
-    setCubagesSelect(cubages);
+    dispatch(setCubageSelect(cubages));
     setShowModalCubages(true);
   };
   useFocusEffect(
     useCallback(() => {
       dispatch(getCubagesByRooms({token: user, idRoom: idRoom}))
         .then((res) => {
-          console.log(res.payload.data)
-          setCubagesList(res.payload.data)
+          setCubagesList(res.payload.data);
+          props.countCubages(res.payload.data.length === undefined ? 0 : res.payload.data.length);
         });
-    }, []),
+    }, [updateList]),
   );
   return (
     <>
@@ -47,6 +48,11 @@ const ListCubages = props => {
                   w={120}
                   backgroundColor={'white'}
                   borderRadius={5}>
+                  {item.finalized === true &&
+                    <Stack position={"absolute"} zIndex={3} >
+                      <Icon as={AntDesign} name={"checkcircle"} size={"lg"} color={colors.otherGreen} />
+                    </Stack>
+                  }
                   <Flex h={'70%'}>
                     <Image
                       source={{
@@ -58,10 +64,11 @@ const ListCubages = props => {
                   </Flex>
                   <Flex
                     h={'30%'}
+                    backgroundColor={colors.orange}
                     alignItems={'center'}
                     justifyContent={'center'}>
-                    <Text>{item.constructions.constructionType.name}</Text>
-                    <Text>
+                    <Text fontSize={16} color={'white'}>{item.constructions.constructionType.name}</Text>
+                    <Text fontSize={16} color={'white'}>
                       ${' '}
                       {(item.materials.price * item.count)
                         .toFixed(0)
@@ -79,8 +86,10 @@ const ListCubages = props => {
       {showModalCubages && (
         <ModalCubages
           showModal={showModalCubages}
+          project={props.project}
+          nameRoom={props.nameRoom}
           onClose={() => setShowModalCubages(false)}
-          cubages={cubagesSelect}
+          updateList={() => setUpdateList(!updateList)}
         />
       )}
     </>

@@ -28,6 +28,7 @@ import {colors} from '../../colors';
 
 const CollapsibleRooms = props => {
   const [activeSections, setActiveSections] = useState([]);
+  const [countCubages, setCountCubages] = useState();
   const {name, neto_amount, id, created_at} = props.rooms;
   const setSections = sections => {
     //setting up a active section state
@@ -65,7 +66,7 @@ const CollapsibleRooms = props => {
           </Box>
           <VStack marginLeft={'2'}>
             <VStack space={2} top={2}>
-              <HStack space={5}>
+              <HStack space={5} w={150}>
                 <Image
                   source={require('../../../assets/logo-hammer.png')}
                   alt="logo-money-bag"
@@ -121,7 +122,7 @@ const CollapsibleRooms = props => {
                       </TouchableOpacity>
                     );
                   }}>
-                  <Menu.Item onPressIn={() => props.onNavigate(id)}>Agregar</Menu.Item>
+                  <Menu.Item onPressIn={() => props.onNavigate(id, countCubages)}>Agregar</Menu.Item>
                   <Divider mt="0" w="100%" />
                   <Menu.Item>Eliminar</Menu.Item>
                 </Menu>
@@ -129,7 +130,7 @@ const CollapsibleRooms = props => {
             </Stack>
           </HStack>
           <Stack h={165} marginTop={2} alignSelf={'center'}>
-            <ListCubages idRoom={id} />
+            <ListCubages idRoom={id} project={props.project} nameRoom={name} countCubages={(count) => setCountCubages(count)} />
           </Stack>
           <Stack alignSelf={'center'}>
             <Text color={'gray.500'} italic={true}>
@@ -149,8 +150,8 @@ const CollapsibleRooms = props => {
           rounded="lg"
           overflow="hidden"
           borderColor="coolGray.300"
-          borderWidth="1"
-          backgroundColor={'gray.100'}
+          borderWidth="2"
+          backgroundColor={'gray.200'}
           _web={{
             shadow: 10,
             borderWidth: 1,

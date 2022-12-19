@@ -107,7 +107,7 @@ const FormPhaseTwo = props => {
   };
 
   return (
-    <Stack w={'100%'} h={'100%'} top={4} backgroundColor={colors.primary}>
+    <Stack w={'100%'} h={'100%'} backgroundColor={colors.primary}>
       <Formik
         initialValues={{
           input: '',
@@ -132,7 +132,7 @@ const FormPhaseTwo = props => {
           isSubmitting,
         }) => (
           <FormControl>
-            <Stack space={4}>
+            <Stack space={4} backgroundColor={'white'} h={500}>
               <VStack>
                 <FormControl.Label><TextReact style={styles.textLarge}>Tipo de pintura</TextReact></FormControl.Label>
                 <Select
