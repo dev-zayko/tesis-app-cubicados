@@ -1,4 +1,5 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {Alert} from 'react-native';
 import ApiClient from '../../../services/connection/ApiClient';
 
 export const createRoom = createAsyncThunk(
@@ -56,6 +57,32 @@ export const getRoomsByProject = createAsyncThunk(
   },
 );
 
+export const updateRoom = createAsyncThunk(
+  'rooms/update',
+  async ({token, idProject, idRoom, name}, {rejectWithValue}) => {
+    try {
+      const response = await ApiClient.put('room/update', {
+        idProject: idProject,
+        idRoom: idRoom,
+        name: name
+      },
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        });
+      console.log(response.data);
+      const {data, status} = response.data;
+      if (status !== 'success') {
+        return {data: 0, status: status};
+      } else {
+        return {data: data, status: status};
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+)
+
 const roomsSlice = createSlice({
   name: 'rooms',
   initialState: {
@@ -101,6 +128,20 @@ const roomsSlice = createSlice({
         state.rooms = action.payload;
       }),
       builder.addCase(getRoomsByProject.rejected, (state, action) => {
+        state.loading = false;
+      }),
+      builder.addCase(updateRoom.pending, (state, action) => {
+        state.loading = true;
+      }),
+      builder.addCase(updateRoom.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.rooms.findIndex(rooms => rooms.id === action.payload.id);
+        state.rooms[index] = {
+          ...state[index],
+          ...action.payload,
+        };
+      }),
+      builder.addCase(updateRoom.rejected, (state, action) => {
         state.loading = false;
       });
   },

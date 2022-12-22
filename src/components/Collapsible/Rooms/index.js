@@ -25,11 +25,13 @@ import ListCubages from '../../List/Cubages';
 import moment from 'moment/moment';
 import HandAnimation from '../../Animation/HandAnimation';
 import {colors} from '../../colors';
+import {useSelector} from 'react-redux';
 
 const CollapsibleRooms = props => {
   const [activeSections, setActiveSections] = useState([]);
   const [countCubages, setCountCubages] = useState();
   const {name, neto_amount, id, created_at} = props.rooms;
+  const {userData} = useSelector(state => ({...state.auth}));
   const setSections = sections => {
     //setting up a active section state
     setActiveSections(sections.includes(undefined) ? [] : sections);
@@ -122,15 +124,25 @@ const CollapsibleRooms = props => {
                       </TouchableOpacity>
                     );
                   }}>
-                  <Menu.Item onPressIn={() => props.onNavigate(id, countCubages)}>Agregar</Menu.Item>
-                  <Divider mt="0" w="100%" />
-                  <Menu.Item>Eliminar</Menu.Item>
+                  <Menu.Item onPressIn={() => props.onNavigate(id, countCubages)}>Cubicar</Menu.Item>
+                  {userData.membership_id !== 1 &&
+                    <>
+                      <Divider mt="1" w="100%" />
+                      <Menu.Item onPressIn={() => {
+                        props.edit();
+                        props.roomSelect(props?.rooms);
+                      }}>{`Editar ${name}`}</Menu.Item>
+                      <Divider mt="1" w="100%" />
+                      <Menu.Item>{`Eliminar ${name}`}</Menu.Item>
+                    </>
+                  }
+
                 </Menu>
               </Box>
             </Stack>
           </HStack>
           <Stack h={165} marginTop={2} alignSelf={'center'}>
-            <ListCubages idRoom={id} project={props.project} nameRoom={name} countCubages={(count) => setCountCubages(count)} />
+            <ListCubages room={props?.rooms} project={props.project} countCubages={(count) => setCountCubages(count)} />
           </Stack>
           <Stack alignSelf={'center'}>
             <Text color={'gray.500'} italic={true}>

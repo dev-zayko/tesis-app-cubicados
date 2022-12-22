@@ -4,12 +4,24 @@ import jwt_decode from 'jwt-decode';
 import {Alert} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import mailService from '../../../services/auth/mailService';
+import DeviceInfo from 'react-native-device-info';
 
 export const login = createAsyncThunk(
   'auth/login',
   async ({user, navigation, toast}, {rejectWithValue}) => {
     try {
-      const response = await ApiClient.post('login', user);
+      let ip = await DeviceInfo.getIpAddress().then((ip) => {return Promise.resolve(ip)});
+      let userAgent = await DeviceInfo.getUserAgent().then((userAgent) => {return Promise.resolve(userAgent)});
+      let deviceName = await DeviceInfo.getDeviceName().then((deviceName) => {return Promise.resolve(deviceName)});
+      let systemVersion = DeviceInfo.getSystemVersion();
+      const response = await ApiClient.post('login', {
+        email: user.email,
+        password: user.password,
+        ip: ip,
+        deviceName: deviceName,
+        systemVersion: systemVersion,
+        userAgent: userAgent
+      });
       const {status, token, verified} = response.data;
       if (status === 'empty') {
         Alert.alert(

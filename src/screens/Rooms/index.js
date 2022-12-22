@@ -39,6 +39,8 @@ const Rooms = ({route}) => {
   const [update, setUpdate] = useState(false);
   const [status, setStatus] = useState('');
   const [fullData, setFullData] = useState(0);
+  const [actionModal, setActionModal] = useState(0);
+  const [roomSelect, setRoomSelect] = useState('');
   const [selectMonth, setSelectMonth] = useState('');
   const [selectYear, setSelectYear] = useState('');
   const [nameConstruction, setNameConstruction] = useState('');
@@ -225,6 +227,11 @@ const Rooms = ({route}) => {
             <ListRooms
               rooms={fullData}
               project={project}
+              edit={() => {
+                setActionModal(2);
+                setIsOpenModal(true)
+              }}
+              roomSelect={(room) => setRoomSelect(room)}
               update={() => setUpdate(!update)}
               alertLimited={(statusData, typeConstruction) => onOpenAlertLimited(statusData, typeConstruction)}
               onActionSheet={roomsSelect => onSelectProject(roomsSelect)}
@@ -234,7 +241,11 @@ const Rooms = ({route}) => {
         <Stack>
           <TouchableOpacity
             style={[styles.buttonLogin, styles.shadow]}
-            onPress={() => setIsOpenModal(true)}>
+            onPress={() => {
+              setActionModal(1);
+              setIsOpenModal(true)
+            }
+            }>
             <HStack space={2}>
               <Icon
                 as={Ionicons}
@@ -261,6 +272,8 @@ const Rooms = ({route}) => {
           <ModalRooms
             onClose={() => setIsOpenModal(false)}
             isOpen={isOpenModal}
+            action={actionModal}
+            room={roomSelect}
             project={project.id}
             onCloseAll={() => onUpdate()}
             toast={toast}

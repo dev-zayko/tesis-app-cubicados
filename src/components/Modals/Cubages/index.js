@@ -229,7 +229,7 @@ const ModalCubages = props => {
       let file = await RNHTMLtoPDF.convert(options)
       alert('PDF Creado')
     } catch (error) {
-      console.log(error.response.data)
+      console.log(error)
     }
   }
   return (

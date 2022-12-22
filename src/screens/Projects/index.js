@@ -41,7 +41,9 @@ import HandDownAnimation from '../../components/Animation/EmptyValue';
 import {filter} from 'lodash';
 import moment from 'moment';
 import Container from '../../components/Container';
-
+import {getCubagesByProject} from '../../redux/features/Cubages/cubagesSlice';
+import {PermissionsAndroid} from 'react-native';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
 
 const Projects = ({navigation}) => {
   const [projectSelect, setProjectSelect] = useState(null);
@@ -53,7 +55,7 @@ const Projects = ({navigation}) => {
   const [isOpenAlertLimited, setIsOpenAlertLimited] = useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
   const [status, setStatus] = useState('');
-  const {user} = useSelector(state => ({...state.auth}));
+  const {user, userData} = useSelector(state => ({...state.auth}));
   const {projects} = useSelector(state => ({...state.project}));
   const [update, setUpdate] = useState(false);
   const dispatch = useDispatch();
@@ -160,6 +162,190 @@ const Projects = ({navigation}) => {
     setSelectYear('');
     setFullData(projects);
   }
+
+  const getAllCubages = (idProject, nameProject) => {
+    dispatch(getCubagesByProject({token: user, idProject: idProject}))
+      .then((response) => {
+        checkPermission(response.payload.data, nameProject);
+      });
+  }
+
+  const checkPermission = async (allCubages, nameProject) => {
+    try {
+      const result = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+
+      if (result === true) {
+        exportToPdf(allCubages, nameProject);
+      } else if (result === false) {
+        const status = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+        if (status === 'never_ask_again') {
+
+        }
+        else if (status === 'denied') {
+          checkPermission(allCubages, nameProject);
+        }
+        else if (status === 'granted') {
+          exportToPdf(allCubages, nameProject);
+        }
+      }
+    } catch (error) {
+      console.log('error: ', error)
+    }
+  }
+
+  const priceFormat = price => {
+    return price
+      .toFixed(0)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  };
+
+  const exportToPdf = async (allCubages, nameProject) => {
+    try {
+      let options = {
+        html:
+          `<html>
+  <head>
+    <style>
+      table,
+      th,
+      td {
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 5px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <div 
+    style="width: 80%; text-align: center">
+        <h1>Cotizaciones</h1>
+    </div>
+    <div>
+        <h1>Detalles</h1>
+        <h3>A nombre de: ${userData.first_name} ${userData.father_last_name} ${userData?.mother_last_name}</h3>
+        <h3>Proyecto: ${nameProject}<h3>
+        ${allCubages.map((item, index) => {
+            return `
+           <div>
+           <h2>Cubicacion: N ${index + 1}</h2>
+           <h2>Habitación: ${item.rooms.name}</h2>
+           </div>
+            <table style="width: 80%">
+      <tr>
+        <th>Tipo de construccion</th>
+        <td>${item.constructions.constructionType.name}</td>
+      </tr>
+      <tr>
+        <th>Construccion</th>
+        <td>${item.constructions.name}</td>
+      </tr>
+      <tr>
+        <th>${item.constructions.constructionType.id === 1 ? 'M3' : 'M2'}</th>
+        <td>${item.constructions.constructionType.id === 1 ? item.m3 : item.area}</td>
+      </tr> 
+      <tr>
+        <th>Dosificacion</th>
+        <td>${item.dosage} ${item.constructions.constructionType.id === 1 ? 'saco/m3 aprox.' : 'mts2/litro aprox.'}</td>
+      </tr>
+      <tr>
+        <th>Cantidad</th>
+        <td>${item.count} ${item.description !== '' ? 'Litro(s) aprox. necesitas' : 'sacos aprox.'}</td>
+      </tr>
+      <tr>
+        <th>${item.description !== '' ? 'Complemento' : 'Grava'}</th>
+        <td>${item.description !== '' ? item.description.tool.name : item.gravel + ' sacos'}</td>
+      </tr>
+      <tr>
+        <th>${item.description !== '' ? 'Tipo diluyente' : 'Arena 5mm'}</th>
+        <td>${item.description !== '' ? item.description.thinnerType : item.sand + ' sacos'}</td>
+      </tr>
+        ${item.description !== '' ? (
+                `
+                <tr>
+                  <th>Cantidad de Galones</th>
+                  <td>${item.description.gallonsCount} gl</td>
+                </tr>
+                <tr>
+                  <th>Cantidad de diluyente</th>
+                  <td>
+                    ${item.description.tool.id === 1
+                  ? `${item.description.thinnerCount} cm3 equivale al 5% de diluyente por la cantidad de pintura`
+                  : item.description.tool.id === 2 &&
+                  `${item.description.thinnerCount} cm3 equivale al 10% de diluyente por la cantidad de pintura`}
+                  </td>
+                </tr>
+           `
+              ) : (
+                `
+              <tr>
+                <th>
+                  ${item.description !== '' ? 'Cantidad de diluyente' : 'Agua'}
+                </th>
+                <td color="green.500">
+                  ${item.water} baldes (10 lts)
+                </td>
+              </tr>
+              `
+              )}
+        </table>
+ <div>
+        <h2>Material</h2>
+        <table style="width: 80%">
+            <tr>
+              <th>Marca</th>
+              <td>${item.materials.trademark}</td>
+            </tr>
+            <tr>
+              <th>titulo</th>
+              <td>${item.materials.title}</td>
+            </tr>
+            <tr>
+              <th>Precio</th>
+              <td>${item.materials.price}</td>
+            </tr>
+            <tr>
+              <th>Tienda</th>
+              <td>${item.materials.stores.name}</td>
+            </tr>
+            <tr>
+              <th>Ubicación</th>
+              <td>${item.materials.communes.regions.name + ', ' + item.materials.communes.name}</td>
+            </tr>
+          </table>
+    </div>
+    <div>
+        <h1 style="color: ${colors.orange}">TOTAL: $ ${priceFormat(item.materials.price * item.count)}</h1>
+    </div>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            </br>
+            ${index === 1 ? (`</br></br>`) : index === 2 ? `</br></br>` : ``} `
+          })} 
+    </div>
+    <div style="text-align: center;">
+     <h4 style='color: #808080'>Cubicados © ${moment().format('YYYY')}</h4>
+    </div>
+  </body>
+</html>`,
+        fileName: `${nameProject}.AllCubic${Math.random()}`,
+        directory: 'Documents',
+      };
+      console.log(options)
+      let file = await RNHTMLtoPDF.convert(options);
+      alert('PDF Creado')
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <Background>
       <Container>
@@ -246,7 +432,10 @@ const Projects = ({navigation}) => {
             <ListProjects
               projects={fullData}
               update={() => setUpdate(!update)}
-              onActionSheet={projectSelect => onSelectProject(projectSelect)}
+              onActionSheet={(projectSelect) => {
+                onSelectProject(projectSelect)
+              }
+              }
             />
           )}
         </Stack>
@@ -273,6 +462,7 @@ const Projects = ({navigation}) => {
             onOpen={onOpen}
             onClose={onClose}
             project={projectSelect}
+            export={() => getAllCubages(projectSelect.id, projectSelect.name)}
             actionModal={() => onActionModal(2)}
             update={onUpdate}
             navigation={navigation}

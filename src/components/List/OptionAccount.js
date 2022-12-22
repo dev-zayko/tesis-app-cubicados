@@ -72,7 +72,7 @@ const OptionAccount = props => {
             <Text fontSize={'sm'}>Membresia</Text>
           </Stack>
         </Stack>
-        {userData.memberships.id !== 1 &&
+        {userData.membership_id !== 1 &&
           <Stack
             w={'26%'}
             h={100}

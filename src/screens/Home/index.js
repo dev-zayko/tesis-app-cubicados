@@ -14,6 +14,7 @@ import {styles} from '../../components/styles';
 import {getMemberships, getPopularMemberships} from '../../redux/features/Memberships/membershipsSlice';
 import {getPopularStores} from '../../redux/features/Stores/storesSlice';
 import {getPopularTrademark} from '../../redux/features/Material/materialSlice';
+import {Linking} from 'react-native';
 
 const Home = ({navigation}) => {
 
@@ -23,19 +24,24 @@ const Home = ({navigation}) => {
   const [memberPopular, setMemberPopular] = useState(null);
   const [storePopular, setStorePopular] = useState([]);
   const [surfacePopular, setSurfacePopular] = useState('');
+  const [coatingPopular, setCoatingPopular] = useState('');
+
   useFocusEffect(
     useCallback(() => {
       dispatch(getMemberships({}));
       dispatch(getPopularStores({}))
         .then((response) => {
-          MostPopularTrademark(response.payload.data);
+          MostPopularStore(response.payload.data);
         });
       dispatch(getPopularMemberships({}))
         .then((response) => {
           MostPopularPlans(response.payload.data);
         });
       dispatch(getPopularTrademark({idConstruction: 1})).then((response) => {
-
+        MostPopularTrademark(response.payload.data, 1);
+      });
+      dispatch(getPopularTrademark({idConstruction: 2})).then((response) => {
+        MostPopularTrademark(response.payload.data, 2);
       });
     }, []),
   );
@@ -54,8 +60,8 @@ const Home = ({navigation}) => {
     return true;
   }
 
-  const MostPopularTrademark = (popularTrademark) => {
-    const {Sodimac, Construmart, Easy} = popularTrademark[0];
+  const MostPopularStore = (popularStore) => {
+    const {Sodimac, Construmart, Easy} = popularStore[0];
     const myArray = [{
       id: 1,
       name: 'Sodimac',
@@ -74,6 +80,15 @@ const Home = ({navigation}) => {
     ];
     const data = myArray.sort(function (a, b) {return a.count - b.count});
     setStorePopular(data);
+    return true;
+  }
+  const MostPopularTrademark = (popularTrademark, idConstructionType) => {
+    const data = popularTrademark.sort(function (a, b) {return a.count - b.count});
+    if (idConstructionType === 1) {
+      setSurfacePopular(data);
+    } else {
+      setCoatingPopular(data);
+    }
     return true;
   }
   return (
@@ -125,11 +140,11 @@ const Home = ({navigation}) => {
                   bg: "white"
                 }} />
               </Stack>
-              {memberPopular !== null &&
+              {memberPopular !== null && memberships !== 0 &&
                 <Stack alignItems={'center'} w={'100%'}>
                   <Stack w={'100%'}>
                     <HStack w={'10%'} h={'10%'} top={5}>
-                      {memberships[memberPopular].discount > 0 && (
+                      {memberships[memberPopular]?.discount > 0 && (
                         <Stack
                           backgroundColor={'cyan.500'}
                           w={10}
@@ -137,39 +152,39 @@ const Home = ({navigation}) => {
                           justifyContent={'center'}
                           borderRightRadius={50}>
                           <Text fontSize={15} color={'white'}>
-                            %{memberships[memberPopular].discount}
+                            %{memberships[memberPopular]?.discount}
                           </Text>
                         </Stack>
                       )}
                     </HStack>
                     <VStack alignItems={'center'} w={'100%'}>
-                      <Text fontSize={20} color={'white'}>{memberships[memberPopular].name}</Text>
+                      <Text fontSize={20} color={'white'}>{memberships[memberPopular]?.name}</Text>
                     </VStack>
                   </Stack>
                   <VStack alignItems={'center'} space={2}>
                     <HStack>
                       <TextReact style={{fontWeight: 'bold', fontSize: 30, color: 'white'}}>
                         ${' '}
-                        {memberships[memberPopular].final_amount
+                        {memberships[memberPopular]?.final_amount
                           .toString()
                           .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}{' '}
                         clp /
                       </TextReact>
                       <TextReact style={{fontWeight: 'bold', fontSize: 15, top: 14, color: 'white'}}>
-                        {memberships[memberPopular].id === 2
+                        {memberships[memberPopular]?.id === 2
                           ? 'Mes'
-                          : memberships[memberPopular].id === 3
+                          : memberships[memberPopular]?.id === 3
                             ? '3 Meses'
-                            : memberships[memberPopular].id === 4 && '1 Año'}
+                            : memberships[memberPopular]?.id === 4 && '1 Año'}
                       </TextReact>
                     </HStack>
                     <Stack w={'100%'} alignItems={'center'}>
                       <TextReact style={[styles.subtitleText, styles.textMedium, {color: 'white'}]}>
-                        {memberships[memberPopular].id === 2
+                        {memberships[memberPopular]?.id === 2
                           ? 'Plan básico para comenzar a vivir la experiencia cubicados.'
-                          : memberships[memberPopular].id === 4
+                          : memberships[memberPopular]?.id === 4
                             ? 'Plan PRO para vivir experiencia completa.'
-                            : memberships[memberPopular].id === 3 &&
+                            : memberships[memberPopular]?.id === 3 &&
                             'Plan trimestral con ofertas de temporada, no te lo pierdas.'}
                       </TextReact>
                     </Stack>
@@ -206,7 +221,7 @@ const Home = ({navigation}) => {
                           color={colors.otherGreen}
                         />
 
-                        {memberships[memberPopular].id === 4 ? (
+                        {memberships[memberPopular]?.id === 4 ? (
                           <Icon
                             as={AntDesign}
                             name={'checkcircle'}
@@ -234,7 +249,7 @@ const Home = ({navigation}) => {
                 </Stack>
               }
             </Stack>
-            {storePopular.length !== 0 &&
+            {storePopular?.length !== 0 &&
               <Stack w={'100%'} h={300}>
                 <Stack h={50} justifyContent={'center'} left={5}>
                   <Text fontSize={20} color={'white'}>Tiendas Populares</Text>
@@ -248,16 +263,18 @@ const Home = ({navigation}) => {
                   <Text color={'white'} fontSize={15}>Los Usuarios estan comprando en</Text>
                 </Stack>
                 <Stack left={5}>
-                  <Text fontSize={18} color={'white'}>{storePopular[2].name}: {storePopular[2].count} cotizaciones</Text>
-                  <Text fontSize={18} color={'white'}>{storePopular[1].name}: {storePopular[1].count} cotizaciones</Text>
-                  <Text fontSize={18} color={'white'}>{storePopular[0].name}: {storePopular[0].count} cotizaciones</Text>
+                  <Text fontSize={18} color={'white'}>{storePopular[2]?.name}: {storePopular[2]?.count} cotizaciones</Text>
+                  <Text fontSize={18} color={'white'}>{storePopular[1]?.name}: {storePopular[1]?.count} cotizaciones</Text>
+                  <Text fontSize={18} color={'white'}>{storePopular[0]?.name}: {storePopular[0]?.count} cotizaciones</Text>
                 </Stack>
                 <Stack w={'100%'} alignItems={'center'} h={150} justifyContent={'center'}>
-                  <Image source={require('../../assets/store-construmart.png')} w={100} borderRadius={100} h={100} alt={'image'} />
+                  {storePopular[2]?.name === 'Construmart' ?
+                    <Image source={require('../../assets/store-construmart.png')} w={100} borderRadius={100} h={100} alt={'image'} />
+                    : <Image source={require('../../assets/store-sodimac.png')} w={100} borderRadius={100} h={100} alt={'image'} />}
                 </Stack>
               </Stack>
             }
-            <Stack w={'100%'} h={400}>
+            <Stack w={'100%'} h={250}>
               <Stack h={50} justifyContent={'center'} left={5}>
                 <Text fontSize={20} color={'white'}>Marcas Populares</Text>
                 <Divider my="2" _light={{
@@ -265,6 +282,55 @@ const Home = ({navigation}) => {
                 }} _dark={{
                   bg: "white"
                 }} />
+              </Stack>
+              <Stack space={2}>
+                <Stack left={5}>
+                  <Text color={'white'} fontSize={15}>En superficies lidera:</Text>
+                  <Text fontSize={18} color={'white'}>{surfacePopular[2]?.trademark}: {surfacePopular[2]?.count} cotizaciones</Text>
+                  <Text fontSize={18} color={'white'}>{surfacePopular[1]?.trademark}: {surfacePopular[1]?.count} cotizaciones</Text>
+                  <Text fontSize={18} color={'white'}>{surfacePopular[0]?.trademark}: {surfacePopular[0]?.count} cotizaciones</Text>
+                </Stack>
+                <Stack left={5}>
+                  <Text color={'white'} fontSize={15}>En Revestimiento lidera:</Text>
+                  {coatingPopular[2]?.trademark !== undefined &&
+                    <Text fontSize={18} color={'white'}>{coatingPopular[2]?.trademark}: {coatingPopular[2]?.count} cotizaciones</Text>
+                  }
+                  <Text fontSize={18} color={'white'}>{coatingPopular[1]?.trademark}: {coatingPopular[1]?.count} cotizaciones</Text>
+                  <Text fontSize={18} color={'white'}>{coatingPopular[0]?.trademark}: {coatingPopular[0]?.count} cotizaciones</Text>
+                </Stack>
+              </Stack>
+            </Stack>
+            <Stack w={'100%'} h={250}>
+              <Stack h={50} justifyContent={'center'} left={5}>
+                <Text fontSize={20} color={'white'}>Dosificaciones en cemento</Text>
+                <Divider my="2" _light={{
+                  bg: "white"
+                }} _dark={{
+                  bg: "white"
+                }} />
+              </Stack>
+              <Stack space={2} alignItems={'center'}>
+                <TouchableOpacity style={styles.buttonLogin} onPress={() => Linking.openURL('http://www.polpaico.cl/wp-content/uploads/NUEVO_VOL_DOSIFICACION-LEY.pdf')}>
+                  <Text style={styles.textLogin}>Polpaico</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonLogin} onPress={() => Linking.openURL('https://cbb.cl/wp-content/uploads/2022/04/Tabla-de-dosificacion.png')}>
+                  <Text style={styles.textLogin}>CBB</Text>
+                </TouchableOpacity>
+              </Stack>
+            </Stack>
+            <Stack w={'100%'} h={250}>
+              <Stack h={50} justifyContent={'center'} left={5}>
+                <Text fontSize={20} color={'white'}>Contacto</Text>
+                <Divider my="2" _light={{
+                  bg: "white"
+                }} _dark={{
+                  bg: "white"
+                }} />
+              </Stack>
+              <Stack space={2} alignItems={'center'} justifyContent={'center'} h={100}>
+                <TouchableOpacity onPress={() => Linking.openURL('https://www.cubicados.cl/')}>
+                  <Text underline color={colors.brand} fontSize={18}>https://www.cubicados.cl/</Text>
+                </TouchableOpacity>
               </Stack>
             </Stack>
           </ScrollView>

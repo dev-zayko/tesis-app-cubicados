@@ -27,11 +27,15 @@ const ModalRooms = props => {
         <KeyboardAvoidingView w={'100%'} behavior={'padding'} left={'10%'}>
           <Modal.Content>
             <Modal.CloseButton />
-            <Modal.Header>Nueva Habitación</Modal.Header>
+            <Modal.Header>
+              {props.action === 1 ? 'Nueva Habitación' : 'Editar Habitación'}</Modal.Header>
             <Modal.Body>
               <FormRooms
                 formRef={formRef}
+                room={props?.room}
+                action={props.action}
                 project={props?.project}
+                cancelSubmit={() => setIsSubmitting(false)}
                 closeSubmit={() => {
                   setIsSubmitting(false);
                   props.onClose();

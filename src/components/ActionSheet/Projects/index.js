@@ -34,7 +34,7 @@ const ActionSheetProjects = props => {
   };
 
   const onChargeToPDF = () => {
-
+    props.export();
   }
   return (
     <>
@@ -62,7 +62,7 @@ const ActionSheetProjects = props => {
             </Actionsheet.Item>
             <Actionsheet.Item
               startIcon={<Icon as={AntDesign} size="6" name="pdffile1" />}
-              onPressIn={onNavigateProject}>
+              onPressIn={onChargeToPDF}>
               Exportar a PDF
             </Actionsheet.Item>
             <Actionsheet.Item

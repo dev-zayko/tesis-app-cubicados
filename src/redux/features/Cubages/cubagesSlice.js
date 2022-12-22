@@ -73,6 +73,33 @@ export const getCubagesByRooms = createAsyncThunk(
   },
 );
 
+
+export const getCubagesByProject = createAsyncThunk(
+  'cubages/charge',
+  async ({token, idProject}, {rejectWithValue}) => {
+    try {
+      const response = await ApiClient.post(
+        'cubage/charge',
+        {
+          idProject: idProject,
+        },
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        },
+      );
+      const {status, data} = response.data;
+      if (status !== 'status') {
+        return {data: data, status: status};
+      } else {
+        return {status: status, data: 0};
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
 export const createCubages = createAsyncThunk(
   'cubages/store',
   async ({toast, token, area, depth, width, m3, dosage, gravel, sand, water, length, count, description, idConstruction, idRoom, idMaterial, totalCost}, {rejectWithValue}) => {
@@ -218,6 +245,17 @@ const cubagesSlice = createSlice({
       builder.addCase(deleteCubage.rejected, (state, action) => {
         state.loading = false;
       });
+    builder.addCase(getCubagesByProject.pending, (state, action) => {
+      state.loading = true;
+      state.cubages = 0;
+    }),
+      builder.addCase(getCubagesByProject.fulfilled, (state, action) => {
+        state.loading = false;
+        state.status = action.payload.status;
+      }),
+      builder.addCase(getCubagesByProject.rejected, (state, action) => {
+        state.loading = false;
+      })
   },
 });
 export const {setCubageSelect} = cubagesSlice.actions;

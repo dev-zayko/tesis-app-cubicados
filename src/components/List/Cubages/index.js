@@ -12,7 +12,6 @@ import ModalCubages from '../../Modals/Cubages';
 const ListCubages = props => {
   const dispatch = useDispatch();
   const {user} = useSelector(state => ({...state.auth}));
-  const {idRoom} = props;
   const [showModalCubages, setShowModalCubages] = useState(false);
   const [updateList, setUpdateList] = useState(false);
   const [cubagesList, setCubagesList] = useState('');
@@ -22,7 +21,7 @@ const ListCubages = props => {
   };
   useFocusEffect(
     useCallback(() => {
-      dispatch(getCubagesByRooms({token: user, idRoom: idRoom}))
+      dispatch(getCubagesByRooms({token: user, idRoom: props?.room.id}))
         .then((res) => {
           setCubagesList(res.payload.data);
           props.countCubages(res.payload.data.length === undefined ? 0 : res.payload.data.length);
@@ -87,7 +86,7 @@ const ListCubages = props => {
         <ModalCubages
           showModal={showModalCubages}
           project={props.project}
-          nameRoom={props.nameRoom}
+          nameRoom={props.room.name}
           onClose={() => setShowModalCubages(false)}
           updateList={() => setUpdateList(!updateList)}
         />

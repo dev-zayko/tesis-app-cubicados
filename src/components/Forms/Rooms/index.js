@@ -12,17 +12,45 @@ import {
 //Hook redux
 import {useDispatch, useSelector} from 'react-redux';
 //Slice Update project
-import {createRoom} from '../../../redux/features/Rooms/roomSlice';
+import {createRoom, updateRoom} from '../../../redux/features/Rooms/roomSlice';
 import * as Yup from 'yup';
+import {Alert} from 'react-native';
 
 const FormRooms = props => {
   //#region Hooks
   const dispatch = useDispatch();
+  console.log(props?.project)
   //Esta constante user guarda el token que proviene del authSlice
   const {user} = useSelector(state => ({...state.auth}));
   //# endregion hooks
 
   //#region Arrow Functions
+  const onUpdateRoom = values => {
+    if (values.name === props?.room.name) {
+      props.closeSubmit();
+    } else {
+      console.log(props?.project)
+      dispatch(updateRoom({
+        token: user,
+        idProject: props?.project,
+        idRoom: props?.room.id,
+        name: values.name
+      })).then((response) => {
+        if (response.payload.status === 'duplicated') {
+          Alert.alert(
+            "Aviso",
+            "Recuerda el nombre de la habitación es unico, por favor escoge otro",
+            [
+              {text: "OK", onPress: () => props.cancelSubmit()}
+            ]
+          );
+        } else {
+          props.closeSubmit();
+        }
+      }).catch((error) => console.log(error.response.data));
+    }
+  };
+
   const onCreateRooms = values => {
     dispatch(
       createRoom({
@@ -49,11 +77,16 @@ const FormRooms = props => {
   return (
     <>
       <Formik
-        initialValues={{name: ''}}
+        initialValues={{name: props.action === 1 ? '' : props.room.name}}
         innerRef={props.formRef}
         validationSchema={roomValidation}
         onSubmit={(values, {setSubmitting}) => {
-          onCreateRooms(values);
+          if (props.action === 1) {
+            onCreateRooms(values);
+          } else {
+            console.log('update');
+            onUpdateRoom(values);
+          }
         }}>
         {({
           handleChange,
