@@ -236,6 +236,7 @@ const projectSlice = createSlice({
         state.loading = true;
       }),
       builder.addCase(deleteProject.fulfilled, (state, action) => {
+        state.loading = false;
         let index = state.projects.findIndex(
           ({id}) => id === action.payload.id,
         );

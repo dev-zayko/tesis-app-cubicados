@@ -34,7 +34,7 @@ const ListRooms = props => {
       <FlatList
         data={props.rooms}
         renderItem={({item}) => (
-          <CollapsibleRooms collapsed={collapsed} rooms={item} roomSelect={(roomSelect) => props.roomSelect(roomSelect)} edit={() => props.edit()} project={props.project} onNavigate={(idRoom, countCubages) => onNavigateAdd(idRoom, countCubages)} />
+          <CollapsibleRooms collapsed={collapsed} rooms={item} delete={() => props.delete()} roomSelect={(roomSelect) => props.roomSelect(roomSelect)} edit={() => props.edit()} project={props.project} onNavigate={(idRoom, countCubages) => onNavigateAdd(idRoom, countCubages)} />
         )}
         keyExtractor={(value, index) => index.toString()}
       />

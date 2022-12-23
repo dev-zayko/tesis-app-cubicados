@@ -94,7 +94,7 @@ const Home = ({navigation}) => {
   return (
     <Background>
       <Container>
-        <Image source={require('../../assets/banner-projects.png')} borderRadius={10} w={350} h={"100%"} alt={'banner'} />
+        <Image source={require('../../assets/banner-projects.jpg')} borderRadius={10} w={350} h={"100%"} alt={'banners'} />
         <LinearGradient
           colors={['#00000000', '#000000']}
           style={{height: '100%', width: '100%', position: 'absolute', borderRadius: 10}}>
@@ -269,8 +269,8 @@ const Home = ({navigation}) => {
                 </Stack>
                 <Stack w={'100%'} alignItems={'center'} h={150} justifyContent={'center'}>
                   {storePopular[2]?.name === 'Construmart' ?
-                    <Image source={require('../../assets/store-construmart.png')} w={100} borderRadius={100} h={100} alt={'image'} />
-                    : <Image source={require('../../assets/store-sodimac.png')} w={100} borderRadius={100} h={100} alt={'image'} />}
+                    <Image source={require('../../assets/store-construmart.jpg')} w={100} borderRadius={100} h={100} alt={'images'} />
+                    : <Image source={require('../../assets/store-sodimac.png')} w={100} borderRadius={100} h={100} alt={'imagev'} />}
                 </Stack>
               </Stack>
             }

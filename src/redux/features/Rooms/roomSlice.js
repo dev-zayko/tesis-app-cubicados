@@ -81,7 +81,38 @@ export const updateRoom = createAsyncThunk(
       return rejectWithValue(error.response.data);
     }
   }
-)
+);
+
+export const deleteRoom = createAsyncThunk(
+  'room/delete',
+  async ({token, idProject, idRoom, toast}, {rejectWithValue}) => {
+    try {
+      const response = await ApiClient.put('room/delete',
+        {
+          idProject: idProject,
+          idRoom: idRoom
+        },
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        });
+      const {data, status} = response.data;
+      if (status === 'success') {
+        toast.show({
+          description: 'Habitación eliminada'
+        });
+        return {id: data.id, status: status};
+      } else {
+        toast.show({
+          description: 'Ocurrio un error'
+        });
+        return {data: 0, status: status};
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 
 const roomsSlice = createSlice({
   name: 'rooms',
@@ -142,6 +173,24 @@ const roomsSlice = createSlice({
         };
       }),
       builder.addCase(updateRoom.rejected, (state, action) => {
+        state.loading = false;
+      }),
+      builder.addCase(deleteRoom.pending, (state, action) => {
+        state.loading = true;
+      }),
+      builder.addCase(deleteRoom.fulfilled, (state, action) => {
+        state.loading = false;
+        if (action.payload.status === 'success') {
+          let index = state.rooms.findIndex(
+            ({id}) => id === action.payload.id,
+          );
+          state.rooms.splice(index, 1);
+          if (state.rooms.length === 0) {
+            state.rooms = null;
+          }
+        }
+      }),
+      builder.addCase(deleteRoom.rejected, (state, action) => {
         state.loading = false;
       });
   },

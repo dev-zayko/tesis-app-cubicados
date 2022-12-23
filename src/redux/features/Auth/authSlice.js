@@ -21,7 +21,7 @@ export const login = createAsyncThunk(
         deviceName: deviceName,
         systemVersion: systemVersion,
         userAgent: userAgent
-      });
+      }, {timeout: 4000});
       const {status, token, verified} = response.data;
       if (status === 'empty') {
         Alert.alert(

@@ -30,6 +30,8 @@ import * as yup from 'yup';
 import AuthGoogleService from '../../../services/auth/authGoogleService';
 //Slice login auth
 import {login} from '../../../redux/features/Auth/authSlice';
+import {Linking} from 'react-native';
+import {GoogleSigninButton} from '@react-native-google-signin/google-signin';
 
 const FormLogin = ({navigation}) => {
   const [show, setShow] = useState(false);
@@ -41,9 +43,10 @@ const FormLogin = ({navigation}) => {
   };
 
   const onGoogleRegister = () => {
+
     AuthGoogleService.signIn().then(response => {
       if (response) {
-        console.log(response);
+
         // navigation.navigate('EmailVerification', {
         //   params: {
         //     userEmail: response.user.email
@@ -51,6 +54,9 @@ const FormLogin = ({navigation}) => {
         // });
       }
     });
+    AuthGoogleService.isSignedIn().then(response => {console.log(response)});
+    AuthGoogleService.signOut();
+
   };
   //Esquema de validacion
   const loginValidationSchema = yup.object().shape({
@@ -154,7 +160,7 @@ const FormLogin = ({navigation}) => {
               error={errors.password}
               touched={touched.password}
             />
-            <TouchableOpacity style={styles.buttonForgotPass}>
+            <TouchableOpacity style={styles.buttonForgotPass} onPress={() => Linking.openURL('https://cubicados.cl/recuperarcuenta')}>
               <Text underline color={colors.orange}>
                 Olvido la contraseña?
               </Text>
@@ -176,20 +182,15 @@ const FormLogin = ({navigation}) => {
           )}
           <Flex>
             <Stack alignItems={'center'}>
-              <Text top={2}>O</Text>
+              <Text>O</Text>
             </Stack>
             <HStack space={4}>
-              <Text bold italic top={2}>
-                Inicia sesión con
-              </Text>
-              <TouchableOpacity onPress={onGoogleRegister}>
-                <Icon
-                  as={<Entypo name={'google--with-circle'} />}
-                  size={10}
-                  mr="2"
-                  color={colors.red}
-                />
-              </TouchableOpacity>
+              <GoogleSigninButton
+                onPress={onGoogleRegister}
+                style={{width: 192, height: 48}}
+                size={GoogleSigninButton.Size.Wide}
+                color={GoogleSigninButton.Color.Light}
+              />
             </HStack>
           </Flex>
         </Stack>

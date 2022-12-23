@@ -1,27 +1,27 @@
-import React from 'react';
+import React from 'react'
 import {AlertDialog, Button, Center, useToast} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
-import {deleteProject} from '../../../redux/features/Projects/projectSlice';
+import {deleteRoom} from '../../../redux/features/Rooms/roomSlice';
+import {ActivityIndicator} from 'react-native';
+
 
 const AlertDelete = props => {
   const dispatch = useDispatch();
   const {user} = useSelector(state => ({...state.auth}));
-  const {loading} = useSelector(state => ({...state.project}));
+  const {loading} = useSelector(state => ({...state.room}));
   const toast = useToast();
 
-  const onDeleteProject = () => {
-    dispatch(deleteProject({id: props.projectSelect.id, token: user}))
-      .then(() => {
-        props.onClose();
-        props.update();
-      })
-      .catch(error => {
-        console.log(error);
-        toast.show({
-          description: 'Ocurrio un error',
-        });
-      });
-  };
+  const onDeleteRoom = () => {
+    dispatch(deleteRoom({
+      token: user,
+      idProject: props.project,
+      idRoom: props.roomSelect.id,
+      toast: toast
+    })).then(() => {
+      props.onClose();
+      props.update();
+    });
+  }
 
   return (
     <Center>
@@ -31,9 +31,9 @@ const AlertDelete = props => {
         onClose={props.onClose}>
         <AlertDialog.Content>
           <AlertDialog.CloseButton />
-          <AlertDialog.Header>{props.projectSelect.name}</AlertDialog.Header>
+          <AlertDialog.Header>{props.roomSelect.name}</AlertDialog.Header>
           <AlertDialog.Body>
-            Estas seguro de eliminar el proyecto
+            Estas seguro de eliminar la habitación
           </AlertDialog.Body>
           <AlertDialog.Footer>
             <Button.Group space={2}>
@@ -51,16 +51,17 @@ const AlertDelete = props => {
                   </Button>
                 </> :
                 <>
-                  <Button colorScheme="danger" onPress={() => onDeleteProject()}>
+                  <Button colorScheme="danger" onPress={() => onDeleteRoom()}>
                     Eliminar
                   </Button>
                 </>
-              }            </Button.Group>
+              }
+            </Button.Group>
           </AlertDialog.Footer>
         </AlertDialog.Content>
       </AlertDialog>
     </Center>
-  );
-};
+  )
+}
 
 export default AlertDelete;

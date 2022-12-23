@@ -34,6 +34,7 @@ import HandDownAnimation from '../../components/Animation/EmptyValue';
 import {filter} from 'lodash';
 import moment from 'moment';
 import Container from '../../components/Container';
+import AlertDelete from '../../components/AlertDialog/Rooms/AlertDelete';
 
 const Rooms = ({route}) => {
   const [update, setUpdate] = useState(false);
@@ -53,6 +54,9 @@ const Rooms = ({route}) => {
   const {user} = useSelector(state => ({...state.auth}));
   const {rooms} = useSelector(state => ({...state.room}));
   const cancelRef = useRef(null);
+  const [isOpenAlertDl, setIsOpenDl] = useState(false)
+  const cancelRefAlert = useRef(null);
+  const onCloseAlertDl = () => setIsOpenDl(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -232,6 +236,7 @@ const Rooms = ({route}) => {
                 setIsOpenModal(true)
               }}
               roomSelect={(room) => setRoomSelect(room)}
+              delete={() => setIsOpenDl(true)}
               update={() => setUpdate(!update)}
               alertLimited={(statusData, typeConstruction) => onOpenAlertLimited(statusData, typeConstruction)}
               onActionSheet={roomsSelect => onSelectProject(roomsSelect)}
@@ -259,6 +264,16 @@ const Rooms = ({route}) => {
         </Stack>
       </Container>
       <>
+        {isOpenAlertDl && (
+          <AlertDelete
+            update={() => setUpdate(!update)}
+            cancelRef={cancelRef}
+            isOpen={isOpenAlertDl}
+            onClose={() => onCloseAlertDl()}
+            roomSelect={roomSelect}
+            project={project.id}
+          />
+        )}
         {isOpenAlertLimited && (
           <AlertLimited
             cancelRef={cancelRef}
