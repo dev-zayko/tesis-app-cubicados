@@ -21,18 +21,6 @@ const Login = ({navigation}) => {
         />
         {/*Componente que carga el formulario de login*/}
         <FormLogin navigation={navigation} />
-        <Flex marginTop={10}>
-          <HStack space={2}>
-            <Text bold italic>
-              No tienes una cuenta?
-            </Text>
-            <TouchableOpacity onPress={handleNavigate}>
-              <Text underline color={colors.orange}>
-                Registrate ahora
-              </Text>
-            </TouchableOpacity>
-          </HStack>
-        </Flex>
       </Flex>
     </Background>
   );

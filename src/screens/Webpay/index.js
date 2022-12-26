@@ -73,7 +73,7 @@ const Webpay = ({route, navigation}) => {
                 toast.show({
                   description: 'Cancelaste el pago'
                 })
-                navigation.navigate('Membership');
+                navigation.reset({index: 0, routes: [{name: 'HomeScreen'}]});
               } else if (e.url.indexOf('http://10.0.2.2:3131/api/webpay/success') > -1) {
                 toast.show({
                   description:

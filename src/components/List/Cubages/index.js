@@ -24,7 +24,8 @@ const ListCubages = props => {
       dispatch(getCubagesByRooms({token: user, idRoom: props?.room.id}))
         .then((res) => {
           setCubagesList(res.payload.data);
-          props.countCubages(res.payload.data.length === undefined ? 0 : res.payload.data.length);
+          console.log(res.payload)
+          props?.countCubages(res.payload.data.length === undefined ? 0 : res.payload.data.length);
         });
     }, [updateList]),
   );
@@ -88,7 +89,11 @@ const ListCubages = props => {
           project={props.project}
           nameRoom={props.room.name}
           onClose={() => setShowModalCubages(false)}
-          updateList={() => setUpdateList(!updateList)}
+          update={() => {
+            props.updateRooms();
+            setUpdateList(!updateList);
+          }
+          }
         />
       )}
     </>

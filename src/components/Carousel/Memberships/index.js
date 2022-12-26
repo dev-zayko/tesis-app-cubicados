@@ -94,7 +94,8 @@ const CarouselMemberships = (props) => {
                   <Text fontSize={15}>Cubicaciones ilimitadas</Text>
                   <Text fontSize={15}>Proyectos ilimitados</Text>
                   <Text fontSize={15}>Habitaciones ilimitadas</Text>
-                  <Text fontSize={15}>Soporte Full</Text>
+                  <Text fontSize={15}>Gestionar Cotizaciones</Text>
+                  <Text fontSize={15}>Exportar proyectos a PDF</Text>
                 </VStack>
                 <VStack space={3}>
                   <Icon
@@ -115,24 +116,18 @@ const CarouselMemberships = (props) => {
                     size={6}
                     color={colors.otherGreen}
                   />
-
-                  {id === 4 ? (
-                    <Icon
-                      as={AntDesign}
-                      name={'checkcircle'}
-                      style={styles.icon}
-                      size={6}
-                      color={colors.otherGreen}
-                    />
-                  ) : (
-                    <Icon
-                      as={AntDesign}
-                      name={'closecircle'}
-                      style={styles.icon}
-                      size={6}
-                      color={colors.red}
-                    />
-                  )}
+                  <Icon
+                    as={AntDesign}
+                    name={'checkcircle'}
+                    size={6}
+                    color={colors.otherGreen}
+                  />
+                  <Icon
+                    as={AntDesign}
+                    name={'checkcircle'}
+                    size={6}
+                    color={colors.otherGreen}
+                  />
                 </VStack>
               </HStack>
             </VStack>

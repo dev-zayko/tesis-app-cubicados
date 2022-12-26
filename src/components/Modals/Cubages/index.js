@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
   Modal,
   VStack,
@@ -18,11 +18,12 @@ import {updateFinalized} from '../../../redux/features/Cubages/cubagesSlice';
 import {colors} from '../../colors';
 import {PermissionsAndroid} from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
-import base64 from 'react-native-base64';
 import moment from 'moment';
+import AlertDelete from '../../AlertDialog/Cubages/AlertDelete';
 
 const ModalCubages = props => {
   const {cubageSelect} = useSelector(state => ({...state.cubages}));
+
   const {materials, constructions} = cubageSelect;
   const {constructionType} = constructions;
   const {stores, communes} = materials;
@@ -33,6 +34,8 @@ const ModalCubages = props => {
   const [collapsedMeasures, setCollapsedMeasures] = useState(true);
   const [collapsedMaterials, setCollapsedMaterials] = useState(true);
   const [isCoating, setIsCoating] = useState();
+  const [isOpenAlertDl, setIsOpenAlertDl] = useState(false);
+  const cancelRef = useRef(null);
   const [description, setDescription] = useState({
     thinnerType: '',
     tool: '',
@@ -59,7 +62,7 @@ const ModalCubages = props => {
       props.updateList();
     });
   }
-
+  const onCloseAlertDl = () => setIsOpenAlertDl(false);
   const toggleExpanded = define => {
     switch (define) {
       case 1:
@@ -216,6 +219,7 @@ const ModalCubages = props => {
     </div>
     <div>
         <h1 style="color: ${colors.orange}">TOTAL: $ ${priceFormat(materials.price * cubageSelect.count)}</h1>
+         <h3 style="color: ${colors.orange}">IVA: ${priceFormat((materials.price * cubageSelect.count) * 0.19)}</h3>
     </div>
   
     <div style="text-align: center;">
@@ -447,6 +451,14 @@ const ModalCubages = props => {
                 $ {priceFormat(materials.price * cubageSelect.count)}
               </Text>
             </HStack>
+            <HStack alignItems="center" justifyContent="space-between">
+              <Text fontWeight="medium" fontSize={18}>
+                IVA /19%
+              </Text>
+              <Text color="green.500" fontSize={'lg'}>
+                {priceFormat((materials.price * cubageSelect.count) * 0.19)}
+              </Text>
+            </HStack>
             <HStack justifyContent={'center'} space={5}>
               <Button size="md" colorScheme={cubageSelect.finalized === true ? 'success' : 'warning'} onPress={() => onUpdateFinalized(cubageSelect.finalized === true ? false : true)} leftIcon={<Icon as={AntDesign} name={cubageSelect.finalized === true ? 'checkcircle' : 'closecircle'} size="sm" />}>
                 {cubageSelect.finalized === true ? 'Finalizado' : 'Finalizar'}
@@ -457,10 +469,29 @@ const ModalCubages = props => {
                 </Button>
               }
             </HStack>
-
           </VStack>
         </Modal.Body>
       </Modal.Content>
+      <Stack h={20} justifyContent={'flex-end'}>
+        <TouchableOpacity onPress={() => {setIsOpenAlertDl(true)}}>
+          <Icon as={AntDesign} name={'closecircle'} borderRadius={100} backgroundColor={'white'} color={'red.500'} size={'5xl'} />
+        </TouchableOpacity>
+      </Stack>
+      {isOpenAlertDl && (
+        <AlertDelete
+          update={props.update}
+          idProject={props.project.id}
+          idCubage={cubageSelect.id}
+          idRoom={cubageSelect.room_id}
+          idMaterial={materials.id}
+          cancelRef={cancelRef}
+          isOpen={isOpenAlertDl}
+          onCloseAll={() => {
+            onCloseAlertDl();
+            props.onClose();
+          }}
+        />
+      )}
     </Modal >
   );
 };

@@ -2,6 +2,11 @@ import React from 'react';
 import {AlertDialog, Button, Center} from 'native-base';
 
 const AlertLimited = props => {
+
+  const onNavigation = () => {
+    props.onClose();
+    props.isOpenPlan();
+  }
   return (
     <Center>
       <AlertDialog
@@ -30,7 +35,7 @@ const AlertLimited = props => {
                 <Button colorScheme="danger">Renovar Pago</Button>
               ) : (
                 props.status === 'limited' && (
-                  <Button colorScheme="danger">Comprar premium</Button>
+                  <Button colorScheme="danger" onPress={() => onNavigation()}>Comprar premium</Button>
                 )
               )}
             </Button.Group>

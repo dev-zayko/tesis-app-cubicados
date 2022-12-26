@@ -21,7 +21,7 @@ export const login = createAsyncThunk(
         deviceName: deviceName,
         systemVersion: systemVersion,
         userAgent: userAgent
-      }, {timeout: 4000});
+      }, {timeout: 6000});
       const {status, token, verified} = response.data;
       if (status === 'empty') {
         Alert.alert(
@@ -40,7 +40,6 @@ export const login = createAsyncThunk(
           case 'isClient':
             const decoded = jwt_decode(token);
             const {user_status, first_name} = decoded.user;
-            await AsyncStorage.setItem('user', token);
             switch (user_status.id) {
               case 1:
                 if (verified === false) {
@@ -48,6 +47,8 @@ export const login = createAsyncThunk(
                 } else {
                   navigation.navigate('TabBar');
                 }
+                await AsyncStorage.setItem('userEmail', user.email);
+                await AsyncStorage.setItem('userPass', user.password);
                 return {user: token, userData: decoded.user};
               case 2:
                 Alert.alert(
@@ -154,7 +155,7 @@ export const register = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk('auth/logout', async () => {
-  return await AsyncStorage.removeItem('user');
+  return await AsyncStorage.removeItem('check');
 });
 
 export const updatePhone = createAsyncThunk('update/phone',

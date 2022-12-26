@@ -145,18 +145,23 @@ export const createCubages = createAsyncThunk(
 
 export const deleteCubage = createAsyncThunk(
   'cubages/delete',
-  async ({token, idCubage}, {rejectWithValue}) => {
+  async ({token, idCubage, idMaterial, idProject, idRoom}, {rejectWithValue}) => {
     try {
       const response = await ApiClient.post(
         'cubage/delete',
         {
           idCubage: idCubage,
+          idMaterial: idMaterial,
+          idProject: idProject,
+          idRoom: idRoom
         },
         {
           headers: {Authorization: `Bearer ${token}`},
         },
       );
-      return response.data;
+      console.log(response.data);
+      const {status} = response.data;
+      return {status: status};
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
@@ -236,11 +241,7 @@ const cubagesSlice = createSlice({
         state.loading = false;
       }),
       builder.addCase(deleteCubage.fulfilled, (state, action) => {
-        let index = state.cubages.findIndex(({id}) => id === action.payload.id);
-        state.cubages.splice(index, 1);
-        if (state.cubages.length === 0) {
-          state.cubages = null;
-        }
+        state.loading = false;
       }),
       builder.addCase(deleteCubage.rejected, (state, action) => {
         state.loading = false;

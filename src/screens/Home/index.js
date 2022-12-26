@@ -1,9 +1,9 @@
 import {useFocusEffect} from '@react-navigation/native';
 import {Divider, HStack, Icon, Image, ScrollView, Stack, Text, VStack} from 'native-base';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useState} from 'react';
 import {useCallback} from 'react';
-import {TouchableOpacity, Text as TextReact} from 'react-native';
+import {TouchableOpacity, Text as TextReact, BackHandler} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useDispatch, useSelector} from 'react-redux';
 import Background from '../../components/Background';
@@ -15,12 +15,15 @@ import {getMemberships, getPopularMemberships} from '../../redux/features/Member
 import {getPopularStores} from '../../redux/features/Stores/storesSlice';
 import {getPopularTrademark} from '../../redux/features/Material/materialSlice';
 import {Linking} from 'react-native';
+import ModalMemberships from '../../components/Modals/Membership';
+import {Alert} from 'react-native';
 
 const Home = ({navigation}) => {
 
   const dispatch = useDispatch()
   const {memberships, loading: loadingMembership} = useSelector(state => ({...state.memberships}));
   const {popularStores} = useSelector(state => ({...state.store}));
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const [memberPopular, setMemberPopular] = useState(null);
   const [storePopular, setStorePopular] = useState([]);
   const [surfacePopular, setSurfacePopular] = useState('');
@@ -28,6 +31,16 @@ const Home = ({navigation}) => {
 
   useFocusEffect(
     useCallback(() => {
+      const backAction = () => {
+        BackHandler.exitApp();
+        return true;
+      };
+
+      const backHandler = BackHandler.addEventListener(
+        "hardwareBackPress",
+        backAction
+      );
+
       dispatch(getMemberships({}));
       dispatch(getPopularStores({}))
         .then((response) => {
@@ -43,6 +56,7 @@ const Home = ({navigation}) => {
       dispatch(getPopularTrademark({idConstruction: 2})).then((response) => {
         MostPopularTrademark(response.payload.data, 2);
       });
+      return () => backHandler.remove();
     }, []),
   );
   const MostPopularPlans = (popularMemberships) => {
@@ -199,7 +213,8 @@ const Home = ({navigation}) => {
                         <Text fontSize={15} color={'white'}>Cubicaciones ilimitadas</Text>
                         <Text fontSize={15} color={'white'}>Proyectos ilimitados</Text>
                         <Text fontSize={15} color={'white'}>Habitaciones ilimitadas</Text>
-                        <Text fontSize={15} color={'white'}>Soporte Full</Text>
+                        <Text fontSize={15} color={'white'}>Gestionar Cotizaciones</Text>
+                        <Text fontSize={15} color={'white'}>Exportar proyectos a PDF</Text>
                       </VStack>
                       <VStack space={3}>
                         <Icon
@@ -220,29 +235,23 @@ const Home = ({navigation}) => {
                           size={6}
                           color={colors.otherGreen}
                         />
-
-                        {memberships[memberPopular]?.id === 4 ? (
-                          <Icon
-                            as={AntDesign}
-                            name={'checkcircle'}
-                            style={styles.icon}
-                            size={6}
-                            color={colors.otherGreen}
-                          />
-                        ) : (
-                          <Icon
-                            as={AntDesign}
-                            name={'closecircle'}
-                            style={styles.icon}
-                            size={6}
-                            color={colors.red}
-                          />
-                        )}
+                        <Icon
+                          as={AntDesign}
+                          name={'checkcircle'}
+                          size={6}
+                          color={colors.otherGreen}
+                        />
+                        <Icon
+                          as={AntDesign}
+                          name={'checkcircle'}
+                          size={6}
+                          color={colors.otherGreen}
+                        />
                       </VStack>
                     </HStack>
                   </VStack>
                   <Stack w={'100%'} alignItems={'center'}>
-                    <TouchableOpacity style={styles.buttonLogin}>
+                    <TouchableOpacity style={styles.buttonLogin} onPress={() => setIsOpenModal(true)}>
                       <Text style={styles.textLogin}>Ir a Planes</Text>
                     </TouchableOpacity>
                   </Stack>
@@ -335,6 +344,13 @@ const Home = ({navigation}) => {
             </Stack>
           </ScrollView>
         </LinearGradient>
+        {isOpenModal && (
+          <ModalMemberships
+            navigation={navigation}
+            onClose={() => setIsOpenModal(false)}
+            isOpen={isOpenModal}
+          />
+        )}
       </Container>
     </Background >
   );

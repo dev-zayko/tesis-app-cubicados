@@ -145,7 +145,7 @@ const CollapsibleRooms = props => {
             </Stack>
           </HStack>
           <Stack h={165} marginTop={2} alignSelf={'center'}>
-            <ListCubages room={props?.rooms} project={props.project} countCubages={(count) => setCountCubages(count)} />
+            <ListCubages room={props?.rooms} project={props.project} updateRooms={() => props.updateRooms()} countCubages={(count) => setCountCubages(count)} />
           </Stack>
           <Stack alignSelf={'center'}>
             <Text color={'gray.500'} italic={true}>

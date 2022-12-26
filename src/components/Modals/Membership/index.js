@@ -3,7 +3,7 @@ import {Button, KeyboardAvoidingView, Modal, Stack, Text} from 'native-base';
 import FormProject from '../../Forms/Projects';
 import {ActivityIndicator} from 'react-native';
 import {colors} from '../../colors';
-import {useFocusEffect} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import {getMemberships} from '../../../redux/features/Memberships/membershipsSlice';
 import CarouselMemberships from '../../Carousel/Memberships';
@@ -23,7 +23,7 @@ const ModalMemberships = props => {
     }, [])
   )
   const onNavigateWebPay = (price, idMembership) => {
-    props.navigation.navigate('Webpay', {amount: price, idMembership: idMembership});
+    props.navigation.navigate('ProfileStack', {screen: 'Webpay', params: {amount: price, idMembership: idMembership}});
     props.onClose();
   }
   return (

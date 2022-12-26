@@ -44,6 +44,8 @@ import Container from '../../components/Container';
 import {getCubagesByProject} from '../../redux/features/Cubages/cubagesSlice';
 import {PermissionsAndroid} from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import ModalMemberships from '../../components/Modals/Membership';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 
 const Projects = ({navigation}) => {
   const [projectSelect, setProjectSelect] = useState(null);
@@ -51,6 +53,7 @@ const Projects = ({navigation}) => {
   const [selectMonth, setSelectMonth] = useState('');
   const [selectYear, setSelectYear] = useState('');
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isOpenModalPlan, setIsOpenModalPlan] = useState(false);
   const [actionModal, setActionModal] = useState(0);
   const [isOpenAlertLimited, setIsOpenAlertLimited] = useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
@@ -320,7 +323,9 @@ const Projects = ({navigation}) => {
     </div>
     <div>
         <h1 style="color: ${colors.orange}">TOTAL: $ ${priceFormat(item.materials.price * item.count)}</h1>
+          <h3 style="color: ${colors.orange}">IVA: ${priceFormat((item.materials.price * item.count) * 0.19)}</h3>
     </div>
+          </div>
             </br>
             </br>
             </br>
@@ -328,7 +333,7 @@ const Projects = ({navigation}) => {
             </br>
             </br>
             </br>
-            ${index === 1 ? (`</br></br>`) : index === 2 ? `</br></br>` : ``} `
+            ${index === 1 ? (`</br></br>`) : index === 2 ? `</br></br></br>` : ``} `
           })} 
     </div>
     <div style="text-align: center;">
@@ -474,7 +479,15 @@ const Projects = ({navigation}) => {
             isOpen={isOpenAlertLimited}
             onClose={() => onCloseAlertLimited()}
             status={status}
+            isOpenPlan={() => setIsOpenModalPlan(true)}
             typeConstruction={'Proyectos'}
+          />
+        )}
+        {isOpenModalPlan && (
+          <ModalMemberships
+            navigation={navigation}
+            onClose={() => setIsOpenModalPlan(false)}
+            isOpen={isOpenModalPlan}
           />
         )}
         {isOpenModal && (

@@ -1,26 +1,26 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {AlertDialog, Button, Center, useToast} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
-import {deleteProject} from '../../../redux/features/Projects/projectSlice';
+import {deleteCubage} from '../../../redux/features/Cubages/cubagesSlice';
+import {ActivityIndicator} from 'react-native';
 
 const AlertDelete = props => {
   const dispatch = useDispatch();
   const {user} = useSelector(state => ({...state.auth}));
-  const {loading} = useSelector(state => ({...state.project}));
+  const {loading} = useSelector(state => ({...state.cubages}));
   const toast = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const onDeleteProject = () => {
-    dispatch(deleteProject({id: props.projectSelect.id, token: user}))
-      .then(() => {
-        props.onClose();
-        props.update();
-      })
-      .catch(error => {
-        console.log(error);
-        toast.show({
-          description: 'Ocurrio un error',
-        });
+  const onDeleteCubages = () => {
+    setIsSubmitting(true)
+    dispatch(deleteCubage({token: user, idCubage: props.idCubage, idMaterial: props.idMaterial, idProject: props.idProject, idRoom: props.idRoom})).then(() => {
+      setIsSubmitting(false);
+      props.update();
+      props.onCloseAll();
+      toast.show({
+        description: 'Cubicación Eliminada'
       });
+    });
   };
 
   return (
@@ -31,9 +31,9 @@ const AlertDelete = props => {
         onClose={props.onClose}>
         <AlertDialog.Content>
           <AlertDialog.CloseButton />
-          <AlertDialog.Header>{props.projectSelect.name}</AlertDialog.Header>
+          <AlertDialog.Header>Aviso</AlertDialog.Header>
           <AlertDialog.Body>
-            ¿Estas seguro de eliminar el proyecto?
+            ¿Estas seguro de eliminar esta cubicación?
           </AlertDialog.Body>
           <AlertDialog.Footer>
             <Button.Group space={2}>
@@ -44,18 +44,19 @@ const AlertDelete = props => {
                 ref={props.cancelRef}>
                 Cancelar
               </Button>
-              {loading === true ?
+              {isSubmitting === true ?
                 <>
                   <Button colorScheme="danger" disabled={true}>
                     <ActivityIndicator size={'small'} color={'white'} />
                   </Button>
                 </> :
                 <>
-                  <Button colorScheme="danger" onPress={() => onDeleteProject()}>
+                  <Button colorScheme="danger" onPress={() => onDeleteCubages()}>
                     Eliminar
                   </Button>
                 </>
-              }            </Button.Group>
+              }
+            </Button.Group>
           </AlertDialog.Footer>
         </AlertDialog.Content>
       </AlertDialog>
