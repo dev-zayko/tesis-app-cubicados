@@ -163,7 +163,34 @@ export const register = createAsyncThunk(
 export const logout = createAsyncThunk('auth/logout', async () => {
   return await AsyncStorage.removeItem('check');
 });
-
+export const updatePassword = createAsyncThunk(
+  'auth/change/password',
+  async ({tokenOld, oldPassword, newPassword}, {rejectWithValue}) => {
+    try {
+      const response = await ApiClient.put(
+        'update/password',
+        {
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+        },
+        {
+          headers: {Authorization: `Bearer ${tokenOld}`},
+        },
+      );
+      const {token, status} = response.data;
+      if (status !== 'incorrect') {
+        const decoded = jwt_decode(token);
+        await AsyncStorage.setItem('userPass', newPassword);
+        return {user: token, userData: decoded.user};
+      } else {
+        return 0;
+      }
+    } catch (error) {
+      console.log(error.response.data);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
 export const updatePhone = createAsyncThunk(
   'update/phone',
   async ({tokenOld, newPhone}, {rejectWithValue}) => {
@@ -233,6 +260,19 @@ const authSlice = createSlice({
         state.loading = false;
       }),
       builder.addCase(updatePhone.rejected, (state, action) => {
+        state.loading = false;
+      }),
+      builder.addCase(updatePassword.pending, (state, action) => {
+        state.loading = true;
+      }),
+      builder.addCase(updatePassword.fulfilled, (state, action) => {
+        if (action.payload !== 0) {
+          state.userData = action.payload.userData;
+          state.user = action.payload.user;
+        }
+        state.loading = false;
+      }),
+      builder.addCase(updatePassword.rejected, (state, action) => {
         state.loading = false;
       });
   },

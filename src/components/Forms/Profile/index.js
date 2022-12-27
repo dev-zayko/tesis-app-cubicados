@@ -2,12 +2,16 @@ import React from 'react';
 //Formik
 import {Formik} from 'formik';
 //Components Native Base
-import {FormControl, Input, VStack} from 'native-base';
+import {FormControl, Input, useToast, VStack} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
-import {updatePhone} from '../../../redux/features/Auth/authSlice';
+import {
+  updatePassword,
+  updatePhone,
+} from '../../../redux/features/Auth/authSlice';
 
 const FormProfile = props => {
   const dispatch = useDispatch();
+  const toast = useToast();
   const {user} = useSelector(state => ({...state.auth}));
   const onUpdatePhone = values => {
     dispatch(
@@ -20,11 +24,32 @@ const FormProfile = props => {
     });
   };
 
-  const onUpdatePassword = () => {};
+  const onUpdatePassword = values => {
+    dispatch(
+      updatePassword({
+        tokenOld: user,
+        oldPassword: values.oldPassword,
+        newPassword: values.newPassword,
+        toast: toast,
+      }),
+    ).then(res => {
+      if (res.payload === 0) {
+        props.closeSubmit();
+        toast.show({
+          description: 'La contraseña antigua no es correcta',
+        });
+      } else {
+        props.closeSubmit();
+        toast.show({
+          description: 'Contraseña actualizada',
+        });
+      }
+    });
+  };
 
   return (
     <Formik
-      initialValues={{phone: '', password: '', matchPassword: ''}}
+      initialValues={{phone: '', oldPassword: '', newPassword: ''}}
       innerRef={props.formRef}
       onSubmit={(values, {setSubmitting}) => {
         if (props.edit === 1) {
@@ -61,21 +86,21 @@ const FormProfile = props => {
                   variant="outline"
                   placeholder="Contraseña antigua"
                   size={'lg'}
-                  onChangeText={handleChange('password')}
-                  onBlur={handleBlur('password')}
-                  error={errors.password}
-                  value={values.password}
-                  touched={touched.password}
+                  onChangeText={handleChange('oldPassword')}
+                  onBlur={handleBlur('oldPassword')}
+                  error={errors.oldPassword}
+                  value={values.oldPassword}
+                  touched={touched.oldPassword}
                 />
                 <Input
                   variant="outline"
                   placeholder="Contraseña nueva"
                   size={'lg'}
-                  onChangeText={handleChange('matchPassword')}
-                  onBlur={handleBlur('matchPassword')}
-                  error={errors.matchPassword}
-                  value={values.matchPassword}
-                  touched={touched.matchPassword}
+                  onChangeText={handleChange('newPassword')}
+                  onBlur={handleBlur('newPassword')}
+                  error={errors.newPassword}
+                  value={values.newPassword}
+                  touched={touched.newPassword}
                 />
               </>
             )}

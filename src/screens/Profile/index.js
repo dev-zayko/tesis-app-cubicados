@@ -40,13 +40,13 @@ const Profile = ({navigation}) => {
                     w={'50%'}
                     justifyContent={'center'}
                     backgroundColor={
-                      userData.user_status.id === 1
+                      userData?.user_status.id === 1
                         ? colors.otherGreen
                         : colors.orange
                     }
                     borderRadius={50}>
                     <Text color={'light.50'} fontSize={'md'} bold>
-                      {userData.user_status.description}
+                      {userData?.user_status.description}
                     </Text>
                   </HStack>
                 </VStack>

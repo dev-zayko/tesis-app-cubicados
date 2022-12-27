@@ -84,13 +84,13 @@ const UserAccount = ({navigation}) => {
                       w={'50%'}
                       justifyContent={'center'}
                       backgroundColor={
-                        userData.user_status.id === 1
+                        userData?.user_status.id === 1
                           ? colors.otherGreen
                           : colors.orange
                       }
                       borderRadius={50}>
                       <Text color={'light.50'} fontSize={'md'} bold>
-                        {userData.user_status.description}
+                        {userData?.user_status.description}
                       </Text>
                     </HStack>
                   </VStack>
@@ -104,7 +104,7 @@ const UserAccount = ({navigation}) => {
                         color={colors.orange}
                         thickness={6}
                         progress={
-                          userData.membership_id !== 1
+                          userData?.membership_id !== 1
                             ? 1
                             : circleProgress.projects
                         }
@@ -113,7 +113,7 @@ const UserAccount = ({navigation}) => {
                       <Stack style={{bottom: 50}} alignItems={'center'}>
                         <Text fontSize={'md'} color={colors.orange}>
                           {countDataProject.projects}{' '}
-                          {userData.memberships.id === 1 && '/2'}
+                          {userData?.memberships.id === 1 && '/2'}
                         </Text>
                       </Stack>
                     </Flex>
