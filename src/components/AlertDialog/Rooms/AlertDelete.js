@@ -1,9 +1,8 @@
-import React from 'react'
+import React from 'react';
 import {AlertDialog, Button, Center, useToast} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
 import {deleteRoom} from '../../../redux/features/Rooms/roomSlice';
 import {ActivityIndicator} from 'react-native';
-
 
 const AlertDelete = props => {
   const dispatch = useDispatch();
@@ -12,16 +11,18 @@ const AlertDelete = props => {
   const toast = useToast();
 
   const onDeleteRoom = () => {
-    dispatch(deleteRoom({
-      token: user,
-      idProject: props.project,
-      idRoom: props.roomSelect.id,
-      toast: toast
-    })).then(() => {
+    dispatch(
+      deleteRoom({
+        token: user,
+        idProject: props.project,
+        idRoom: props.roomSelect.id,
+        toast: toast,
+      }),
+    ).then(() => {
       props.onClose();
       props.update();
     });
-  }
+  };
 
   return (
     <Center>
@@ -44,24 +45,25 @@ const AlertDelete = props => {
                 ref={props.cancelRef}>
                 Cancelar
               </Button>
-              {loading === true ?
+              {loading === true ? (
                 <>
                   <Button colorScheme="danger" disabled={true}>
                     <ActivityIndicator size={'small'} color={'white'} />
                   </Button>
-                </> :
+                </>
+              ) : (
                 <>
                   <Button colorScheme="danger" onPress={() => onDeleteRoom()}>
                     Eliminar
                   </Button>
                 </>
-              }
+              )}
             </Button.Group>
           </AlertDialog.Footer>
         </AlertDialog.Content>
       </AlertDialog>
     </Center>
-  )
-}
+  );
+};
 
 export default AlertDelete;

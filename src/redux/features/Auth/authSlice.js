@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import ApiClient from '../../../services/connection/ApiClient';
 import jwt_decode from 'jwt-decode';
 import {Alert} from 'react-native';
@@ -10,27 +10,37 @@ export const login = createAsyncThunk(
   'auth/login',
   async ({user, navigation, toast}, {rejectWithValue}) => {
     try {
-      let ip = await DeviceInfo.getIpAddress().then((ip) => {return Promise.resolve(ip)});
-      let userAgent = await DeviceInfo.getUserAgent().then((userAgent) => {return Promise.resolve(userAgent)});
-      let deviceName = await DeviceInfo.getDeviceName().then((deviceName) => {return Promise.resolve(deviceName)});
+      let ip = await DeviceInfo.getIpAddress().then(ip => {
+        return Promise.resolve(ip);
+      });
+      let userAgent = await DeviceInfo.getUserAgent().then(userAgent => {
+        return Promise.resolve(userAgent);
+      });
+      let deviceName = await DeviceInfo.getDeviceName().then(deviceName => {
+        return Promise.resolve(deviceName);
+      });
       let systemVersion = DeviceInfo.getSystemVersion();
-      const response = await ApiClient.post('login', {
-        email: user.email,
-        password: user.password,
-        ip: ip,
-        deviceName: deviceName,
-        systemVersion: systemVersion,
-        userAgent: userAgent
-      }, {timeout: 6000});
+      const response = await ApiClient.post(
+        'login',
+        {
+          email: user.email,
+          password: user.password,
+          ip: ip,
+          deviceName: deviceName,
+          systemVersion: systemVersion,
+          userAgent: userAgent,
+        },
+        {timeout: 6000},
+      );
       const {status, token, verified} = response.data;
       if (status === 'empty') {
         Alert.alert(
           'Aviso',
-          `Lo sentimos no existe una cuenta asociada a este email`,
+          'Lo sentimos no existe una cuenta asociada a este email',
           [
             {
               text: 'OK',
-              style: 'cancel'
+              style: 'cancel',
             },
           ],
         );
@@ -43,7 +53,9 @@ export const login = createAsyncThunk(
             switch (user_status.id) {
               case 1:
                 if (verified === false) {
-                  navigation.navigate('EmailVerification', {params: {user: user}});
+                  navigation.navigate('EmailVerification', {
+                    params: {user: user},
+                  });
                 } else {
                   navigation.navigate('TabBar');
                 }
@@ -96,7 +108,7 @@ export const login = createAsyncThunk(
       }
       // return response.data;
     } catch (error) {
-      console.log(error.response.data)
+      console.log(error.response.data);
       toast.show({
         description: 'Ocurrio un error',
       });
@@ -132,14 +144,8 @@ export const register = createAsyncThunk(
             {
               text: 'OK',
               onPress: () => {
-                mailService
-                  .sendEmailVerification(
-                    email,
-                    first_name,
-                    token,
-                  );
+                mailService.sendEmailVerification(email, first_name, token);
                 navigation.navigate('LoginScreen');
-
               },
             },
           ],
@@ -147,7 +153,7 @@ export const register = createAsyncThunk(
       }
     } catch (error) {
       toast.show({
-        description: 'Ocurrio un error'
+        description: 'Ocurrio un error',
       });
       return rejectWithValue(error.response.data);
     }
@@ -158,28 +164,30 @@ export const logout = createAsyncThunk('auth/logout', async () => {
   return await AsyncStorage.removeItem('check');
 });
 
-export const updatePhone = createAsyncThunk('update/phone',
+export const updatePhone = createAsyncThunk(
+  'update/phone',
   async ({tokenOld, newPhone}, {rejectWithValue}) => {
     try {
-      const response = await ApiClient.put('update/phone',
+      const response = await ApiClient.put(
+        'update/phone',
         {
-          newPhone: newPhone
+          newPhone: newPhone,
         },
         {
           headers: {Authorization: `Bearer ${tokenOld}`},
-        });
+        },
+      );
 
       const {token} = response.data;
       const decoded = jwt_decode(token);
 
-      return {user: token, userData: decoded.user}
+      return {user: token, userData: decoded.user};
     } catch (error) {
       console.log(error);
       return rejectWithValue(error.response.data);
     }
   },
-)
-
+);
 
 const user = null;
 
@@ -226,7 +234,7 @@ const authSlice = createSlice({
       }),
       builder.addCase(updatePhone.rejected, (state, action) => {
         state.loading = false;
-      })
+      });
   },
 });
 export default authSlice.reducer;

@@ -1,9 +1,5 @@
 import React, {useEffect} from 'react';
-import {
-  StyleSheet,
-  View,
-  Animated,
-} from 'react-native';
+import {Animated, StyleSheet, View} from 'react-native';
 import {colors} from '../../../colors';
 
 const styles = StyleSheet.create({
@@ -27,30 +23,34 @@ const styles = StyleSheet.create({
   },
 });
 
-
 const ObjectAnimated = ({value, opacity, y}) => (
   <Animated.View
-    style={[styles.diamond, {
-      opacity: value.interpolate({
-        inputRange: [0, 1, 2, 3, 4, 5, 6, 7],
-        outputRange: opacity,
-      }),
-      transform: [{
-        rotateY: value.interpolate({
+    style={[
+      styles.diamond,
+      {
+        opacity: value.interpolate({
           inputRange: [0, 1, 2, 3, 4, 5, 6, 7],
-          outputRange: y,
+          outputRange: opacity,
         }),
-      }],
-    }]}
+        transform: [
+          {
+            rotateY: value.interpolate({
+              inputRange: [0, 1, 2, 3, 4, 5, 6, 7],
+              outputRange: y,
+            }),
+          },
+        ],
+      },
+    ]}
   />
 );
 
-const Square = (props) => {
+const Square = props => {
   const animatedValue = new Animated.Value(0);
 
   useEffect(() => {
     animate();
-  }, [])
+  }, []);
 
   const setTimingAnimated = (originalValue, newValue, duration) => {
     return Animated.timing(originalValue, {
@@ -58,7 +58,7 @@ const Square = (props) => {
       duration,
       useNativeDriver: true,
     });
-  }
+  };
 
   const animate = () => {
     Animated.sequence([
@@ -74,42 +74,82 @@ const Square = (props) => {
       animatedValue.setValue(0);
       animate();
     });
-  }
+  };
   const {active} = props;
   return active ? (
     <View>
-      <View style={[styles.groupColumn, {
-        transform: [{rotateZ: '45deg'}],
-      }]}
-      >
+      <View
+        style={[
+          styles.groupColumn,
+          {
+            transform: [{rotateZ: '45deg'}],
+          },
+        ]}>
         <View style={styles.groupRow}>
           <ObjectAnimated
             value={animatedValue}
             opacity={[1, 0, 0, 0, 1, 1, 1, 1]}
-            y={['180deg', '0deg', '0deg', '0deg', '0deg', '0deg', '0deg', '0deg']}
+            y={[
+              '180deg',
+              '0deg',
+              '0deg',
+              '0deg',
+              '0deg',
+              '0deg',
+              '0deg',
+              '0deg',
+            ]}
           />
           <ObjectAnimated
             value={animatedValue}
             opacity={[1, 1, 0, 0, 0, 1, 1, 1]}
-            y={['0deg', '0deg', '180deg', '0deg', '0deg', '0deg', '0deg', '0deg']}
+            y={[
+              '0deg',
+              '0deg',
+              '180deg',
+              '0deg',
+              '0deg',
+              '0deg',
+              '0deg',
+              '0deg',
+            ]}
           />
         </View>
         <View style={styles.groupRow}>
           <ObjectAnimated
             value={animatedValue}
             opacity={[1, 1, 1, 1, 0, 0, 0, 1]}
-            y={['0deg', '0deg', '0deg', '0deg', '180deg', '0deg', '0deg', '0deg']}
+            y={[
+              '0deg',
+              '0deg',
+              '0deg',
+              '0deg',
+              '180deg',
+              '0deg',
+              '0deg',
+              '0deg',
+            ]}
           />
           <ObjectAnimated
             value={animatedValue}
             opacity={[1, 1, 1, 0, 0, 0, 1, 1]}
-            y={['0deg', '0deg', '0deg', '180deg', '0deg', '0deg', '0deg', '0deg']}
+            y={[
+              '0deg',
+              '0deg',
+              '0deg',
+              '180deg',
+              '0deg',
+              '0deg',
+              '0deg',
+              '0deg',
+            ]}
           />
         </View>
       </View>
     </View>
-  ) : <React.Fragment />;
-}
-
+  ) : (
+    <React.Fragment />
+  );
+};
 
 export default Square;

@@ -10,7 +10,6 @@ import UserAccount from '../../screens/UserAccount';
 import Membership from '../../screens/Membership';
 import Webpay from '../../screens/Webpay';
 import MyPays from '../../screens/MyPays';
-import {HeaderBackButton} from '@react-navigation/stack';
 //Stack navigator
 const ProfileStack = createNativeStackNavigator();
 
@@ -65,11 +64,7 @@ const ProfileStackScreen = () => {
           headerBackVisible: true,
         }}
       />
-      <ProfileStack.Screen
-        name={'Webpay'}
-        component={Webpay}
-      />
-
+      <ProfileStack.Screen name={'Webpay'} component={Webpay} />
     </ProfileStack.Navigator>
   );
 };

@@ -1,5 +1,5 @@
 import UtilityService from '../../services/utility/utilityService';
-import {GET_COUNT, LOGIN_SUCCESS, SET_MESSAGE} from './type';
+import {LOGIN_SUCCESS, SET_MESSAGE} from './type';
 
 export const getCount = token => dispatch => {
   return UtilityService.getCount(token).then(response => {

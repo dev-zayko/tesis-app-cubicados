@@ -1,6 +1,5 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import {AlertDialog, Button, Center} from 'native-base';
-
 
 const AlertConfirm = props => {
   const onNavigate = () => {

@@ -7,21 +7,20 @@ import {useDispatch, useSelector} from 'react-redux';
 import {updatePhone} from '../../../redux/features/Auth/authSlice';
 
 const FormProfile = props => {
-
   const dispatch = useDispatch();
   const {user} = useSelector(state => ({...state.auth}));
-  const onUpdatePhone = (values) => {
-    dispatch(updatePhone({
-      tokenOld: user,
-      newPhone: values.phone
-    })).then(() => {
+  const onUpdatePhone = values => {
+    dispatch(
+      updatePhone({
+        tokenOld: user,
+        newPhone: values.phone,
+      }),
+    ).then(() => {
       props.closeSubmit();
     });
   };
 
-  const onUpdatePassword = () => {
-
-  }
+  const onUpdatePassword = () => {};
 
   return (
     <Formik
@@ -54,7 +53,8 @@ const FormProfile = props => {
                 onBlur={handleBlur('phone')}
                 error={errors.phone}
                 value={values.phone}
-                touched={touched.phone} />
+                touched={touched.phone}
+              />
             ) : (
               <>
                 <Input
@@ -65,7 +65,8 @@ const FormProfile = props => {
                   onBlur={handleBlur('password')}
                   error={errors.password}
                   value={values.password}
-                  touched={touched.password} />
+                  touched={touched.password}
+                />
                 <Input
                   variant="outline"
                   placeholder="Contraseña nueva"
@@ -74,7 +75,8 @@ const FormProfile = props => {
                   onBlur={handleBlur('matchPassword')}
                   error={errors.matchPassword}
                   value={values.matchPassword}
-                  touched={touched.matchPassword} />
+                  touched={touched.matchPassword}
+                />
               </>
             )}
           </VStack>

@@ -12,7 +12,7 @@ import quoterReducer from './features/Quoter/quoterSlice';
 import materialReducer from './features/Material/materialSlice';
 import membershipsReducer from './features/Memberships/membershipsSlice';
 import webpayReducer from './features/Webpay/webpaySlice';
-import paidMembershipsReducer from './features/PaidMemberships/paidMembershipsSlice'
+import paidMembershipsReducer from './features/PaidMemberships/paidMembershipsSlice';
 
 export default configureStore({
   reducer: {
@@ -29,11 +29,12 @@ export default configureStore({
     material: materialReducer,
     memberships: membershipsReducer,
     webpay: webpayReducer,
-    paidMembership: paidMembershipsReducer
+    paidMembership: paidMembershipsReducer,
   },
   devTools: true,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-    immutableCheck: false,
-    serializableCheck: false,
-  })
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      immutableCheck: false,
+      serializableCheck: false,
+    }),
 });

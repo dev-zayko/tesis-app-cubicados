@@ -7,12 +7,12 @@ import React, {useState} from 'react';
 // import all the components we are going to use
 import {
   SafeAreaView,
-  Switch,
   ScrollView,
   StyleSheet,
+  Switch,
   Text,
-  View,
   TouchableOpacity,
+  View,
 } from 'react-native';
 
 //import for the animation of Collapse and Expand

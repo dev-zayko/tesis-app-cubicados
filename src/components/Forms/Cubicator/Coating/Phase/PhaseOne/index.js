@@ -4,19 +4,18 @@ import {Formik} from 'formik';
 //Components Native Base
 import {
   FormControl,
-  Input,
   HStack,
-  Text,
-  VStack,
-  Stack,
   Image,
+  Input,
+  Stack,
+  Text,
   useToast,
+  VStack,
 } from 'native-base';
 import {Text as TextReact} from 'react-native';
 import {useSelector} from 'react-redux';
 import {styles} from '../../../../../styles';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
-import {colors} from '../../../../../colors';
 
 const FormPhaseOne = props => {
   const {constructionSelect} = useSelector(state => ({...state.construction}));
@@ -254,10 +253,11 @@ const FormPhaseOne = props => {
         </FormControl>
       )}
     </Formik>
-
   );
 };
 
-const StyleText = ({children}) => {return <Text fontSize={18}>{children}</Text>}
+const StyleText = ({children}) => {
+  return <Text fontSize={18}>{children}</Text>;
+};
 
 export default FormPhaseOne;

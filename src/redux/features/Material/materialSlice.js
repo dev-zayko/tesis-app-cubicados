@@ -1,41 +1,51 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import ApiClient from '../../../services/connection/ApiClient';
 
 export const createMaterial = createAsyncThunk(
   'material/get',
-  async ({token, image, tradeMark, title, price, idStore, idCommune}, {rejectWithValue}) => {
+  async (
+    {token, image, tradeMark, title, price, idStore, idCommune},
+    {rejectWithValue},
+  ) => {
     try {
-      const response = await ApiClient.post('materials/store', {
-        image: image,
-        tradeMark: tradeMark,
-        title: title,
-        price: price,
-        idStore: idStore,
-        idCommune: idCommune
-      }, {
-        headers: {Authorization: `Bearer ${token}`},
-      });
+      const response = await ApiClient.post(
+        'materials/store',
+        {
+          image: image,
+          tradeMark: tradeMark,
+          title: title,
+          price: price,
+          idStore: idStore,
+          idCommune: idCommune,
+        },
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        },
+      );
       const {status, data} = response.data;
       if (status === 'success') {
         return {data: data};
       } else {
-        return {data: status}
+        return {data: status};
       }
     } catch (error) {
       console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 
 export const getPopularTrademark = createAsyncThunk(
   'material/popular',
   async ({idConstruction}, {rejectWithValue}) => {
     try {
-      const response = await ApiClient.post('construction/type/popular',
+      const response = await ApiClient.post(
+        'construction/type/popular',
         {
-          idConstruction: idConstruction
-        }, {});
+          idConstruction: idConstruction,
+        },
+        {},
+      );
       const {data, status} = response.data;
       if (status === 'success') {
         return {data: data, status: status};
@@ -44,8 +54,7 @@ export const getPopularTrademark = createAsyncThunk(
       console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
-  }
-
+  },
 );
 
 const materialSlice = createSlice({
@@ -53,7 +62,7 @@ const materialSlice = createSlice({
   initialState: {
     loading: false,
     material: 0,
-    status: ''
+    status: '',
   },
   extraReducers: builder => {
     builder.addCase(createMaterial.pending, (state, action) => {
@@ -65,9 +74,8 @@ const materialSlice = createSlice({
       }),
       builder.addCase(createMaterial.rejected, (state, action) => {
         state.loading = false;
-      })
-  }
-})
+      });
+  },
+});
 
 export default materialSlice.reducer;
-

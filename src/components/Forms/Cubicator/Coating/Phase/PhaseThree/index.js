@@ -1,9 +1,8 @@
 import React, {useCallback} from 'react';
-import {Stack, Text, Image, HStack, VStack, Divider} from 'native-base';
+import {Divider, HStack, Image, Stack, Text, VStack} from 'native-base';
 import {Text as TextReact} from 'react-native';
 import {useSelector} from 'react-redux';
 import {useFocusEffect} from '@react-navigation/native';
-import {colors} from '../../../../../colors';
 import {styles} from '../../../../../styles';
 
 const ResultPhaseThree = props => {
@@ -72,7 +71,9 @@ const ResultPhaseThree = props => {
           <TextReact style={styles.textLarge}>{typePainting}</TextReact>
         </HStack>
         <HStack justifyContent={'center'}>
-          <TextReact style={styles.textLarge}>{performancePainting} m2/Litro</TextReact>
+          <TextReact style={styles.textLarge}>
+            {performancePainting} m2/Litro
+          </TextReact>
         </HStack>
       </HStack>
       <VStack>
@@ -94,7 +95,9 @@ const ResultPhaseThree = props => {
           w={10}
           h={10}
         />
-        <Text style={styles.textLarge}>{countPainting} Litro(s) aproximados</Text>
+        <Text style={styles.textLarge}>
+          {countPainting} Litro(s) aproximados
+        </Text>
       </HStack>
       <VStack>
         <HStack space={100}>
@@ -131,7 +134,7 @@ const ResultPhaseThree = props => {
           {tool.id === 1
             ? `${countDiluent} cm3 equivale al 5% de diluyente por la cantidad de pintura`
             : tool.id === 2 &&
-            `${countDiluent} cm3 equivale al 10% de diluyente por la cantidad de pintura`}
+              `${countDiluent} cm3 equivale al 10% de diluyente por la cantidad de pintura`}
         </TextReact>
       </Stack>
     </Stack>

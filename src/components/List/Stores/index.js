@@ -1,46 +1,44 @@
-import React, {useCallback, useRef, useState} from "react";
-import {FlatList, TouchableOpacity, Text as TextReact} from "react-native";
+import React, {useCallback, useRef, useState} from 'react';
+import {FlatList, Text as TextReact, TouchableOpacity} from 'react-native';
 import {
   Box,
   Center,
   Heading,
   HStack,
-  Flex,
-  Text,
   Image,
+  Stack,
+  Text,
   VStack,
-  Stack
-} from "native-base";
+} from 'native-base';
 //Colors
 import {colors} from '../../colors';
 import {styles} from '../../styles';
-import {useFocusEffect, useNavigation} from "@react-navigation/native";
-import {useDispatch} from "react-redux";
-import {setStoreSelect} from "../../../redux/features/Stores/storesSlice";
-import {resetListProducts} from "../../../redux/features/Quoter/quoterSlice";
-import AlertLocation from "../../AlertDialog/Location/AlertLocation";
+import {useFocusEffect} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {setStoreSelect} from '../../../redux/features/Stores/storesSlice';
+import {resetListProducts} from '../../../redux/features/Quoter/quoterSlice';
+import AlertLocation from '../../AlertDialog/Location/AlertLocation';
 
-const ListStores = (props) => {
+const ListStores = props => {
   const dispatch = useDispatch();
   const cancelRef = useRef(null);
   const [isOpenAlertLocation, setIsOpenAlertLocation] = useState(false);
 
-  const onOpenAlert = (item) => {
+  const onOpenAlert = item => {
     dispatch(setStoreSelect(item));
     setIsOpenAlertLocation(true);
-  }
+  };
 
-  useFocusEffect(useCallback(() => {
-    dispatch(resetListProducts());
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(resetListProducts());
+    }, []),
   );
 
   return (
     <>
       <Stack alignItems={'center'} justifyContent={'center'} h={100}>
-        <Text style={styles.textLarge}>
-          TIENDA
-        </Text>
+        <Text style={styles.textLarge}>TIENDA</Text>
         <TextReact style={[styles.textMedium, styles.subtitleText]}>
           Escoge tu tienda
         </TextReact>
@@ -70,9 +68,14 @@ const ListStores = (props) => {
                 <HStack>
                   <Box>
                     <Image
-                      source={item.name === 'Sodimac' ? require('../../../assets/logo-sodimac.png')
-                        : item.name === 'Easy' ? require('../../../assets/logo-easy.png') : item.name === 'Construmart' &&
-                          require('../../../assets/logo-construmart.png')}
+                      source={
+                        item.name === 'Sodimac'
+                          ? require('../../../assets/logo-sodimac.png')
+                          : item.name === 'Easy'
+                          ? require('../../../assets/logo-easy.png')
+                          : item.name === 'Construmart' &&
+                            require('../../../assets/logo-construmart.png')
+                      }
                       alt="logo-stores"
                       width={100}
                       height={100}
@@ -125,6 +128,6 @@ const ListStores = (props) => {
       )}
     </>
   );
-}
+};
 
 export default ListStores;

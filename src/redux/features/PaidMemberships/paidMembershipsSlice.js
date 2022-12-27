@@ -1,39 +1,48 @@
-import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
-import ApiClient from "../../../services/connection/ApiClient";
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import ApiClient from '../../../services/connection/ApiClient';
 
 export const createPaidMemberships = createAsyncThunk(
   'paidMemberships/create',
-  async ({idMembership, netoAmount, buyOrder, sessionId, token, tokenDevice}, {rejectWithValue}) => {
+  async (
+    {idMembership, netoAmount, buyOrder, sessionId, token, tokenDevice},
+    {rejectWithValue},
+  ) => {
     try {
-      const response = await ApiClient.post('membership/paid/store', {
-        idMembership: idMembership,
-        netoAmount: netoAmount,
-        buyOrder: buyOrder,
-        sessionId: sessionId,
-        tokenDevice: tokenDevice
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      const response = await ApiClient.post(
+        'membership/paid/store',
+        {
+          idMembership: idMembership,
+          netoAmount: netoAmount,
+          buyOrder: buyOrder,
+          sessionId: sessionId,
+          tokenDevice: tokenDevice,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
     } catch (error) {
       console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 
 export const getPaidMemberships = createAsyncThunk(
   'paidMemberships/get',
   async ({token}, {rejectWithValue}) => {
     try {
-      const response = await ApiClient.post('membership/paid/all', {
-
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }
-      });
+      const response = await ApiClient.post(
+        'membership/paid/all',
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
       const {status, data} = response.data;
       if (status !== 'empty') {
         return {data: data, status: status};
@@ -44,15 +53,15 @@ export const getPaidMemberships = createAsyncThunk(
       console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
-  }
-)
+  },
+);
 
 const paidMembershipsSlice = createSlice({
   name: 'paidMemberships',
   initialState: {
     paidMemberships: 0,
     loading: 0,
-    status: ''
+    status: '',
   },
   extraReducers: builder => {
     builder.addCase(createPaidMemberships.pending, (state, action) => {
@@ -74,8 +83,8 @@ const paidMembershipsSlice = createSlice({
       }),
       builder.addCase(getPaidMemberships.rejected, (state, action) => {
         state.loading = false;
-      })
-  }
+      });
+  },
 });
 
 export default paidMembershipsSlice.reducer;

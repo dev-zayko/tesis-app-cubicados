@@ -1,13 +1,11 @@
-import React, {useState, useCallback, useRef} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 //Components Native base
 import {
   CheckIcon,
-  Divider,
   Flex,
   HStack,
   Icon,
   Input,
-  Menu,
   Select,
   Stack,
   Text,
@@ -23,11 +21,15 @@ import {useFocusEffect} from '@react-navigation/native';
 //hook redux
 import {useDispatch, useSelector} from 'react-redux';
 //SLice Get Project By User
-import {getProjectByUser, setListProjects} from '../../redux/features/Projects/projectSlice';
+import {getProjectByUser} from '../../redux/features/Projects/projectSlice';
 //Custom Components of list Projects
 import ListProjects from '../../components/List/Projects';
 //Components of React native
-import {ActivityIndicator, TouchableOpacity} from 'react-native';
+import {
+  ActivityIndicator,
+  PermissionsAndroid,
+  TouchableOpacity,
+} from 'react-native';
 //React vector icon
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -42,10 +44,8 @@ import {filter} from 'lodash';
 import moment from 'moment';
 import Container from '../../components/Container';
 import {getCubagesByProject} from '../../redux/features/Cubages/cubagesSlice';
-import {PermissionsAndroid} from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import ModalMemberships from '../../components/Modals/Membership';
-import Fontisto from 'react-native-vector-icons/Fontisto';
 
 const Projects = ({navigation}) => {
   const [projectSelect, setProjectSelect] = useState(null);
@@ -69,10 +69,9 @@ const Projects = ({navigation}) => {
     useCallback(() => {
       setSelectYear('');
       setSelectMonth('');
-      dispatch(getProjectByUser({token: user, toast: toast}))
-        .then((response) => {
-          setFullData(response.payload.data);
-        });
+      dispatch(getProjectByUser({token: user, toast: toast})).then(response => {
+        setFullData(response.payload.data);
+      });
     }, [update]),
   );
 
@@ -100,10 +99,10 @@ const Projects = ({navigation}) => {
   const onSearch = text => {
     const formattedQuery = text;
     const data = filter(projects, projectForm => {
-      return contains(projectForm, formattedQuery)
+      return contains(projectForm, formattedQuery);
     });
     setFullData(data);
-  }
+  };
   const contains = (project, query) => {
     const {name} = project;
     let reg = new RegExp(query, 'gi');
@@ -115,15 +114,15 @@ const Projects = ({navigation}) => {
   };
 
   const onSearchMonth = text => {
-    setSelectMonth(text)
+    setSelectMonth(text);
     const formattedQuery = text;
     const data = filter(projects, projectForm => {
-      return containsMonth(projectForm, formattedQuery)
+      return containsMonth(projectForm, formattedQuery);
     });
     if (data.length === 0) {
       toast.show({
-        description: 'No hay proyectos en este mes'
-      })
+        description: 'No hay proyectos en este mes',
+      });
     } else {
       setFullData(data);
     }
@@ -138,15 +137,15 @@ const Projects = ({navigation}) => {
     }
   };
   const onSearchYear = text => {
-    setSelectYear(text)
+    setSelectYear(text);
     const formattedQuery = text;
     const data = filter(fullData, projectForm => {
-      return containsYear(projectForm, formattedQuery)
+      return containsYear(projectForm, formattedQuery);
     });
     if (data.length === 0) {
       toast.show({
-        description: 'No hay proyectos en este año'
-      })
+        description: 'No hay proyectos en este año',
+      });
     } else {
       setFullData(data);
     }
@@ -164,37 +163,39 @@ const Projects = ({navigation}) => {
     setSelectMonth('');
     setSelectYear('');
     setFullData(projects);
-  }
+  };
 
   const getAllCubages = (idProject, nameProject) => {
-    dispatch(getCubagesByProject({token: user, idProject: idProject}))
-      .then((response) => {
+    dispatch(getCubagesByProject({token: user, idProject: idProject})).then(
+      response => {
         checkPermission(response.payload.data, nameProject);
-      });
-  }
+      },
+    );
+  };
 
   const checkPermission = async (allCubages, nameProject) => {
     try {
-      const result = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+      const result = await PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      );
 
       if (result === true) {
         exportToPdf(allCubages, nameProject);
       } else if (result === false) {
-        const status = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+        const status = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        );
         if (status === 'never_ask_again') {
-
-        }
-        else if (status === 'denied') {
+        } else if (status === 'denied') {
           checkPermission(allCubages, nameProject);
-        }
-        else if (status === 'granted') {
+        } else if (status === 'granted') {
           exportToPdf(allCubages, nameProject);
         }
       }
     } catch (error) {
-      console.log('error: ', error)
+      console.log('error: ', error);
     }
-  }
+  };
 
   const priceFormat = price => {
     return price
@@ -206,8 +207,7 @@ const Projects = ({navigation}) => {
   const exportToPdf = async (allCubages, nameProject) => {
     try {
       let options = {
-        html:
-          `<html>
+        html: `<html>
   <head>
     <style>
       table,
@@ -230,10 +230,12 @@ const Projects = ({navigation}) => {
     </div>
     <div>
         <h1>Detalles</h1>
-        <h3>A nombre de: ${userData.first_name} ${userData.father_last_name} ${userData?.mother_last_name}</h3>
+        <h3>A nombre de: ${userData.first_name} ${userData.father_last_name} ${
+          userData?.mother_last_name
+        }</h3>
         <h3>Proyecto: ${nameProject}<h3>
         ${allCubages.map((item, index) => {
-            return `
+          return `
            <div>
            <h2>Cubicacion: N ${index + 1}</h2>
            <h2>Habitación: ${item.rooms.name}</h2>
@@ -249,26 +251,45 @@ const Projects = ({navigation}) => {
       </tr>
       <tr>
         <th>${item.constructions.constructionType.id === 1 ? 'M3' : 'M2'}</th>
-        <td>${item.constructions.constructionType.id === 1 ? item.m3 : item.area}</td>
+        <td>${
+          item.constructions.constructionType.id === 1 ? item.m3 : item.area
+        }</td>
       </tr> 
       <tr>
         <th>Dosificacion</th>
-        <td>${item.dosage} ${item.constructions.constructionType.id === 1 ? 'saco/m3 aprox.' : 'mts2/litro aprox.'}</td>
+        <td>${item.dosage} ${
+            item.constructions.constructionType.id === 1
+              ? 'saco/m3 aprox.'
+              : 'mts2/litro aprox.'
+          }</td>
       </tr>
       <tr>
         <th>Cantidad</th>
-        <td>${item.count} ${item.description !== '' ? 'Litro(s) aprox. necesitas' : 'sacos aprox.'}</td>
+        <td>${item.count} ${
+            item.description !== ''
+              ? 'Litro(s) aprox. necesitas'
+              : 'sacos aprox.'
+          }</td>
       </tr>
       <tr>
         <th>${item.description !== '' ? 'Complemento' : 'Grava'}</th>
-        <td>${item.description !== '' ? item.description.tool.name : item.gravel + ' sacos'}</td>
+        <td>${
+          item.description !== ''
+            ? item.description.tool.name
+            : item.gravel + ' sacos'
+        }</td>
       </tr>
       <tr>
         <th>${item.description !== '' ? 'Tipo diluyente' : 'Arena 5mm'}</th>
-        <td>${item.description !== '' ? item.description.thinnerType : item.sand + ' sacos'}</td>
+        <td>${
+          item.description !== ''
+            ? item.description.thinnerType
+            : item.sand + ' sacos'
+        }</td>
       </tr>
-        ${item.description !== '' ? (
-                `
+        ${
+          item.description !== ''
+            ? `
                 <tr>
                   <th>Cantidad de Galones</th>
                   <td>${item.description.gallonsCount} gl</td>
@@ -276,15 +297,16 @@ const Projects = ({navigation}) => {
                 <tr>
                   <th>Cantidad de diluyente</th>
                   <td>
-                    ${item.description.tool.id === 1
-                  ? `${item.description.thinnerCount} cm3 equivale al 5% de diluyente por la cantidad de pintura`
-                  : item.description.tool.id === 2 &&
-                  `${item.description.thinnerCount} cm3 equivale al 10% de diluyente por la cantidad de pintura`}
+                    ${
+                      item.description.tool.id === 1
+                        ? `${item.description.thinnerCount} cm3 equivale al 5% de diluyente por la cantidad de pintura`
+                        : item.description.tool.id === 2 &&
+                          `${item.description.thinnerCount} cm3 equivale al 10% de diluyente por la cantidad de pintura`
+                    }
                   </td>
                 </tr>
            `
-              ) : (
-                `
+            : `
               <tr>
                 <th>
                   ${item.description !== '' ? 'Cantidad de diluyente' : 'Agua'}
@@ -294,7 +316,7 @@ const Projects = ({navigation}) => {
                 </td>
               </tr>
               `
-              )}
+        }
         </table>
  <div>
         <h2>Material</h2>
@@ -317,13 +339,21 @@ const Projects = ({navigation}) => {
             </tr>
             <tr>
               <th>Ubicación</th>
-              <td>${item.materials.communes.regions.name + ', ' + item.materials.communes.name}</td>
+              <td>${
+                item.materials.communes.regions.name +
+                ', ' +
+                item.materials.communes.name
+              }</td>
             </tr>
           </table>
     </div>
     <div>
-        <h1 style="color: ${colors.orange}">TOTAL: $ ${priceFormat(item.materials.price * item.count)}</h1>
-          <h3 style="color: ${colors.orange}">IVA: ${priceFormat((item.materials.price * item.count) * 0.19)}</h3>
+        <h1 style="color: ${colors.orange}">TOTAL: $ ${priceFormat(
+            item.materials.price * item.count,
+          )}</h1>
+          <h3 style="color: ${colors.orange}">IVA: ${priceFormat(
+            item.materials.price * item.count * 0.19,
+          )}</h3>
     </div>
           </div>
             </br>
@@ -333,8 +363,10 @@ const Projects = ({navigation}) => {
             </br>
             </br>
             </br>
-            ${index === 1 ? (`</br></br>`) : index === 2 ? `</br></br></br>` : ``} `
-          })} 
+            ${
+              index === 1 ? '</br></br>' : index === 2 ? '</br></br></br>' : ''
+            } `;
+        })} 
     </div>
     <div style="text-align: center;">
      <h4 style='color: #808080'>Cubicados © ${moment().format('YYYY')}</h4>
@@ -344,13 +376,13 @@ const Projects = ({navigation}) => {
         fileName: `${nameProject}.AllCubic${Math.random()}`,
         directory: 'Documents',
       };
-      console.log(options)
+      console.log(options);
       let file = await RNHTMLtoPDF.convert(options);
-      alert('PDF Creado')
+      alert('PDF Creado');
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   return (
     <Background>
       <Container>
@@ -369,15 +401,30 @@ const Projects = ({navigation}) => {
               backgroundColor={'gray.200'}
               placeholder="BUSCAR"
               onChangeText={onSearch}
-              InputLeftElement={<Icon as={<Ionicons name="search-circle" />} size={10} color={colors.orange} />} />
+              InputLeftElement={
+                <Icon
+                  as={<Ionicons name="search-circle" />}
+                  size={10}
+                  color={colors.orange}
+                />
+              }
+            />
           </Stack>
           <HStack space={2} justifyContent={'center'}>
-            <Select selectedValue={selectMonth} fontSize={14} backgroundColor={'gray.200'} minWidth={"120"} borderRadius={20} accessibilityLabel="MES" placeholder="MES" _selectedItem={{
-              bg: "orange.500",
-              endIcon: <CheckIcon size="5" />
-            }} mt={1}
-              onValueChange={(itemValue) => onSearchMonth(itemValue)}>
-
+            <Select
+              selectedValue={selectMonth}
+              fontSize={14}
+              backgroundColor={'gray.200'}
+              minWidth={'120'}
+              borderRadius={20}
+              accessibilityLabel="MES"
+              placeholder="MES"
+              _selectedItem={{
+                bg: 'orange.500',
+                endIcon: <CheckIcon size="5" />,
+              }}
+              mt={1}
+              onValueChange={itemValue => onSearchMonth(itemValue)}>
               <Select.Item label="Enero" value="01" />
               <Select.Item label="Febrero" value="02" />
               <Select.Item label="Marzo" value="03" />
@@ -394,16 +441,17 @@ const Projects = ({navigation}) => {
             <Select
               backgroundColor={'gray.200'}
               selectedValue={selectYear}
-              minWidth={"100"}
+              minWidth={'100'}
               borderRadius={20}
               accessibilityLabel="AÑO"
               placeholder="AÑO"
               fontSize={14}
               _selectedItem={{
-                bg: "orange.500",
-                endIcon: <CheckIcon size="5" color={'white'} />
-              }} mt={1}
-              onValueChange={(itemValue) => onSearchYear(itemValue)}>
+                bg: 'orange.500',
+                endIcon: <CheckIcon size="5" color={'white'} />,
+              }}
+              mt={1}
+              onValueChange={itemValue => onSearchYear(itemValue)}>
               <Select.Item label="2022" value="2022" />
               <Select.Item label="2023" value="2023" />
               <Select.Item label="2024" value="2024" />
@@ -414,22 +462,28 @@ const Projects = ({navigation}) => {
             </Select>
             <Stack justifyContent={'center'}>
               <TouchableOpacity onPress={() => cleanFilter()}>
-                <Icon as={Entypo} name={"erase"} size={'8'} color={colors.orange} />
+                <Icon
+                  as={Entypo}
+                  name={'erase'}
+                  size={'8'}
+                  color={colors.orange}
+                />
               </TouchableOpacity>
             </Stack>
           </HStack>
         </Stack>
-        <Stack
-          w={300}
-          h={380}
-          alignItems={'center'}>
+        <Stack w={300} h={380} alignItems={'center'}>
           {fullData === 0 ? (
             <ActivityIndicator size={'large'} color={colors.orange} />
           ) : projects === null ? (
             <Stack h={250} alignItems={'center'} justifyContent={'center'}>
               <Text fontSize={'lg'}>No tienes proyectos creados</Text>
               <Text fontSize={'lg'}>¡Crea uno!</Text>
-              <Stack w={280} alignItems={'center'} h={100} justifyContent={'flex-end'}>
+              <Stack
+                w={280}
+                alignItems={'center'}
+                h={100}
+                justifyContent={'flex-end'}>
                 <HandDownAnimation />
               </Stack>
             </Stack>
@@ -437,10 +491,9 @@ const Projects = ({navigation}) => {
             <ListProjects
               projects={fullData}
               update={() => setUpdate(!update)}
-              onActionSheet={(projectSelect) => {
-                onSelectProject(projectSelect)
-              }
-              }
+              onActionSheet={projectSelect => {
+                onSelectProject(projectSelect);
+              }}
             />
           )}
         </Stack>
@@ -469,6 +522,7 @@ const Projects = ({navigation}) => {
             project={projectSelect}
             export={() => getAllCubages(projectSelect.id, projectSelect.name)}
             actionModal={() => onActionModal(2)}
+            isOpenPlan={() => setIsOpenModalPlan(true)}
             update={onUpdate}
             navigation={navigation}
           />

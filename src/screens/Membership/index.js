@@ -1,14 +1,12 @@
 import React, {useState} from 'react';
 import Background from '../../components/Background';
-import {Button, Flex, HStack, Stack, Text, VStack, Icon, Image} from 'native-base';
+import {Flex, HStack, Image, Stack, Text, VStack} from 'native-base';
 import {styles} from '../../components/styles';
 import {colors} from '../../components/colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import {TouchableOpacity} from 'react-native';
 import ModalMemberships from '../../components/Modals/Membership';
 import {useSelector} from 'react-redux';
-
 
 const Membership = ({navigation}) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -25,17 +23,21 @@ const Membership = ({navigation}) => {
             backgroundColor={colors.primary}
             alignItems={'center'}>
             <Flex alignItems={'center'}>
-              {memberships.id !== 1 &&
+              {memberships.id !== 1 && (
                 <Image
                   source={require('../../assets/logo-premium.png')}
                   alt="logo-premium"
                   width={50}
                   height={50}
                 />
-              }
+              )}
               <Text fontSize={'3xl'}>Membresia</Text>
             </Flex>
-            <Stack w={'100%'} alignItems={'center'} h={10} justifyContent={'center'}>
+            <Stack
+              w={'100%'}
+              alignItems={'center'}
+              h={10}
+              justifyContent={'center'}>
               <Stack
                 backgroundColor={colors.orange}
                 borderRadius={50}
@@ -46,60 +48,80 @@ const Membership = ({navigation}) => {
                 </Text>
               </Stack>
             </Stack>
-            <VStack space={5} h={'50%'} justifyContent={'flex-end'} w={'90%'} alignItems={'center'}>
+            <VStack
+              space={5}
+              h={'50%'}
+              justifyContent={'flex-end'}
+              w={'90%'}
+              alignItems={'center'}>
               <VStack space={5}>
                 <HStack space={2}>
                   <AntDesign
-                    name={'checkcircle'}
+                    name={memberships.id === 1 ? 'closecircle' : 'checkcircle'}
                     style={styles.icon}
                     size={24}
-                    color={memberships.id === 1 ? colors.red : colors.otherGreen}
+                    color={
+                      memberships.id === 1 ? colors.red : colors.otherGreen
+                    }
                   />
                   <Text>Proyectos Ilimitados</Text>
                 </HStack>
                 <HStack space={2}>
                   <AntDesign
-                    name={'checkcircle'}
+                    name={memberships.id === 1 ? 'closecircle' : 'checkcircle'}
                     style={styles.icon}
                     size={24}
-                    color={memberships.id === 1 ? colors.red : colors.otherGreen}
+                    color={
+                      memberships.id === 1 ? colors.red : colors.otherGreen
+                    }
                   />
                   <Text>Habitaciones Ilimitadas</Text>
                 </HStack>
                 <HStack space={2}>
                   <AntDesign
-                    name={'checkcircle'}
+                    name={memberships.id === 1 ? 'closecircle' : 'checkcircle'}
                     style={styles.icon}
                     size={24}
-                    color={memberships.id === 1 ? colors.red : colors.otherGreen}
+                    color={
+                      memberships.id === 1 ? colors.red : colors.otherGreen
+                    }
                   />
                   <Text>Cubicaciones Ilimitadas</Text>
                 </HStack>
 
                 <HStack space={2}>
                   <AntDesign
-                    name={'checkcircle'}
+                    name={memberships.id === 1 ? 'closecircle' : 'checkcircle'}
                     style={styles.icon}
                     size={24}
-                    color={colors.otherGreen}
+                    color={
+                      memberships.id === 1 ? colors.red : colors.otherGreen
+                    }
                   />
-                  <Text>Gestionar proyectos</Text>
+                  <Text>Gestionar Cotizaciones</Text>
                 </HStack>
                 <HStack space={2}>
                   <AntDesign
-                    name={'closecircle'}
+                    name={memberships.id === 1 ? 'closecircle' : 'checkcircle'}
                     style={styles.icon}
                     size={24}
-                    color={colors.red}
+                    color={
+                      memberships.id === 1 ? colors.red : colors.otherGreen
+                    }
                   />
-                  <Text>Soporte full</Text>
+                  <Text>Exportar a PDF</Text>
                 </HStack>
-
               </VStack>
             </VStack>
-            <Stack w={'100%'} h={'30%'} justifyContent={'center'} alignItems={'center'}>
-              {memberships.id === 1 &&
-                <TouchableOpacity onPress={() => setIsOpenModal(true)} style={styles.buttonLogin}>
+            <Stack
+              w={'100%'}
+              h={'30%'}
+              justifyContent={'center'}
+              alignItems={'center'}>
+              {memberships.id === 1 && (
+                <TouchableOpacity
+                  onPress={() => setIsOpenModal(true)}
+                  style={styles.buttonLogin}>
                   <HStack space={2}>
                     <AntDesign
                       name={'star'}
@@ -110,7 +132,7 @@ const Membership = ({navigation}) => {
                     <Text style={styles.textLogin}>Subir a premium</Text>
                   </HStack>
                 </TouchableOpacity>
-              }
+              )}
             </Stack>
           </Stack>
         </Stack>

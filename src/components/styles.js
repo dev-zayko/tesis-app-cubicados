@@ -7,10 +7,10 @@ import {colors} from './colors';
 
 export const styles = StyleSheet.create({
   item: {
-    width: "80%",
-    height: "98%",
+    width: '80%',
+    height: '98%',
     backgroundColor: colors.primary,
-    borderRadius: 20
+    borderRadius: 20,
   },
   imageContainer: {
     flex: 1,
@@ -136,7 +136,7 @@ export const styles = StyleSheet.create({
     width: 120,
     height: 40,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   subtitleText: {
     fontSize: 13,
@@ -147,5 +147,5 @@ export const styles = StyleSheet.create({
   },
   textLarge: {
     fontSize: 18,
-  }
+  },
 });

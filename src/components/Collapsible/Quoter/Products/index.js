@@ -1,16 +1,16 @@
 import React, {useState} from 'react';
 import {
-  Stack,
-  Heading,
   Box,
-  HStack,
-  VStack,
-  Image,
   Center,
-  Text,
+  Heading,
+  HStack,
   Icon,
+  Image,
+  Stack,
+  Text,
+  VStack,
 } from 'native-base';
-import {TouchableOpacity, Text as TextReact} from 'react-native';
+import {Text as TextReact, TouchableOpacity} from 'react-native';
 //import for the animation of Collapse and Expand
 import * as Animatable from 'react-native-animatable';
 import Accordion from 'react-native-collapsible/Accordion';
@@ -32,7 +32,7 @@ const CollapsibleProducts = props => {
           <Box>
             <Image
               source={{
-                uri: image
+                uri: image,
               }}
               alt="logo-casa"
               w={90}
@@ -60,7 +60,7 @@ const CollapsibleProducts = props => {
               <TextReact style={{fontSize: 15, fontWeight: 'bold'}}>
                 {tradeMark}
               </TextReact>
-              <Heading size={"sm"} ml="-1" color={'gray.500'}>
+              <Heading size={'sm'} ml="-1" color={'gray.500'}>
                 {title}
               </Heading>
               <Heading size="md" ml="-1" color={'red.700'}>
@@ -71,7 +71,6 @@ const CollapsibleProducts = props => {
                   {city}
                 </Heading>
               </Stack>
-
             </VStack>
           </VStack>
         </HStack>
@@ -87,15 +86,29 @@ const CollapsibleProducts = props => {
         style={{textAlign: 'center', height: 50, justifyContent: 'flex-end'}}>
         <Box alignItems={'center'}>
           <HStack space={5} bottom={1}>
-            <TouchableOpacity style={[styles.buttonProducts, styles.shadow]} onPress={() => props.showItem(linkProduct)}>
+            <TouchableOpacity
+              style={[styles.buttonProducts, styles.shadow]}
+              onPress={() => props.showItem(linkProduct)}>
               <HStack space={2}>
-                <Icon as={Ionicons} name={'eye-sharp'} size={6} color={'gray.500'} />
+                <Icon
+                  as={Ionicons}
+                  name={'eye-sharp'}
+                  size={6}
+                  color={'gray.500'}
+                />
                 <Text color={'gray.500'}>Ver en tienda</Text>
               </HStack>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.buttonProducts, styles.shadow]} onPress={() => props.addItem(props.products)}>
+            <TouchableOpacity
+              style={[styles.buttonProducts, styles.shadow]}
+              onPress={() => props.addItem(props.products)}>
               <HStack space={2}>
-                <Icon as={Ionicons} name={'add-circle'} size={6} color={'gray.500'} />
+                <Icon
+                  as={Ionicons}
+                  name={'add-circle'}
+                  size={6}
+                  color={'gray.500'}
+                />
                 <Text color={'gray.500'}>Agregar</Text>
               </HStack>
             </TouchableOpacity>
@@ -119,8 +132,7 @@ const CollapsibleProducts = props => {
           _web={{
             shadow: 10,
             borderWidth: 1,
-          }}
-        >
+          }}>
           <Accordion
             activeSections={activeSections}
             touchableComponent={TouchableOpacity}
@@ -133,7 +145,7 @@ const CollapsibleProducts = props => {
             expandMultiple={false}
             //Duration for Collapse and expand
             onChange={setSections}
-          //setting the state of active sections
+            //setting the state of active sections
           />
         </Box>
       </Box>

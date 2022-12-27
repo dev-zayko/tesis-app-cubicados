@@ -1,11 +1,10 @@
-import React from "react";
-import {Icon, Stack} from 'native-base';
-import {Animated, Easing, View} from "react-native";
+import React from 'react';
+import {Icon} from 'native-base';
+import {Animated, Easing} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import {colors} from "../colors";
+import {colors} from '../colors';
 
 const AnimatedIcon = Animated.createAnimatedComponent(Icon);
-
 
 const HandDownAnimation = () => {
   let springValue = new Animated.Value(0);

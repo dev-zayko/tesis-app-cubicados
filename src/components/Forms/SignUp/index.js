@@ -1,17 +1,7 @@
 //React
 import React, {useState} from 'react';
 //Components Native Base
-import {
-  Flex,
-  FormControl,
-  HStack,
-  Icon,
-  Input,
-  Stack,
-  Text,
-  useToast,
-  WarningOutlineIcon,
-} from 'native-base';
+import {Flex, Icon, Input, Stack, Text, useToast} from 'native-base';
 //Styles
 import {styles} from '../../styles';
 //Colors
@@ -29,13 +19,11 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import {
   ActivityIndicator,
   Platform,
-  TouchableOpacity,
   Pressable,
-  Alert,
+  TouchableOpacity,
 } from 'react-native';
 //Import date
 import DateTimePicker from '@react-native-community/datetimepicker';
-import mailService from '../../../services/auth/mailService';
 import {register} from '../../../redux/features/Auth/authSlice';
 
 const FormSignUp = ({navigation}) => {
@@ -73,8 +61,10 @@ const FormSignUp = ({navigation}) => {
   };
 
   const onRegister = (values, setSubmitting) => {
-    dispatch(register({navigation: navigation, newUser: values, toast: toast})).then(() => {
-      setSubmitting(false)
+    dispatch(
+      register({navigation: navigation, newUser: values, toast: toast}),
+    ).then(() => {
+      setSubmitting(false);
     });
   };
 

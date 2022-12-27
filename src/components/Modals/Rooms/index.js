@@ -28,7 +28,8 @@ const ModalRooms = props => {
           <Modal.Content>
             <Modal.CloseButton />
             <Modal.Header>
-              {props.action === 1 ? 'Nueva Habitación' : 'Editar Habitación'}</Modal.Header>
+              {props.action === 1 ? 'Nueva Habitación' : 'Editar Habitación'}
+            </Modal.Header>
             <Modal.Body>
               <FormRooms
                 formRef={formRef}
@@ -41,7 +42,9 @@ const ModalRooms = props => {
                   props.onClose();
                   props.onCloseAll();
                 }}
-                alertLimited={(status, typeConstruction) => props.alertLimited(status, typeConstruction)}
+                alertLimited={(status, typeConstruction) =>
+                  props.alertLimited(status, typeConstruction)
+                }
                 disableForm={disabled => setDisabled(disabled)}
                 toast={props.toast}
               />

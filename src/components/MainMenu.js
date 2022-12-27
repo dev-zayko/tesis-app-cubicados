@@ -1,5 +1,5 @@
 import React, {useRef, useState} from 'react';
-import {Box, Center, HStack, Icon, IconButton, Stagger} from 'native-base';
+import {Box, Icon, IconButton, Stagger} from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {colors} from './colors';
 import {styles} from './styles';
@@ -36,17 +36,16 @@ const MainMenu = props => {
     }
   };
 
-
   const glowAnimation = useAnimatedStyle(() => ({
     transform: [
       {
         scale: withRepeat(
           withSequence(
             withTiming(1.2, {duration: 1500}),
-            withTiming(1.4, {duration: 1500})
+            withTiming(1.4, {duration: 1500}),
           ),
           -1,
-          true
+          true,
         ),
       },
     ],

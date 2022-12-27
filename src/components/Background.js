@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, ImageBackground, StatusBar, StyleSheet} from 'react-native';
+import {ImageBackground} from 'react-native';
 import {KeyboardAvoidingView} from 'native-base';
 import {styles} from './styles';
 

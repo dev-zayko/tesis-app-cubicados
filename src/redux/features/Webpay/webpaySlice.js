@@ -1,29 +1,33 @@
-import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
-import ApiClient from "../../../services/connection/ApiClient";
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import ApiClient from '../../../services/connection/ApiClient';
 
 export const createTransaction = createAsyncThunk(
   'webpay/create',
   async ({token, amount}, {rejectWithValue}) => {
     try {
-      const response = await ApiClient.post('webpay/create', {
-        amount: amount
-      }, {
-        headers: {Authorization: `Bearer ${token}`}
-      });
+      const response = await ApiClient.post(
+        'webpay/create',
+        {
+          amount: amount,
+        },
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        },
+      );
       const {viewData} = response.data;
       return {data: viewData};
     } catch (error) {
       console.log(error);
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 
 const webpaySlice = createSlice({
   name: 'webpay',
   initialState: {
     viewData: 0,
-    loadingTr: false
+    loadingTr: false,
   },
   extraReducers: builder => {
     builder.addCase(createTransaction.pending, (state, action) => {
@@ -35,12 +39,8 @@ const webpaySlice = createSlice({
       }),
       builder.addCase(createTransaction.rejected, (state, action) => {
         state.loading = false;
-      })
-
-  }
-
+      });
+  },
 });
 
-export default webpaySlice.reducer
-
-
+export default webpaySlice.reducer;

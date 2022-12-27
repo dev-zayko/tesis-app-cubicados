@@ -1,6 +1,6 @@
 import React from 'react';
 import {Icon, Stack} from 'native-base';
-import {Animated, Easing, View} from 'react-native';
+import {Animated, Easing} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {colors} from '../colors';
 

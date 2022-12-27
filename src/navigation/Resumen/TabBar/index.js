@@ -1,8 +1,9 @@
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import React from "react";
-import {colors} from "../../../components/colors";
-import ReportMyPays from "../../../screens/Report/ReportMyPays";
+import React from 'react';
+import {colors} from '../../../components/colors';
+import ReportMyPays from '../../../screens/Report/ReportMyPays';
 import ReportQuoter from '../../../screens/Report/ReportQuoter';
+
 const Tab = createMaterialTopTabNavigator();
 
 const TabBarReport = () => {
@@ -23,19 +24,19 @@ const TabBarReport = () => {
         tabBarStyle: {
           borderRadius: 10,
         },
-        tabBarIconStyle: {display: "none"},
+        tabBarIconStyle: {display: 'none'},
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
         tabBarPressColor: colors.darkLight,
         tabBarIndicatorStyle: {
-          backgroundColor: 'tomato'
-        }
+          backgroundColor: 'tomato',
+        },
       })}>
       <Tab.Screen
         name="ReportQuoter"
         component={ReportQuoter}
         options={{
-          title: "Cotizaciones",
+          title: 'Cotizaciones',
           headerTintColor: '#fff',
         }}
       />
@@ -43,10 +44,11 @@ const TabBarReport = () => {
         name="ReportMyPays"
         component={ReportMyPays}
         options={{
-          title: "Mis Pagos"
-        }} />
+          title: 'Mis Pagos',
+        }}
+      />
     </Tab.Navigator>
   );
-}
+};
 
 export default TabBarReport;

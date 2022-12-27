@@ -8,7 +8,7 @@ import {TouchableOpacity} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import mailService from '../../services/auth/mailService';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {login} from '../../redux/features/Auth/authSlice';
 
 const EmailVerification = ({route}) => {
@@ -21,7 +21,11 @@ const EmailVerification = ({route}) => {
   const dispatch = useDispatch();
   useEffect(() => {
     if (reset === true) {
-      mailService.sendEmailVerification(userData.email, userData.first_name, user);
+      mailService.sendEmailVerification(
+        userData.email,
+        userData.first_name,
+        user,
+      );
     }
   }, [reset]);
 
@@ -30,9 +34,9 @@ const EmailVerification = ({route}) => {
       if (response.verified === true) {
         dispatch(login({user: dataForm, navigation: navigation, toast: toast}));
       } else {
-        console.log(response)
+        console.log(response);
         toast.show({
-          description: 'No ha sido verificada esta cuenta'
+          description: 'No ha sido verificada esta cuenta',
         });
       }
     });

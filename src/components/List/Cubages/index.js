@@ -1,9 +1,12 @@
-import React, {useEffect, useCallback, useState} from 'react';
-import {FlatList, HStack, Stack, Text, Flex, Image, Icon} from 'native-base';
+import React, {useCallback, useState} from 'react';
+import {FlatList, Flex, Icon, Image, Stack, Text} from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useDispatch, useSelector} from 'react-redux';
 import {TouchableOpacity} from 'react-native';
-import {getCubagesByRooms, setCubageSelect} from '../../../redux/features/Cubages/cubagesSlice';
+import {
+  getCubagesByRooms,
+  setCubageSelect,
+} from '../../../redux/features/Cubages/cubagesSlice';
 import {colors} from '../../colors';
 import {useFocusEffect} from '@react-navigation/native';
 import {styles} from '../../styles';
@@ -21,21 +24,24 @@ const ListCubages = props => {
   };
   useFocusEffect(
     useCallback(() => {
-      dispatch(getCubagesByRooms({token: user, idRoom: props?.room.id}))
-        .then((res) => {
+      dispatch(getCubagesByRooms({token: user, idRoom: props?.room.id})).then(
+        res => {
           setCubagesList(res.payload.data);
-          console.log(res.payload)
-          props?.countCubages(res.payload.data.length === undefined ? 0 : res.payload.data.length);
-        });
+          console.log(res.payload);
+          props?.countCubages(
+            res.payload.data.length === undefined ? 0 : res.payload.data.length,
+          );
+        },
+      );
     }, [updateList]),
   );
   return (
     <>
-      {cubagesList === 0 ?
+      {cubagesList === 0 ? (
         <Stack h={100} justifyContent={'center'}>
           <Text fontSize={15}>¡No hay cubicaciones, crea una!</Text>
         </Stack>
-        :
+      ) : (
         <FlatList
           data={cubagesList}
           horizontal
@@ -48,11 +54,16 @@ const ListCubages = props => {
                   w={120}
                   backgroundColor={'white'}
                   borderRadius={5}>
-                  {item.finalized === true &&
-                    <Stack position={"absolute"} zIndex={3} >
-                      <Icon as={AntDesign} name={"checkcircle"} size={"lg"} color={colors.otherGreen} />
+                  {item.finalized === true && (
+                    <Stack position={'absolute'} zIndex={3}>
+                      <Icon
+                        as={AntDesign}
+                        name={'checkcircle'}
+                        size={'lg'}
+                        color={colors.otherGreen}
+                      />
                     </Stack>
-                  }
+                  )}
                   <Flex h={'70%'}>
                     <Image
                       source={{
@@ -67,7 +78,9 @@ const ListCubages = props => {
                     backgroundColor={colors.orange}
                     alignItems={'center'}
                     justifyContent={'center'}>
-                    <Text fontSize={16} color={'white'}>{item.constructions.constructionType.name}</Text>
+                    <Text fontSize={16} color={'white'}>
+                      {item.constructions.constructionType.name}
+                    </Text>
                     <Text fontSize={16} color={'white'}>
                       ${' '}
                       {(item.materials.price * item.count)
@@ -82,7 +95,7 @@ const ListCubages = props => {
           )}
           keyExtractor={(value, index) => index.toString()}
         />
-      }
+      )}
       {showModalCubages && (
         <ModalCubages
           showModal={showModalCubages}
@@ -92,8 +105,7 @@ const ListCubages = props => {
           update={() => {
             props.updateRooms();
             setUpdateList(!updateList);
-          }
-          }
+          }}
         />
       )}
     </>

@@ -24,9 +24,7 @@ const SurfaceStackScreen = props => {
         />
         <SurfaceStack.Screen
           name={'ResultSurface'}
-          children={() => (
-            <ResultSurface phaseTwo={() => props.phaseTwo()} />
-          )}
+          children={() => <ResultSurface phaseTwo={() => props.phaseTwo()} />}
         />
       </SurfaceStack.Navigator>
     </Stack>
@@ -34,5 +32,3 @@ const SurfaceStackScreen = props => {
 };
 
 export default SurfaceStackScreen;
-
-

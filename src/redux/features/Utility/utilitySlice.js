@@ -1,5 +1,4 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import ApiClient from '../../../services/connection/ApiClient';
+import {createSlice} from '@reduxjs/toolkit';
 
 const utilitySlice = createSlice({
   name: 'utility',
@@ -65,5 +64,6 @@ const utilitySlice = createSlice({
   },
 });
 
-export const {setMeasures, setDefineLocation, setMineLocation, setTokenDevice} = utilitySlice.actions;
+export const {setMeasures, setDefineLocation, setMineLocation, setTokenDevice} =
+  utilitySlice.actions;
 export default utilitySlice.reducer;

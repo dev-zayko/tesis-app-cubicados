@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 //Backgrund Image
 import Background from '../../components/Background';
 //Components native base
@@ -32,13 +32,14 @@ const UserAccount = ({navigation}) => {
   });
   const dispatch = useDispatch();
 
-  useFocusEffect(useCallback(() => {
-    dispatch(getCount({token: user})).then((response) => {
-      const {projects, cubages, rooms} = response.payload.data
-      ProgressCircleFormat(cubages, projects, rooms);
-    });
-    dispatch(getDays({token: user}))
-  }, [circleProgress.cubages]),
+  useFocusEffect(
+    useCallback(() => {
+      dispatch(getCount({token: user})).then(response => {
+        const {projects, cubages, rooms} = response.payload.data;
+        ProgressCircleFormat(cubages, projects, rooms);
+      });
+      dispatch(getDays({token: user}));
+    }, [circleProgress.cubages]),
   );
 
   const ProgressCircleFormat = (countCubages, countProjects, countRooms) => {
@@ -102,12 +103,17 @@ const UserAccount = ({navigation}) => {
                         showsText={false}
                         color={colors.orange}
                         thickness={6}
-                        progress={userData.membership_id !== 1 ? 1 : circleProgress.projects}
+                        progress={
+                          userData.membership_id !== 1
+                            ? 1
+                            : circleProgress.projects
+                        }
                         direction={'counter-clockwise'}
                       />
                       <Stack style={{bottom: 50}} alignItems={'center'}>
                         <Text fontSize={'md'} color={colors.orange}>
-                          {countDataProject.projects} {userData.memberships.id === 1 && '/2'}
+                          {countDataProject.projects}{' '}
+                          {userData.memberships.id === 1 && '/2'}
                         </Text>
                       </Stack>
                     </Flex>
@@ -117,12 +123,17 @@ const UserAccount = ({navigation}) => {
                         showsText={false}
                         color={colors.orange}
                         thickness={6}
-                        progress={userData.membership_id !== 1 ? 1 : circleProgress.rooms}
+                        progress={
+                          userData.membership_id !== 1
+                            ? 1
+                            : circleProgress.rooms
+                        }
                         direction={'counter-clockwise'}
                       />
                       <Stack style={{bottom: 50}} alignItems={'center'}>
                         <Text fontSize={'md'} color={colors.orange}>
-                          {countDataProject.rooms} {userData.memberships.id === 1 && '/2'}
+                          {countDataProject.rooms}{' '}
+                          {userData.memberships.id === 1 && '/4'}
                         </Text>
                       </Stack>
                     </Flex>
@@ -132,12 +143,17 @@ const UserAccount = ({navigation}) => {
                         showsText={false}
                         color={colors.orange}
                         thickness={6}
-                        progress={userData.membership_id !== 1 ? 1 : circleProgress.cubages}
+                        progress={
+                          userData.membership_id !== 1
+                            ? 1
+                            : circleProgress.cubages
+                        }
                         direction={'counter-clockwise'}
                       />
                       <Stack style={{bottom: 50}} alignItems={'center'}>
                         <Text fontSize={'md'} color={colors.orange}>
-                          {countDataProject.cubages} {userData.memberships.id === 1 && '/2'}
+                          {countDataProject.cubages}{' '}
+                          {userData.memberships.id === 1 && '/8'}
                         </Text>
                       </Stack>
                     </Flex>
@@ -158,15 +174,22 @@ const UserAccount = ({navigation}) => {
                 backgroundColor={colors.primary}>
                 <VStack space={2} alignItems={'center'}>
                   <Text fontSize={'md'}>Dias</Text>
-                  {loadingDays === true ?
-                    <ActivityIndicator size={'large'} color={colors.darkLight} /> :
+                  {loadingDays === true ? (
+                    <ActivityIndicator
+                      size={'large'}
+                      color={colors.darkLight}
+                    />
+                  ) : (
                     <>
-                      <Days days={userData.memberships.days} dayRest={dayRest} />
+                      <Days
+                        days={userData.memberships.days}
+                        dayRest={dayRest}
+                      />
                       <Text>
                         {dayRest} / {userData.memberships.days}
                       </Text>
                     </>
-                  }
+                  )}
                 </VStack>
               </Stack>
             )}

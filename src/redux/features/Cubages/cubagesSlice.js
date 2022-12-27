@@ -1,19 +1,20 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import ApiClient from '../../../services/connection/ApiClient';
-
 
 export const updateFinalized = createAsyncThunk(
   'cubages/finalized',
   async ({token, isFinalized, idCubages}, {rejectWithValue}) => {
     try {
-      const response = await ApiClient.post('cubage/finalized',
+      const response = await ApiClient.post(
+        'cubage/finalized',
         {
           isFinalized: isFinalized,
-          idCubages: idCubages
+          idCubages: idCubages,
         },
         {
           headers: {Authorization: `Bearer ${token}`},
-        });
+        },
+      );
       const {status, data} = response.data;
       if (status === 'success') {
         return {finalized: data.finalized, status: status, idCubage: idCubages};
@@ -22,19 +23,20 @@ export const updateFinalized = createAsyncThunk(
       console.log(error.reponse.data);
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
-
-
 
 export const preferenceByUser = createAsyncThunk(
   'cubages/preference',
   async ({token}, {rejectWithValue}) => {
     try {
-      const response = await ApiClient.post('cubage/preference', {},
+      const response = await ApiClient.post(
+        'cubage/preference',
+        {},
         {
           headers: {Authorization: `Bearer ${token}`},
-        });
+        },
+      );
       const {status, data} = response.data;
       if (status === 'empty') {
         return {data: null, status: status};
@@ -45,7 +47,7 @@ export const preferenceByUser = createAsyncThunk(
       console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 
 export const getCubagesByRooms = createAsyncThunk(
@@ -72,7 +74,6 @@ export const getCubagesByRooms = createAsyncThunk(
     }
   },
 );
-
 
 export const getCubagesByProject = createAsyncThunk(
   'cubages/charge',
@@ -102,27 +103,51 @@ export const getCubagesByProject = createAsyncThunk(
 
 export const createCubages = createAsyncThunk(
   'cubages/store',
-  async ({toast, token, area, depth, width, m3, dosage, gravel, sand, water, length, count, description, idConstruction, idRoom, idMaterial, totalCost}, {rejectWithValue}) => {
+  async (
+    {
+      toast,
+      token,
+      area,
+      depth,
+      width,
+      m3,
+      dosage,
+      gravel,
+      sand,
+      water,
+      length,
+      count,
+      description,
+      idConstruction,
+      idRoom,
+      idMaterial,
+      totalCost,
+    },
+    {rejectWithValue},
+  ) => {
     try {
-      const response = await ApiClient.post('cubage/store', {
-        area: area,
-        depth: depth,
-        width: width,
-        m3: m3,
-        dosage: dosage,
-        gravel: gravel,
-        sand: sand,
-        water: water,
-        length: length,
-        count: count,
-        description: description,
-        idConstruction: idConstruction,
-        idRoom: idRoom,
-        idMaterial: idMaterial,
-        totalCost: totalCost
-      }, {
-        headers: {Authorization: `Bearer ${token}`},
-      },
+      const response = await ApiClient.post(
+        'cubage/store',
+        {
+          area: area,
+          depth: depth,
+          width: width,
+          m3: m3,
+          dosage: dosage,
+          gravel: gravel,
+          sand: sand,
+          water: water,
+          length: length,
+          count: count,
+          description: description,
+          idConstruction: idConstruction,
+          idRoom: idRoom,
+          idMaterial: idMaterial,
+          totalCost: totalCost,
+        },
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        },
       );
       const {status, data} = response.data;
       if (status === 'success') {
@@ -140,12 +165,15 @@ export const createCubages = createAsyncThunk(
       });
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 
 export const deleteCubage = createAsyncThunk(
   'cubages/delete',
-  async ({token, idCubage, idMaterial, idProject, idRoom}, {rejectWithValue}) => {
+  async (
+    {token, idCubage, idMaterial, idProject, idRoom},
+    {rejectWithValue},
+  ) => {
     try {
       const response = await ApiClient.post(
         'cubage/delete',
@@ -153,7 +181,7 @@ export const deleteCubage = createAsyncThunk(
           idCubage: idCubage,
           idMaterial: idMaterial,
           idProject: idProject,
-          idRoom: idRoom
+          idRoom: idRoom,
         },
         {
           headers: {Authorization: `Bearer ${token}`},
@@ -168,7 +196,6 @@ export const deleteCubage = createAsyncThunk(
   },
 );
 
-
 const cubagesSlice = createSlice({
   name: 'cubages',
   initialState: {
@@ -179,15 +206,16 @@ const cubagesSlice = createSlice({
     preferences: 0,
     statusPreference: '',
     cubageSelect: 0,
-  }, reducers: {
+  },
+  reducers: {
     setCubageSelect: (state, action) => {
       state.cubageSelect = action.payload;
-    }
+    },
   },
   extraReducers: builder => {
     builder.addCase(updateFinalized.pending, (state, action) => {
       state.loading = true;
-      state.cubageSelect.finalized = !state.cubageSelect.finalized
+      state.cubageSelect.finalized = !state.cubageSelect.finalized;
     }),
       builder.addCase(updateFinalized.fulfilled, (state, action) => {
         state.loading = false;
@@ -256,7 +284,7 @@ const cubagesSlice = createSlice({
       }),
       builder.addCase(getCubagesByProject.rejected, (state, action) => {
         state.loading = false;
-      })
+      });
   },
 });
 export const {setCubageSelect} = cubagesSlice.actions;

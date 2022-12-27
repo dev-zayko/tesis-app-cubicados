@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import ApiClient from '../../../services/connection/ApiClient';
 
 export const getConstruction = createAsyncThunk(

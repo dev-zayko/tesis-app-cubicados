@@ -1,13 +1,11 @@
-import ApiClient from "../connection/ApiClient";
-
+import ApiClient from '../connection/ApiClient';
 
 const sendEmailVerification = async (email, name, token) => {
-  return await ApiClient
-    .post('mail/verification', {
-      email: email,
-      name: name,
-      token: token,
-    })
+  return await ApiClient.post('mail/verification', {
+    email: email,
+    name: name,
+    token: token,
+  })
     .then(response => {
       return response.data;
     })
@@ -16,15 +14,14 @@ const sendEmailVerification = async (email, name, token) => {
     });
 };
 
-const emailVerificate = async (token) => {
-  return await ApiClient
-    .post(
-      'mail/status',
-      {},
-      {
-        headers: {Authorization: `Bearer ${token}`},
-      },
-    )
+const emailVerificate = async token => {
+  return await ApiClient.post(
+    'mail/status',
+    {},
+    {
+      headers: {Authorization: `Bearer ${token}`},
+    },
+  )
     .then(response => {
       return response.data;
     })

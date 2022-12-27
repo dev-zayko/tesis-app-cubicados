@@ -1,25 +1,17 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {
-  Modal,
-  VStack,
-  Text,
-  HStack,
-  Icon,
-  Stack,
-  Button
-} from 'native-base';
+import {Button, HStack, Icon, Modal, Stack, Text, VStack} from 'native-base';
 import Collapsible from 'react-native-collapsible';
-import {TouchableOpacity} from 'react-native';
+import {PermissionsAndroid, TouchableOpacity} from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateFinalized} from '../../../redux/features/Cubages/cubagesSlice';
 import {colors} from '../../colors';
-import {PermissionsAndroid} from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import moment from 'moment';
 import AlertDelete from '../../AlertDialog/Cubages/AlertDelete';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ModalCubages = props => {
   const {cubageSelect} = useSelector(state => ({...state.cubages}));
@@ -45,7 +37,8 @@ const ModalCubages = props => {
   useEffect(() => {
     if (cubageSelect.description !== '') {
       setIsCoating(true);
-      const {thinnerType, thinnerCount, tool, gallonsCount} = cubageSelect.description;
+      const {thinnerType, thinnerCount, tool, gallonsCount} =
+        cubageSelect.description;
       setDescription({
         thinnerType: thinnerType,
         thinnerCount: thinnerCount,
@@ -57,11 +50,17 @@ const ModalCubages = props => {
     }
   }, []);
 
-  const onUpdateFinalized = (isFinalized) => {
-    dispatch(updateFinalized({token: user, isFinalized: isFinalized, idCubages: cubageSelect.id})).then(() => {
+  const onUpdateFinalized = isFinalized => {
+    dispatch(
+      updateFinalized({
+        token: user,
+        isFinalized: isFinalized,
+        idCubages: cubageSelect.id,
+      }),
+    ).then(() => {
       props.updateList();
     });
-  }
+  };
   const onCloseAlertDl = () => setIsOpenAlertDl(false);
   const toggleExpanded = define => {
     switch (define) {
@@ -82,32 +81,32 @@ const ModalCubages = props => {
   };
   const checkPermission = async () => {
     try {
-      const result = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+      const result = await PermissionsAndroid.check(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+      );
 
       if (result === true) {
         exportToPdf();
       } else if (result === false) {
-        const status = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE);
+        const status = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        );
         if (status === 'never_ask_again') {
-
-        }
-        else if (status === 'denied') {
+        } else if (status === 'denied') {
           checkPermission();
-        }
-        else if (status === 'granted') {
+        } else if (status === 'granted') {
           exportToPdf();
         }
       }
     } catch (error) {
-      console.log('error: ', error)
+      console.log('error: ', error);
     }
-  }
+  };
 
   const exportToPdf = async () => {
     try {
       let options = {
-        html:
-          `<html>
+        html: `<html>
   <head>
     <style>
       table,
@@ -130,7 +129,9 @@ const ModalCubages = props => {
     </div>
     <div>
         <h1>Detalles</h1>
-        <h3>A nombre de: ${userData.first_name} ${userData.father_last_name} ${userData?.mother_last_name}</h3>
+        <h3>A nombre de: ${userData.first_name} ${userData.father_last_name} ${
+          userData?.mother_last_name
+        }</h3>
         <h3>Proyecto: ${props?.project.name}<h3>
         <h3>Habitación ${props?.nameRoom}</h3>
     <table style="width: 80%">
@@ -144,26 +145,41 @@ const ModalCubages = props => {
       </tr>
       <tr>
         <th>${constructionType.id === 1 ? 'M3' : 'M2'}</th>
-        <td>${constructionType.id === 1 ? cubageSelect.m3 : cubageSelect.area}</td>
+        <td>${
+          constructionType.id === 1 ? cubageSelect.m3 : cubageSelect.area
+        }</td>
       </tr>
       <tr>
         <th>Dosificacion</th>
-        <td>${cubageSelect.dosage} ${constructionType.id === 1 ? 'saco/m3 aprox.' : 'mts2/litro aprox.'}</td>
+        <td>${cubageSelect.dosage} ${
+          constructionType.id === 1 ? 'saco/m3 aprox.' : 'mts2/litro aprox.'
+        }</td>
       </tr>
       <tr>
         <th>Cantidad</th>
-        <td>${cubageSelect.count} ${isCoating === true ? 'Litro(s) aprox. necesitas' : 'sacos aprox.'}</td>
+        <td>${cubageSelect.count} ${
+          isCoating === true ? 'Litro(s) aprox. necesitas' : 'sacos aprox.'
+        }</td>
       </tr>
       <tr>
         <th>${isCoating === true ? 'Complemento' : 'Grava'}</th>
-        <td>${isCoating === true ? description.tool.name : cubageSelect.gravel + ' sacos'}</td>
+        <td>${
+          isCoating === true
+            ? description.tool.name
+            : cubageSelect.gravel + ' sacos'
+        }</td>
       </tr>
       <tr>
         <th>${isCoating === true ? 'Tipo diluyente' : 'Arena 5mm'}</th>
-        <td>${isCoating === true ? description.thinnerType : cubageSelect.sand + ' sacos'}</td>
+        <td>${
+          isCoating === true
+            ? description.thinnerType
+            : cubageSelect.sand + ' sacos'
+        }</td>
       </tr>
-        ${isCoating === true ? (
-            `
+        ${
+          isCoating === true
+            ? `
                 <tr>
                   <th>Cantidad de Galones</th>
                   <td>${description.gallonsCount} gl</td>
@@ -171,15 +187,16 @@ const ModalCubages = props => {
                 <tr>
                   <th>Cantidad de diluyente</th>
                   <td>
-                    ${description.tool.id === 1
-              ? `${description.thinnerCount} cm3 equivale al 5% de diluyente por la cantidad de pintura`
-              : description.tool.id === 2 &&
-              `${description.thinnerCount} cm3 equivale al 10% de diluyente por la cantidad de pintura`}
+                    ${
+                      description.tool.id === 1
+                        ? `${description.thinnerCount} cm3 equivale al 5% de diluyente por la cantidad de pintura`
+                        : description.tool.id === 2 &&
+                          `${description.thinnerCount} cm3 equivale al 10% de diluyente por la cantidad de pintura`
+                    }
                   </td>
                 </tr>
            `
-          ) : (
-            `
+            : `
               <tr>
                 <th>
                   ${isCoating === true ? 'Cantidad de diluyente' : 'Agua'}
@@ -189,7 +206,7 @@ const ModalCubages = props => {
                 </td>
               </tr>
               `
-          )}
+        }
         </table>
     </div>
     <div>
@@ -218,8 +235,12 @@ const ModalCubages = props => {
           </table>
     </div>
     <div>
-        <h1 style="color: ${colors.orange}">TOTAL: $ ${priceFormat(materials.price * cubageSelect.count)}</h1>
-         <h3 style="color: ${colors.orange}">IVA: ${priceFormat((materials.price * cubageSelect.count) * 0.19)}</h3>
+        <h1 style="color: ${colors.orange}">TOTAL: $ ${priceFormat(
+          materials.price * cubageSelect.count,
+        )}</h1>
+         <h3 style="color: ${colors.orange}">IVA: ${priceFormat(
+          materials.price * cubageSelect.count * 0.19,
+        )}</h3>
     </div>
   
     <div style="text-align: center;">
@@ -227,21 +248,30 @@ const ModalCubages = props => {
     </div>
   </body>
 </html>`,
-        fileName: `${props.nameRoom}.${constructionType.id === 1 ? 'SP' : 'RV'}${Math.random()}`,
+        fileName: `${props.nameRoom}.${
+          constructionType.id === 1 ? 'SP' : 'RV'
+        }${Math.random()}`,
         directory: 'Documents',
       };
-      let file = await RNHTMLtoPDF.convert(options)
-      alert('PDF Creado')
+      let file = await RNHTMLtoPDF.convert(options);
+      alert('PDF Creado');
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   return (
     <Modal isOpen={props.showModal} onClose={() => props.onClose()} size="lg">
       <Modal.Content maxWidth="350">
         <Modal.CloseButton />
-        <Modal.Header backgroundColor={cubageSelect.finalized === true ? colors.otherGreen : 'warmGray.200'}>
-          <Text fontSize={'xl'} color={cubageSelect.finalized === true ? 'white' : 'black'}>Detalles</Text>
+        <Modal.Header
+          backgroundColor={
+            cubageSelect.finalized === true ? colors.otherGreen : 'warmGray.200'
+          }>
+          <Text
+            fontSize={'xl'}
+            color={cubageSelect.finalized === true ? 'white' : 'black'}>
+            Detalles
+          </Text>
         </Modal.Header>
         <Modal.Body>
           <VStack space={3}>
@@ -289,14 +319,15 @@ const ModalCubages = props => {
                     </HStack>
                     {constructionType.id === 1 && (
                       <>
-                        {cubageSelect.area !== 0 &&
+                        {cubageSelect.area !== 0 && (
                           <HStack
                             alignItems="center"
                             justifyContent="space-between">
                             <Text fontWeight="medium">Area</Text>
                             <Text color="green.500">{cubageSelect.area}</Text>
-                          </HStack>}
-                        {cubageSelect.depth !== 0 &&
+                          </HStack>
+                        )}
+                        {cubageSelect.depth !== 0 && (
                           <HStack
                             alignItems="center"
                             justifyContent="space-between">
@@ -305,25 +336,29 @@ const ModalCubages = props => {
                               {cubageSelect.depth} cms
                             </Text>
                           </HStack>
-                        }
+                        )}
                       </>
                     )}
-                    {cubageSelect.width !== 0 &&
-                      <HStack alignItems="center" justifyContent="space-between">
+                    {cubageSelect.width !== 0 && (
+                      <HStack
+                        alignItems="center"
+                        justifyContent="space-between">
                         <Text fontWeight="medium">Ancho</Text>
                         <Text color="green.500" bold>
                           {cubageSelect.width} mts
                         </Text>
                       </HStack>
-                    }
-                    {cubageSelect.length !== 0 &&
-                      <HStack alignItems="center" justifyContent="space-between">
+                    )}
+                    {cubageSelect.length !== 0 && (
+                      <HStack
+                        alignItems="center"
+                        justifyContent="space-between">
                         <Text fontWeight="medium">Largo</Text>
                         <Text color="green.500" bold>
                           {cubageSelect.length} mts
                         </Text>
                       </HStack>
-                    }
+                    )}
                   </Collapsible>
                 </Stack>
               </VStack>
@@ -378,7 +413,7 @@ const ModalCubages = props => {
                     {description.tool.id === 1
                       ? `${description.thinnerCount} cm3 equivale al 5% de diluyente por la cantidad de pintura`
                       : description.tool.id === 2 &&
-                      `${description.thinnerCount} cm3 equivale al 10% de diluyente por la cantidad de pintura`}
+                        `${description.thinnerCount} cm3 equivale al 10% de diluyente por la cantidad de pintura`}
                   </Text>
                 </VStack>
               </>
@@ -456,25 +491,61 @@ const ModalCubages = props => {
                 IVA /19%
               </Text>
               <Text color="green.500" fontSize={'lg'}>
-                {priceFormat((materials.price * cubageSelect.count) * 0.19)}
+                {priceFormat(materials.price * cubageSelect.count * 0.19)}
               </Text>
             </HStack>
             <HStack justifyContent={'center'} space={5}>
-              <Button size="md" colorScheme={cubageSelect.finalized === true ? 'success' : 'warning'} onPress={() => onUpdateFinalized(cubageSelect.finalized === true ? false : true)} leftIcon={<Icon as={AntDesign} name={cubageSelect.finalized === true ? 'checkcircle' : 'closecircle'} size="sm" />}>
+              <Button
+                size="md"
+                colorScheme={
+                  cubageSelect.finalized === true ? 'success' : 'warning'
+                }
+                onPress={() =>
+                  onUpdateFinalized(
+                    cubageSelect.finalized === true ? false : true,
+                  )
+                }
+                leftIcon={
+                  <Icon
+                    as={AntDesign}
+                    name={
+                      cubageSelect.finalized === true
+                        ? 'checkcircle'
+                        : 'closecircle'
+                    }
+                    size="sm"
+                  />
+                }>
                 {cubageSelect.finalized === true ? 'Finalizado' : 'Finalizar'}
               </Button>
-              {memberships.id !== 1 &&
-                <Button size="md" onPress={() => checkPermission()} colorScheme="danger" leftIcon={<Icon as={FontAwesome} name="file-pdf-o" size="sm" />}>
+              {memberships.id !== 1 && (
+                <Button
+                  size="md"
+                  onPress={() => checkPermission()}
+                  colorScheme="danger"
+                  leftIcon={
+                    <Icon as={FontAwesome} name="file-pdf-o" size="sm" />
+                  }>
                   Exportar a PDF
                 </Button>
-              }
+              )}
             </HStack>
           </VStack>
         </Modal.Body>
       </Modal.Content>
       <Stack h={20} justifyContent={'flex-end'}>
-        <TouchableOpacity onPress={() => {setIsOpenAlertDl(true)}}>
-          <Icon as={AntDesign} name={'closecircle'} borderRadius={100} backgroundColor={'white'} color={'red.500'} size={'5xl'} />
+        <TouchableOpacity
+          onPress={() => {
+            setIsOpenAlertDl(true);
+          }}>
+          <Icon
+            as={MaterialCommunityIcons}
+            name={'delete-circle'}
+            borderRadius={100}
+            backgroundColor={'white'}
+            color={'red.500'}
+            size={'5xl'}
+          />
         </TouchableOpacity>
       </Stack>
       {isOpenAlertDl && (
@@ -486,13 +557,14 @@ const ModalCubages = props => {
           idMaterial={materials.id}
           cancelRef={cancelRef}
           isOpen={isOpenAlertDl}
+          onClose={() => onCloseAlertDl()}
           onCloseAll={() => {
             onCloseAlertDl();
             props.onClose();
           }}
         />
       )}
-    </Modal >
+    </Modal>
   );
 };
 

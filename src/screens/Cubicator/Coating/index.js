@@ -1,15 +1,12 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import Background from '../../../components/Background';
 import {Box, Flex, Stack, Text} from 'native-base';
 import {styles} from '../../../components/styles';
-import {colors} from '../../../components/colors';
 import CoatingStackScreen from '../../../navigation/Coating';
 import {Text as TextReact, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
-import AlertLocation from '../../../components/AlertDialog/Location/AlertLocation';
 import Container from '../../../components/Container';
 import {useNavigation} from '@react-navigation/native';
-import {getStores} from '../../../redux/features/Stores/storesSlice';
 
 const Coating = () => {
   const {constructionSelect} = useSelector(state => ({...state.construction}));
@@ -19,7 +16,7 @@ const Coating = () => {
   const navigation = useNavigation();
   const onNavigate = () => {
     navigation.navigate('Quoter');
-  }
+  };
 
   const onSubmitFormOne = async () => {
     await formRefPhaseOne.current.submitForm();
@@ -30,7 +27,11 @@ const Coating = () => {
   return (
     <Background>
       <Container>
-        <Flex alignItems={'center'} w={'100%'} h={100} justifyContent={'center'}>
+        <Flex
+          alignItems={'center'}
+          w={'100%'}
+          h={100}
+          justifyContent={'center'}>
           <Text bold fontSize={'xl'}>
             {constructionSelect === 0
               ? 'Revestimiento'
@@ -42,10 +43,7 @@ const Coating = () => {
             </TextReact>
           )}
         </Flex>
-        <Stack
-          w={300}
-          h={490}
-          alignItems={'center'}>
+        <Stack w={300} h={490} alignItems={'center'}>
           <CoatingStackScreen
             formRefPhaseOne={formRefPhaseOne}
             formRefPhaseTwo={formRefPhaseTwo}
@@ -61,15 +59,15 @@ const Coating = () => {
               phase === 0
                 ? onSubmitFormOne()
                 : phase === 1
-                  ? onSubmitFormTwo()
-                  : phase === 2 && onNavigate()
+                ? onSubmitFormTwo()
+                : phase === 2 && onNavigate()
             }>
             <Text style={styles.textLogin} fontSize={18}>
               {phase === 0
                 ? 'Siguiente'
                 : phase === 1
-                  ? 'Cubicar'
-                  : phase === 2 && 'Cotizar'}
+                ? 'Cubicar'
+                : phase === 2 && 'Cotizar'}
             </Text>
           </TouchableOpacity>
         </Box>

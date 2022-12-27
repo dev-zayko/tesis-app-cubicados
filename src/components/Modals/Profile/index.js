@@ -1,5 +1,13 @@
 import React, {useRef, useState} from 'react';
-import {Button, HStack, Icon, KeyboardAvoidingView, Modal, Stack, VStack} from 'native-base';
+import {
+  Button,
+  HStack,
+  Icon,
+  KeyboardAvoidingView,
+  Modal,
+  Stack,
+  VStack,
+} from 'native-base';
 import {ActivityIndicator, TouchableOpacity} from 'react-native';
 import {styles} from '../../styles';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -7,7 +15,6 @@ import FormProfile from '../../Forms/Profile';
 import {colors} from '../../colors';
 
 const ModalProfile = props => {
-
   const [modalVisible, setModalVisible] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -41,7 +48,8 @@ const ModalProfile = props => {
                   setModalVisible(false);
                 }}
                 disableForm={disabled => setDisabled(disabled)}
-                toast={props.toast} />
+                toast={props.toast}
+              />
             </Modal.Body>
             <Modal.Footer>
               {!isSubmitting && (

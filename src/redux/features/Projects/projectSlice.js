@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import ApiClient from '../../../services/connection/ApiClient';
 
 export const createProject = createAsyncThunk(
@@ -91,29 +91,33 @@ export const getCount = createAsyncThunk(
   'count/get',
   async ({token}, {rejectWithValue}) => {
     try {
-      const response = await ApiClient.post('count/get', {
-
-      },
+      const response = await ApiClient.post(
+        'count/get',
+        {},
         {
           headers: {Authorization: `Bearer ${token}`},
-        });
+        },
+      );
       const {data} = response;
       return {data: data};
     } catch (error) {
       console.log(error);
       return rejectWithValue(error.response.data);
     }
-  }
-)
+  },
+);
 
 export const totalProjects = createAsyncThunk(
   'projects/total',
   async ({token}, {rejectWithValue}) => {
     try {
-      const response = await ApiClient.post('project/total', {},
+      const response = await ApiClient.post(
+        'project/total',
+        {},
         {
           headers: {Authorization: `Bearer ${token}`},
-        });
+        },
+      );
       const {status, data} = response.data;
       if (status !== 'empty') {
         return {data: data, status: status};
@@ -124,8 +128,8 @@ export const totalProjects = createAsyncThunk(
       console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
-  }
-)
+  },
+);
 
 export const deleteProject = createAsyncThunk(
   'projects/delete',
@@ -160,7 +164,7 @@ const projectSlice = createSlice({
   reducers: {
     setListProjects: (state, action) => {
       state.projects = action.payload;
-    }
+    },
   },
   extraReducers: builder => {
     builder.addCase(totalProjects.pending, (state, action) => {
@@ -168,7 +172,7 @@ const projectSlice = createSlice({
     }),
       builder.addCase(totalProjects.fulfilled, (state, action) => {
         state.loading = false;
-        state.total = action.payload.data
+        state.total = action.payload.data;
       }),
       builder.addCase(totalProjects.rejected, (state, action) => {
         state.loading = false;
@@ -178,7 +182,7 @@ const projectSlice = createSlice({
       }),
       builder.addCase(getCount.fulfilled, (state, action) => {
         state.loading = false;
-        state.countDataProject = action.payload.data
+        state.countDataProject = action.payload.data;
       }),
       builder.addCase(getCount.rejected, (state, action) => {
         state.loading = false;

@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import {AlertDialog, Button, Center} from 'native-base';
 import {useDispatch} from 'react-redux';
 import {logout} from '../../redux/actions/auth';

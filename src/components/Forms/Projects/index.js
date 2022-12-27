@@ -1,14 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 //Formik for forms
 import {Formik} from 'formik';
 //Components Native Base
-import {
-  FormControl,
-  Input,
-  Text,
-  VStack,
-  WarningOutlineIcon,
-} from 'native-base';
+import {FormControl, Input, VStack, WarningOutlineIcon} from 'native-base';
 //Hook redux
 import {useDispatch, useSelector} from 'react-redux';
 //Slice Update project

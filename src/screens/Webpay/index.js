@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {WebView} from 'react-native-webview';
 import {useFocusEffect} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -18,25 +18,29 @@ const Webpay = ({route, navigation}) => {
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(createTransaction({token: user, amount: amount})).then((response) => {
-        const {url, token} = response.payload.data;
-        setUrl(url);
-        setTokenWs(token);
-      });
+      dispatch(createTransaction({token: user, amount: amount})).then(
+        response => {
+          const {url, token} = response.payload.data;
+          setUrl(url);
+          setTokenWs(token);
+        },
+      );
     }, [url]),
   );
 
-  const onAddPaidMemeberships = (data) => {
+  const onAddPaidMemeberships = data => {
     console.log(data);
-    dispatch(createPaidMemberships({
-      idMembership: idMembership,
-      netoAmount: data.amount,
-      buyOrder: data.buyOrder,
-      sessionId: data.sessionId,
-      token: user,
-      tokenDevice: tokenDevice
-    }));
-  }
+    dispatch(
+      createPaidMemberships({
+        idMembership: idMembership,
+        netoAmount: data.amount,
+        buyOrder: data.buyOrder,
+        sessionId: data.sessionId,
+        token: user,
+        tokenDevice: tokenDevice,
+      }),
+    );
+  };
 
   const onMessage = message => {
     console.log(message);
@@ -55,7 +59,7 @@ const Webpay = ({route, navigation}) => {
   return (
     <Background>
       <Stack w={'100%'} h={'100%'}>
-        {url !== '' &&
+        {url !== '' && (
           <WebView
             originWhitelist={['*']}
             mixedContentMode={'always'}
@@ -68,13 +72,15 @@ const Webpay = ({route, navigation}) => {
               body: `token_ws=${tokenWs}`,
             }}
             onNavigationStateChange={e => {
-              console.log(e.url)
+              console.log(e.url);
               if (e.url.indexOf('http://10.0.2.2:3131/api/webpay/exit') > -1) {
                 toast.show({
-                  description: 'Cancelaste el pago'
-                })
+                  description: 'Cancelaste el pago',
+                });
                 navigation.reset({index: 0, routes: [{name: 'HomeScreen'}]});
-              } else if (e.url.indexOf('http://10.0.2.2:3131/api/webpay/success') > -1) {
+              } else if (
+                e.url.indexOf('http://10.0.2.2:3131/api/webpay/success') > -1
+              ) {
                 toast.show({
                   description:
                     '¡Felicidades! ingresa de nuevo para disfrutar premium',
@@ -87,7 +93,7 @@ const Webpay = ({route, navigation}) => {
             }}
             injectedJavaScript={jsCode}
           />
-        }
+        )}
       </Stack>
     </Background>
   );

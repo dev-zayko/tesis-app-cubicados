@@ -1,10 +1,9 @@
-import React from "react";
-import {createNativeStackNavigator} from "@react-navigation/native-stack";
-import {Stack} from "native-base";
-import ListStores from "../../components/List/Stores";
-import ListProducts from "../../components/List/Products";
-import {useSelector} from "react-redux";
-import PhaseQuoterResult from "../../components/Forms/Quoter/PhaseResult";
+import React from 'react';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import ListStores from '../../components/List/Stores';
+import ListProducts from '../../components/List/Products';
+import {useSelector} from 'react-redux';
+import PhaseQuoterResult from '../../components/Forms/Quoter/PhaseResult';
 
 const QuoterStack = createNativeStackNavigator();
 
@@ -17,24 +16,19 @@ const QuoterStackScreen = props => {
       initialRouteName={'ListStores'}>
       <QuoterStack.Screen
         name={'ListStores'}
-        children={() => (
-          <ListStores stores={stores} />
-        )}
+        children={() => <ListStores stores={stores} />}
       />
       <QuoterStack.Screen
         name={'ListProduct'}
-        children={() => (
-          <ListProducts />
-        )}
+        children={() => <ListProducts />}
       />
       <QuoterStack.Screen
         name={'ResultQuoter'}
         alertConfirm={() => props.alertConfirm()}
-        children={() => (
-          <PhaseQuoterResult />
-        )} />
+        children={() => <PhaseQuoterResult />}
+      />
     </QuoterStack.Navigator>
   );
-}
+};
 
 export default QuoterStackScreen;

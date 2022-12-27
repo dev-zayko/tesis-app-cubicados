@@ -6,20 +6,21 @@ import {
   FormControl,
   HStack,
   Icon,
-  Input,
   Radio,
   Select,
   Stack,
-  Text,
   useToast,
   VStack,
 } from 'native-base';
-import {useFocusEffect, useRoute} from '@react-navigation/native';
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native';
 import {Formik} from 'formik';
 import colors from 'native-base/src/theme/base/colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {styles} from '../../../../../styles';
-import {useNavigation} from '@react-navigation/native';
 import {useDispatch} from 'react-redux';
 import {setMeasures} from '../../../../../../redux/features/Utility/utilitySlice';
 import {setTypeProduct} from '../../../../../../redux/features/Quoter/quoterSlice';
@@ -134,7 +135,11 @@ const FormPhaseTwo = props => {
           <FormControl>
             <Stack space={4} backgroundColor={'white'} h={500}>
               <VStack>
-                <FormControl.Label><TextReact style={styles.textLarge}>Tipo de pintura</TextReact></FormControl.Label>
+                <FormControl.Label>
+                  <TextReact style={styles.textLarge}>
+                    Tipo de pintura
+                  </TextReact>
+                </FormControl.Label>
                 <Select
                   selectedValue={typePainting}
                   minWidth="200"
@@ -180,11 +185,11 @@ const FormPhaseTwo = props => {
                       ? 'Selecciona la pintura'
                       : typePainting === 'Esmalte al Agua' ||
                         typePainting === 'Latex'
-                        ? 'Agua'
-                        : typePainting === 'Esmalte Sintetico' ||
-                          typePainting === 'Óleo'
-                          ? 'Aguarras o diluyente sintetico'
-                          : 'Selecciona la pintura'}
+                      ? 'Agua'
+                      : typePainting === 'Esmalte Sintetico' ||
+                        typePainting === 'Óleo'
+                      ? 'Aguarras o diluyente sintetico'
+                      : 'Selecciona la pintura'}
                   </TextReact>
                 </FormControl.Label>
               </VStack>

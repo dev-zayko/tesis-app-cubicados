@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import {Platform, PermissionsAndroid} from 'react-native';
+import {PermissionsAndroid, Platform} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 
 export const useMyLocation = async () => {
@@ -21,7 +21,7 @@ export const useMyLocation = async () => {
           Geolocation.getCurrentPosition(
             info => {
               setPosition(info);
-              console.log('Res', info.coords.latitude)
+              console.log('Res', info.coords.latitude);
               const response = axios.get(
                 `https://maps.googleapis.com/maps/api/geocode/json?latlng=${info.coords.latitude},${info.coords.longitude}&key=AIzaSyCAEmEW-PI6yZbduCX8FF6eVtWcAPiL23g`,
               );

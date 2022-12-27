@@ -1,18 +1,23 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
-import ApiClient from "../../../services/connection/ApiClient";
-
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import ApiClient from '../../../services/connection/ApiClient';
 
 export const getProducts = createAsyncThunk(
   'products/get',
-  async ({token, storeName, typeProduct, region, commune}, {rejectedWithValue}) => {
+  async (
+    {token, storeName, typeProduct, region, commune},
+    {rejectedWithValue},
+  ) => {
     try {
-      const response = await ApiClient.post(`scrap/${(storeName).toLowerCase()}/product`, {
-        typeProduct: typeProduct,
-        region: region,
-        local: commune,
-      }, {
-        headers: {Authorization: `Bearer ${token}`},
-      },
+      const response = await ApiClient.post(
+        `scrap/${storeName.toLowerCase()}/product`,
+        {
+          typeProduct: typeProduct,
+          region: region,
+          local: commune,
+        },
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        },
       );
       const {data, status} = response.data;
       if (status !== 'empty') {
@@ -20,15 +25,12 @@ export const getProducts = createAsyncThunk(
       } else {
         return {data: 0};
       }
-
     } catch (error) {
       console.log(error.response.data);
       return rejectedWithValue(error.response.data);
     }
   },
 );
-
-
 
 const quoterSlice = createSlice({
   name: 'products',
@@ -50,7 +52,7 @@ const quoterSlice = createSlice({
     },
     setProductSelect: (state, action) => {
       state.productSelect = action.payload;
-    }
+    },
   },
   extraReducers: builder => {
     builder.addCase(getProducts.pending, (state, action) => {
@@ -67,8 +69,9 @@ const quoterSlice = createSlice({
       }),
       builder.addCase(getProducts.rejected, (state, action) => {
         state.loading = false;
-      })
+      });
   },
 });
-export const {setTypeProduct, resetListProducts, setProductSelect} = quoterSlice.actions;
-export default quoterSlice.reducer
+export const {setTypeProduct, resetListProducts, setProductSelect} =
+  quoterSlice.actions;
+export default quoterSlice.reducer;

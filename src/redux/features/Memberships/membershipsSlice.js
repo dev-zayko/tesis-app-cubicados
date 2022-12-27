@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import ApiClient from '../../../services/connection/ApiClient';
 
 export const getMemberships = createAsyncThunk(
@@ -7,21 +7,25 @@ export const getMemberships = createAsyncThunk(
     try {
       const response = await ApiClient.get('membership/all');
       const {data} = response.data;
-      return {data: data}
+      return {data: data};
     } catch (error) {
       console.log(error);
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 
 export const getDays = createAsyncThunk(
   'membership/days',
   async ({token}, {rejectWithValue}) => {
     try {
-      const response = await ApiClient.post('membership/days', {}, {
-        headers: {Authorization: `Bearer ${token}`},
-      });
+      const response = await ApiClient.post(
+        'membership/days',
+        {},
+        {
+          headers: {Authorization: `Bearer ${token}`},
+        },
+      );
       const {restDays} = response.data;
       if (restDays <= 0) {
         return {data: 0};
@@ -32,7 +36,7 @@ export const getDays = createAsyncThunk(
       console.log(error);
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 
 export const getPopularMemberships = createAsyncThunk(
@@ -46,7 +50,7 @@ export const getPopularMemberships = createAsyncThunk(
       console.log(error);
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 
 const membershipsSlice = createSlice({
@@ -56,7 +60,7 @@ const membershipsSlice = createSlice({
     dayRest: '',
     loading: 0,
     popularMemberships: 0,
-    loadingDays: false
+    loadingDays: false,
   },
   extraReducers: builder => {
     builder.addCase(getMemberships.pending, (state, action) => {
@@ -65,7 +69,6 @@ const membershipsSlice = createSlice({
       builder.addCase(getMemberships.fulfilled, (state, action) => {
         state.loading = false;
         state.memberships = action.payload.data;
-
       }),
       builder.addCase(getMemberships.rejected, (state, action) => {
         state.loading = false;
@@ -89,8 +92,8 @@ const membershipsSlice = createSlice({
       }),
       builder.addCase(getPopularMemberships.rejected, (state, action) => {
         state.loading = false;
-      })
-  }
-})
+      });
+  },
+});
 
-export default membershipsSlice.reducer 
+export default membershipsSlice.reducer;

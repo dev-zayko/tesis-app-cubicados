@@ -1,4 +1,4 @@
-import messaging, {firebase} from '@react-native-firebase/messaging';
+import messaging from '@react-native-firebase/messaging';
 
 const checkToken = async () => {
   const fcmToken = await messaging().getToken();

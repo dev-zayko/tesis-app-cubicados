@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useRef} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
 //Components Native base
 import {
   CheckIcon,
@@ -35,9 +35,12 @@ import {filter} from 'lodash';
 import moment from 'moment';
 import Container from '../../components/Container';
 import AlertDelete from '../../components/AlertDialog/Rooms/AlertDelete';
+import AlertPremium from '../../components/AlertDialog/AlertPremium';
+import ModalMemberships from '../../components/Modals/Membership';
 
-const Rooms = ({route}) => {
+const Rooms = ({route, navigation}) => {
   const [update, setUpdate] = useState(false);
+  const [isOpenAlertPr, setIsOpenAlerPr] = useState(false);
   const [status, setStatus] = useState('');
   const [fullData, setFullData] = useState(0);
   const [actionModal, setActionModal] = useState(0);
@@ -47,6 +50,7 @@ const Rooms = ({route}) => {
   const [nameConstruction, setNameConstruction] = useState('');
   const [isOpenAlertLimited, setIsOpenAlertLimited] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isOpenModalPlan, setIsOpenModalPlan] = useState(false);
   const dispatch = useDispatch();
   const {isOpen, onOpen, onClose} = useDisclose();
   const {project} = route.params?.params;
@@ -54,16 +58,17 @@ const Rooms = ({route}) => {
   const {user} = useSelector(state => ({...state.auth}));
   const {rooms} = useSelector(state => ({...state.room}));
   const cancelRef = useRef(null);
-  const [isOpenAlertDl, setIsOpenDl] = useState(false)
+  const [isOpenAlertDl, setIsOpenDl] = useState(false);
   const cancelRefAlert = useRef(null);
   const onCloseAlertDl = () => setIsOpenDl(false);
 
   useFocusEffect(
     useCallback(() => {
-      dispatch(getRoomsByProject({token: user, idProject: project.id}))
-        .then((response) => {
+      dispatch(getRoomsByProject({token: user, idProject: project.id})).then(
+        response => {
           setFullData(response.payload);
-        });
+        },
+      );
     }, [update]),
   );
   const onUpdate = () => {
@@ -86,10 +91,10 @@ const Rooms = ({route}) => {
   const onSearch = text => {
     const formattedQuery = text;
     const data = filter(rooms, roomForm => {
-      return contains(roomForm, formattedQuery)
+      return contains(roomForm, formattedQuery);
     });
     setFullData(data);
-  }
+  };
   const contains = (proyect, query) => {
     const {name} = proyect;
     let reg = new RegExp(query, 'gi');
@@ -98,17 +103,17 @@ const Rooms = ({route}) => {
     } else {
       return false;
     }
-  }
+  };
   const onSearchMonth = text => {
-    setSelectMonth(text)
+    setSelectMonth(text);
     const formattedQuery = text;
     const data = filter(rooms, roomForm => {
-      return containsMonth(roomForm, formattedQuery)
+      return containsMonth(roomForm, formattedQuery);
     });
     if (data.length === 0) {
       toast.show({
-        description: 'No hay proyectos en este mes'
-      })
+        description: 'No hay proyectos en este mes',
+      });
     } else {
       setFullData(data);
     }
@@ -123,15 +128,15 @@ const Rooms = ({route}) => {
     }
   };
   const onSearchYear = text => {
-    setSelectYear(text)
+    setSelectYear(text);
     const formattedQuery = text;
     const data = filter(fullData, projectForm => {
-      return containsYear(projectForm, formattedQuery)
+      return containsYear(projectForm, formattedQuery);
     });
     if (data.length === 0) {
       toast.show({
-        description: 'No hay proyectos en este año'
-      })
+        description: 'No hay proyectos en este año',
+      });
     } else {
       setFullData(data);
     }
@@ -149,7 +154,7 @@ const Rooms = ({route}) => {
     setSelectMonth('');
     setSelectYear('');
     setFullData(rooms);
-  }
+  };
   return (
     <Background>
       <Container>
@@ -168,15 +173,29 @@ const Rooms = ({route}) => {
               placeholder="BUSCAR"
               backgroundColor={'gray.200'}
               onChangeText={onSearch}
-              InputLeftElement={<Icon as={<Ionicons name="search-circle" />} size={10} color={colors.orange} />} />
+              InputLeftElement={
+                <Icon
+                  as={<Ionicons name="search-circle" />}
+                  size={10}
+                  color={colors.orange}
+                />
+              }
+            />
           </Stack>
           <HStack space={2} justifyContent={'center'}>
-            <Select selectedValue={selectMonth} backgroundColor={'gray.200'} minWidth={"120"} borderRadius={20} accessibilityLabel="MES" placeholder="MES" _selectedItem={{
-              bg: "otange.500",
-              endIcon: <CheckIcon size="5" color={'white'} />
-            }} mt={1}
-              onValueChange={(itemValue) => onSearchMonth(itemValue)}>
-
+            <Select
+              selectedValue={selectMonth}
+              backgroundColor={'gray.200'}
+              minWidth={'120'}
+              borderRadius={20}
+              accessibilityLabel="MES"
+              placeholder="MES"
+              _selectedItem={{
+                bg: 'otange.500',
+                endIcon: <CheckIcon size="5" color={'white'} />,
+              }}
+              mt={1}
+              onValueChange={itemValue => onSearchMonth(itemValue)}>
               <Select.Item label="Enero" value="01" />
               <Select.Item label="Febrero" value="02" />
               <Select.Item label="Marzo" value="03" />
@@ -190,11 +209,20 @@ const Rooms = ({route}) => {
               <Select.Item label="Noviembre" value="11" />
               <Select.Item label="Diciembre" value="12" />
             </Select>
-            <Select backgroundColor={'gray.200'} fontSize={14} selectedValue={selectYear} minWidth={"100"} borderRadius={20} accessibilityLabel="AÑO" placeholder="AÑO" _selectedItem={{
-              bg: "orange.500",
-              endIcon: <CheckIcon size="5" color={'white'} />
-            }} mt={1}
-              onValueChange={(itemValue) => onSearchYear(itemValue)}>
+            <Select
+              backgroundColor={'gray.200'}
+              fontSize={14}
+              selectedValue={selectYear}
+              minWidth={'100'}
+              borderRadius={20}
+              accessibilityLabel="AÑO"
+              placeholder="AÑO"
+              _selectedItem={{
+                bg: 'orange.500',
+                endIcon: <CheckIcon size="5" color={'white'} />,
+              }}
+              mt={1}
+              onValueChange={itemValue => onSearchYear(itemValue)}>
               <Select.Item label="2022" value="2022" />
               <Select.Item label="2023" value="2023" />
               <Select.Item label="2024" value="2024" />
@@ -205,7 +233,12 @@ const Rooms = ({route}) => {
             </Select>
             <Stack justifyContent={'center'}>
               <TouchableOpacity onPress={() => cleanFilter()}>
-                <Icon as={Entypo} name={"erase"} size={'8'} color={colors.orange} />
+                <Icon
+                  as={Entypo}
+                  name={'erase'}
+                  size={'8'}
+                  color={colors.orange}
+                />
               </TouchableOpacity>
             </Stack>
           </HStack>
@@ -223,7 +256,11 @@ const Rooms = ({route}) => {
                 <Text fontSize={'lg'}>No tienes Habitaciones creadas</Text>
                 <Text fontSize={'lg'}>¡Crea una!</Text>
               </Stack>
-              <Stack w={280} alignItems={'center'} h={100} justifyContent={'flex-end'}>
+              <Stack
+                w={280}
+                alignItems={'center'}
+                h={100}
+                justifyContent={'flex-end'}>
                 <HandDownAnimation />
               </Stack>
             </Stack>
@@ -233,12 +270,17 @@ const Rooms = ({route}) => {
               project={project}
               edit={() => {
                 setActionModal(2);
-                setIsOpenModal(true)
+                setIsOpenModal(true);
               }}
-              roomSelect={(room) => setRoomSelect(room)}
+              isOpenAlertPr={() => {
+                setIsOpenAlerPr(true);
+              }}
+              roomSelect={room => setRoomSelect(room)}
               delete={() => setIsOpenDl(true)}
               update={() => setUpdate(!update)}
-              alertLimited={(statusData, typeConstruction) => onOpenAlertLimited(statusData, typeConstruction)}
+              alertLimited={(statusData, typeConstruction) =>
+                onOpenAlertLimited(statusData, typeConstruction)
+              }
               onActionSheet={roomsSelect => onSelectProject(roomsSelect)}
             />
           )}
@@ -248,9 +290,8 @@ const Rooms = ({route}) => {
             style={[styles.buttonLogin, styles.shadow]}
             onPress={() => {
               setActionModal(1);
-              setIsOpenModal(true)
-            }
-            }>
+              setIsOpenModal(true);
+            }}>
             <HStack space={2}>
               <Icon
                 as={Ionicons}
@@ -292,7 +333,24 @@ const Rooms = ({route}) => {
             project={project.id}
             onCloseAll={() => onUpdate()}
             toast={toast}
-            alertLimited={(statusData, typeConstruction) => onOpenAlertLimited(statusData, typeConstruction)}
+            alertLimited={(statusData, typeConstruction) =>
+              onOpenAlertLimited(statusData, typeConstruction)
+            }
+          />
+        )}
+        {isOpenModalPlan && (
+          <ModalMemberships
+            navigation={navigation}
+            onClose={() => setIsOpenModalPlan(false)}
+            isOpen={isOpenModalPlan}
+          />
+        )}
+        {isOpenAlertPr && (
+          <AlertPremium
+            cancelRef={cancelRef}
+            isOpen={isOpenAlertPr}
+            isOpenPlan={() => setIsOpenModalPlan(true)}
+            onClose={() => setIsOpenAlerPr(!isOpenAlertPr)}
           />
         )}
       </>

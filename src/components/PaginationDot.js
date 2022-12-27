@@ -1,6 +1,6 @@
 import React from 'react';
 
-import {View, StyleSheet} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {colors} from './colors';
 
 function genCircleStyle(size) {
@@ -39,7 +39,7 @@ function Dot({isActive, activeDotSize, inActiveDotSize, dotSeparator}) {
   );
 }
 
-const PaginationDot = (props) => {
+const PaginationDot = props => {
   const {
     style,
     length,
@@ -64,7 +64,7 @@ const PaginationDot = (props) => {
       {Array(length).fill(0).map(renderItem)}
     </View>
   );
-}
+};
 
 export default PaginationDot;
 
@@ -88,4 +88,3 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
 });
-

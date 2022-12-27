@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import {useDispatch} from 'react-redux';
+import React from 'react';
 
 const useFormatMoney = price => {
   if (price !== 0) {

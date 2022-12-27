@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 import {Flex, Stack} from 'native-base';
-import {styles} from "./styles";
-import {colors} from "./colors";
+import {styles} from './styles';
+import {colors} from './colors';
 
 const Container = ({children}) => {
   return (
@@ -15,7 +15,8 @@ const Container = ({children}) => {
         alignItems={'center'}>
         {children}
       </Stack>
-    </Flex>);
-}
+    </Flex>
+  );
+};
 
 export default Container;

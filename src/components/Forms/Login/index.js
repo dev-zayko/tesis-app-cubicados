@@ -22,17 +22,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 //Component react native
-import {ActivityIndicator, Alert, TouchableOpacity} from 'react-native';
+import {ActivityIndicator, Linking, TouchableOpacity} from 'react-native';
 //Hook redux
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 //Yup for validation of input
 import * as yup from 'yup';
 //Login with Google service
 import AuthGoogleService from '../../../services/auth/authGoogleService';
 //Slice login auth
 import {login} from '../../../redux/features/Auth/authSlice';
-import {Linking} from 'react-native';
-import {GoogleSigninButton} from '@react-native-google-signin/google-signin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FormLogin = ({navigation}) => {
@@ -45,10 +43,8 @@ const FormLogin = ({navigation}) => {
   };
 
   const onGoogleRegister = () => {
-
     AuthGoogleService.signIn().then(response => {
       if (response) {
-
         // navigation.navigate('EmailVerification', {
         //   params: {
         //     userEmail: response.user.email
@@ -56,9 +52,10 @@ const FormLogin = ({navigation}) => {
         // });
       }
     });
-    AuthGoogleService.isSignedIn().then(response => {console.log(response)});
+    AuthGoogleService.isSignedIn().then(response => {
+      console.log(response);
+    });
     AuthGoogleService.signOut();
-
   };
   //Esquema de validacion
   const loginValidationSchema = yup.object().shape({
@@ -67,30 +64,31 @@ const FormLogin = ({navigation}) => {
 
   useEffect(() => {
     async function checkRemember() {
-      if (await AsyncStorage.getItem('check') === 'yes') {
+      if ((await AsyncStorage.getItem('check')) === 'yes') {
         const email = await AsyncStorage.getItem('userEmail');
-        const password = await AsyncStorage.getItem('userPass')
+        const password = await AsyncStorage.getItem('userPass');
         const user = {email, password};
         setCheckLogin(true);
-        dispatch(login({user, navigation, toast})).then(() => setCheckLogin(false));
+        dispatch(login({user, navigation, toast})).then(() =>
+          setCheckLogin(false),
+        );
       }
     }
     checkRemember();
-
   }, []);
 
-  const checkRemember = async (check) => {
+  const checkRemember = async check => {
     if (check === false) {
       await AsyncStorage.removeItem('check');
     } else {
       await AsyncStorage.setItem('check', 'yes');
     }
-  }
+  };
   return (
     <>
-      {checkLogin === true ?
+      {checkLogin === true ? (
         <ActivityIndicator size={'large'} color={'orange'} />
-        :
+      ) : (
         <Formik
           initialValues={{email: '', password: ''}}
           validationSchema={loginValidationSchema}
@@ -188,7 +186,11 @@ const FormLogin = ({navigation}) => {
                   touched={touched.password}
                 />
                 <HStack space={10}>
-                  <TouchableOpacity style={styles.buttonForgotPass} onPress={() => Linking.openURL('https://cubicados.cl/recuperarcuenta')}>
+                  <TouchableOpacity
+                    style={styles.buttonForgotPass}
+                    onPress={() =>
+                      Linking.openURL('https://cubicados.cl/recuperarcuenta')
+                    }>
                     <Text underline color={colors.orange}>
                       Olvido la contraseña?
                     </Text>
@@ -198,7 +200,8 @@ const FormLogin = ({navigation}) => {
                       value={'yes'}
                       colorScheme={'orange'}
                       accessibilityLabel="remember"
-                      onChange={(values) => checkRemember(values)} />
+                      onChange={values => checkRemember(values)}
+                    />
                     <Text>Recordarme</Text>
                   </HStack>
                 </HStack>
@@ -234,8 +237,7 @@ const FormLogin = ({navigation}) => {
             </Stack>
           )}
         </Formik>
-
-      }
+      )}
     </>
   );
 };

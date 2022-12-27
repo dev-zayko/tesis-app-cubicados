@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../../screens/Home';
 import {colors} from '../../components/colors';
@@ -6,11 +6,7 @@ import {useDisclose, useToast} from 'native-base';
 import MainMenu from '../../components/MainMenu';
 import ProfileStackScreen from '../Profile/ProfileStackScreen';
 import CubicStackScreen from '../Cubicator';
-import {useDispatch, useSelector} from 'react-redux';
-import {useFocusEffect} from '@react-navigation/native';
-import {stateUser} from '../../redux/actions/utility';
-import {Alert} from 'react-native';
-import {useState} from 'react';
+import {useDispatch} from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 

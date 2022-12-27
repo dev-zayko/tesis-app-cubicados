@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {HStack, Icon, IconButton, Stack, Text} from 'native-base';
 import {styles} from '../styles';
 import {colors} from '../colors';
@@ -72,7 +72,7 @@ const OptionAccount = props => {
             <Text fontSize={'sm'}>Membresia</Text>
           </Stack>
         </Stack>
-        {userData.membership_id !== 1 &&
+        {userData.membership_id !== 1 && (
           <Stack
             w={'26%'}
             h={100}
@@ -99,7 +99,7 @@ const OptionAccount = props => {
               <Text fontSize={'sm'}>Mi Resumen</Text>
             </Stack>
           </Stack>
-        }
+        )}
       </HStack>
       {/*{showModal &&*/}
       {/* <ModalProfile show={showModal} close={() => setShowModal(false)}/>}*/}

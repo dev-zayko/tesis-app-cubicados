@@ -2,25 +2,14 @@ import React from 'react';
 //Moments for date
 import moment from 'moment';
 //Components React Native
-import {FlatList, TouchableOpacity, Text as TextReact} from 'react-native';
+import {FlatList, Text as TextReact, TouchableOpacity} from 'react-native';
 //Components and hooks Native Base
-import {
-  Box,
-  Center,
-  Divider,
-  Heading,
-  HStack,
-  Image,
-  Stack,
-  Text,
-  VStack,
-} from 'native-base';
+import {Box, Heading, HStack, Stack, VStack} from 'native-base';
 //Colors
-import {colors} from '../../colors';
 import {styles} from '../../styles';
 
 const ListPaidMemberships = props => {
-  console.log(props.paidMemberships)
+  console.log(props.paidMemberships);
   return (
     <FlatList
       data={props.paidMemberships}
@@ -37,8 +26,7 @@ const ListPaidMemberships = props => {
               _web={{
                 shadow: 2,
                 borderWidth: 1,
-              }}
-            >
+              }}>
               <HStack space={12} justifyContent={'center'} h={140}>
                 <VStack justifyContent={'center'} space={1}>
                   <Heading size="sm" ml="-1" color={'light.700'}>
@@ -57,12 +45,21 @@ const ListPaidMemberships = props => {
                     Hora pago
                   </Heading>
                 </VStack>
-                <Stack alignItems={'flex-end'} space={1} justifyContent={'center'}>
+                <Stack
+                  alignItems={'flex-end'}
+                  space={1}
+                  justifyContent={'center'}>
                   <TextReact style={[styles.subtitleText, styles.textMedium]}>
                     {item.buy_order}
                   </TextReact>
                   <TextReact style={[styles.subtitleText, styles.textMedium]}>
-                    $ {item.neto_amount === 0 ? item.neto_amount : ((item.neto_amount.toFixed(0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'))}
+                    ${' '}
+                    {item.neto_amount === 0
+                      ? item.neto_amount
+                      : item.neto_amount
+                          .toFixed(0)
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                   </TextReact>
                   <TextReact style={[styles.subtitleText, styles.textMedium]}>
                     {item.memberships.days}
@@ -76,11 +73,14 @@ const ListPaidMemberships = props => {
                 </Stack>
               </HStack>
               <Stack alignItems={'center'}>
-                <TextReact style={styles.subtitleText}> Cubicados © {moment().format('YYYY')}</TextReact>
+                <TextReact style={styles.subtitleText}>
+                  {' '}
+                  Cubicados © {moment().format('YYYY')}
+                </TextReact>
               </Stack>
             </Box>
           </Box>
-        </TouchableOpacity >
+        </TouchableOpacity>
       )}
       keyExtractor={(value, index) => index.toString()}
     />

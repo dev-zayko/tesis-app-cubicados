@@ -1,5 +1,5 @@
 import ProjectService from '../../services/projects/projectService';
-import {GET_PROJECTS, SET_MESSAGE} from './type';
+import {GET_PROJECTS} from './type';
 import utilityService from '../../services/utility/utilityService';
 
 export const getProject = token => dispatch => {

@@ -1,5 +1,4 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import {Alert} from 'react-native';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import ApiClient from '../../../services/connection/ApiClient';
 
 export const createRoom = createAsyncThunk(
@@ -61,14 +60,17 @@ export const updateRoom = createAsyncThunk(
   'rooms/update',
   async ({token, idProject, idRoom, name}, {rejectWithValue}) => {
     try {
-      const response = await ApiClient.put('room/update', {
-        idProject: idProject,
-        idRoom: idRoom,
-        name: name
-      },
+      const response = await ApiClient.put(
+        'room/update',
+        {
+          idProject: idProject,
+          idRoom: idRoom,
+          name: name,
+        },
         {
           headers: {Authorization: `Bearer ${token}`},
-        });
+        },
+      );
       console.log(response.data);
       const {data, status} = response.data;
       if (status !== 'success') {
@@ -80,30 +82,32 @@ export const updateRoom = createAsyncThunk(
       console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 
 export const deleteRoom = createAsyncThunk(
   'room/delete',
   async ({token, idProject, idRoom, toast}, {rejectWithValue}) => {
     try {
-      const response = await ApiClient.put('room/delete',
+      const response = await ApiClient.put(
+        'room/delete',
         {
           idProject: idProject,
-          idRoom: idRoom
+          idRoom: idRoom,
         },
         {
           headers: {Authorization: `Bearer ${token}`},
-        });
+        },
+      );
       const {data, status} = response.data;
       if (status === 'success') {
         toast.show({
-          description: 'Habitación eliminada'
+          description: 'Habitación eliminada',
         });
         return {id: data.id, status: status};
       } else {
         toast.show({
-          description: 'Ocurrio un error'
+          description: 'Ocurrio un error',
         });
         return {data: 0, status: status};
       }
@@ -111,7 +115,7 @@ export const deleteRoom = createAsyncThunk(
       console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
-  }
+  },
 );
 
 const roomsSlice = createSlice({
@@ -126,7 +130,7 @@ const roomsSlice = createSlice({
   reducers: {
     setRoomSelect: (state, action) => {
       state.roomSelect = action.payload;
-    }
+    },
   },
   extraReducers: builder => {
     builder.addCase(createRoom.pending, (state, action) => {
@@ -166,7 +170,9 @@ const roomsSlice = createSlice({
       }),
       builder.addCase(updateRoom.fulfilled, (state, action) => {
         state.loading = false;
-        const index = state.rooms.findIndex(rooms => rooms.id === action.payload.id);
+        const index = state.rooms.findIndex(
+          rooms => rooms.id === action.payload.id,
+        );
         state.rooms[index] = {
           ...state[index],
           ...action.payload,
@@ -181,9 +187,7 @@ const roomsSlice = createSlice({
       builder.addCase(deleteRoom.fulfilled, (state, action) => {
         state.loading = false;
         if (action.payload.status === 'success') {
-          let index = state.rooms.findIndex(
-            ({id}) => id === action.payload.id,
-          );
+          let index = state.rooms.findIndex(({id}) => id === action.payload.id);
           state.rooms.splice(index, 1);
           if (state.rooms.length === 0) {
             state.rooms = null;

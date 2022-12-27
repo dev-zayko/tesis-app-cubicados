@@ -1,18 +1,16 @@
 import React, {useState} from 'react';
 import {
-  Stack,
-  Heading,
   Box,
-  HStack,
-  VStack,
-  Image,
   Center,
-  Text,
-  Flex,
-  Icon,
-  HamburgerIcon,
-  Menu,
   Divider,
+  HamburgerIcon,
+  Heading,
+  HStack,
+  Image,
+  Menu,
+  Stack,
+  Text,
+  VStack,
 } from 'native-base';
 import {styles} from '../../styles';
 import {TouchableOpacity} from 'react-native';
@@ -87,7 +85,12 @@ const CollapsibleRooms = props => {
                   h={6}
                 />
                 <Heading size="md" ml="-1" color={'light.700'}>
-                  {neto_amount === 0 ? neto_amount : ((neto_amount.toFixed(0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'))}
+                  {neto_amount === 0
+                    ? neto_amount
+                    : neto_amount
+                        .toFixed(0)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                 </Heading>
               </HStack>
             </VStack>
@@ -124,28 +127,37 @@ const CollapsibleRooms = props => {
                       </TouchableOpacity>
                     );
                   }}>
-                  <Menu.Item onPressIn={() => props.onNavigate(id, countCubages)}>Cubicar</Menu.Item>
-                  {userData.membership_id !== 1 &&
+                  <Menu.Item
+                    onPressIn={() => props.onNavigate(id, countCubages)}>
+                    Cubicar
+                  </Menu.Item>
+                  {userData.membership_id !== 1 && (
                     <>
                       <Divider mt="1" w="100%" />
-                      <Menu.Item onPressIn={() => {
-                        props.edit();
-                        props.roomSelect(props?.rooms);
-                      }}>{`Editar ${name}`}</Menu.Item>
+                      <Menu.Item
+                        onPressIn={() => {
+                          props.edit();
+                          props.roomSelect(props?.rooms);
+                        }}>{`Editar ${name}`}</Menu.Item>
                       <Divider mt="1" w="100%" />
-                      <Menu.Item onPressIn={() => {
-                        props.delete();
-                        props.roomSelect(props?.rooms)
-                      }}>{`Eliminar ${name}`}</Menu.Item>
+                      <Menu.Item
+                        onPressIn={() => {
+                          props.delete();
+                          props.roomSelect(props?.rooms);
+                        }}>{`Eliminar ${name}`}</Menu.Item>
                     </>
-                  }
-
+                  )}
                 </Menu>
               </Box>
             </Stack>
           </HStack>
           <Stack h={165} marginTop={2} alignSelf={'center'}>
-            <ListCubages room={props?.rooms} project={props.project} updateRooms={() => props.updateRooms()} countCubages={(count) => setCountCubages(count)} />
+            <ListCubages
+              room={props?.rooms}
+              project={props.project}
+              updateRooms={() => props.updateRooms()}
+              countCubages={count => setCountCubages(count)}
+            />
           </Stack>
           <Stack alignSelf={'center'}>
             <Text color={'gray.500'} italic={true}>
@@ -170,8 +182,7 @@ const CollapsibleRooms = props => {
           _web={{
             shadow: 10,
             borderWidth: 1,
-          }}
-        >
+          }}>
           <Accordion
             activeSections={activeSections}
             touchableComponent={TouchableOpacity}
@@ -184,7 +195,7 @@ const CollapsibleRooms = props => {
             expandMultiple={false}
             //Duration for Collapse and expand
             onChange={setSections}
-          //setting the state of active sections
+            //setting the state of active sections
           />
         </Box>
       </Box>

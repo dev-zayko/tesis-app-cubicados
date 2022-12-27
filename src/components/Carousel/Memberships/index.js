@@ -1,6 +1,11 @@
-import {Stack, Text, Icon, VStack, HStack} from 'native-base';
-import React, {useState, useRef} from 'react';
-import {Dimensions, TouchableOpacity, Text as TextReact, Animated} from 'react-native';
+import {HStack, Icon, Stack, Text, VStack} from 'native-base';
+import React, {useRef, useState} from 'react';
+import {
+  Animated,
+  Dimensions,
+  Text as TextReact,
+  TouchableOpacity,
+} from 'react-native';
 import {colors} from '../../colors';
 import {styles} from '../../styles';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -8,11 +13,10 @@ import {useSelector} from 'react-redux';
 import Carousel from 'react-native-anchor-carousel';
 import PaginationDot from '../../PaginationDot';
 
-
 const INITIAL_INDEX = 0;
 const {width: windowWidth} = Dimensions.get('window');
 
-const CarouselMemberships = (props) => {
+const CarouselMemberships = props => {
   const {memberships} = useSelector(state => ({...state.memberships}));
   const scrollX = useRef(new Animated.Value(0)).current;
   const [count, setCount] = useState();
@@ -22,7 +26,6 @@ const CarouselMemberships = (props) => {
 
   const handleCarouselScrollEnd = (item, index) => {
     setCurrentIndex(index);
-
   };
 
   const renderItem = ({item, index}) => {
@@ -69,8 +72,8 @@ const CarouselMemberships = (props) => {
                   {id === 2
                     ? 'Mes'
                     : id === 3
-                      ? '3 Meses'
-                      : id === 4 && '1 Año'}
+                    ? '3 Meses'
+                    : id === 4 && '1 Año'}
                 </TextReact>
               </HStack>
               <Stack w={'100%'} alignItems={'center'}>
@@ -78,8 +81,8 @@ const CarouselMemberships = (props) => {
                   {id === 2
                     ? 'Plan básico para comenzar a vivir la experiencia cubicados.'
                     : id === 4
-                      ? 'Plan PRO para vivir experiencia completa.'
-                      : id === 3 &&
+                    ? 'Plan PRO para vivir experiencia completa.'
+                    : id === 3 &&
                       'Plan trimestral con ofertas de temporada, no te lo pierdas.'}
                 </TextReact>
               </Stack>
@@ -132,7 +135,9 @@ const CarouselMemberships = (props) => {
               </HStack>
             </VStack>
             <Stack w={'100%'} alignItems={'center'}>
-              <TouchableOpacity style={styles.buttonLogin} onPress={() => props.selectMemberships(final_amount, id)}>
+              <TouchableOpacity
+                style={styles.buttonLogin}
+                onPress={() => props.selectMemberships(final_amount, id)}>
                 <Text style={styles.textLogin}>Comprar plan</Text>
               </TouchableOpacity>
             </Stack>
@@ -153,16 +158,19 @@ const CarouselMemberships = (props) => {
           [{nativeEvent: {contentOffset: {x: scrollX}}}],
           {
             useNativeDriver: true,
-          }
+          },
         )}
         onScrollEnd={handleCarouselScrollEnd}
         containerWidth={windowWidth}
         ref={carouselRef}
       />
       <Stack w={'100%'}>
-        {memberships !== 0 &&
-          <PaginationDot currentIndex={currentIndex} length={memberships.length} />
-        }
+        {memberships !== 0 && (
+          <PaginationDot
+            currentIndex={currentIndex}
+            length={memberships.length}
+          />
+        )}
       </Stack>
     </Stack>
   );

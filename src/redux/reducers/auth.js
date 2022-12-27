@@ -4,9 +4,9 @@ import {
   LOGOUT,
   REGISTER_FAIL,
   REGISTER_SUCCESS,
-  TOKEN,
 } from '../actions/type';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 const user = AsyncStorage.getItem('user');
 const initialState = user
   ? {isLoggedIn: true, user}

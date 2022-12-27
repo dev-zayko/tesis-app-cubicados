@@ -1,6 +1,5 @@
-import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
-import ApiClient from "../../../services/connection/ApiClient";
-
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import ApiClient from '../../../services/connection/ApiClient';
 
 export const getStores = createAsyncThunk(
   'stores/get',
@@ -32,9 +31,7 @@ export const getPopularStores = createAsyncThunk(
       console.log(error.response.data);
       return rejectWithValue(error.response.data);
     }
-  }
-
-
+  },
 );
 
 const storesSlice = createSlice({
@@ -44,12 +41,12 @@ const storesSlice = createSlice({
     storeSelect: 0,
     loading: false,
     popularStores: 0,
-    status: ''
+    status: '',
   },
   reducers: {
     setStoreSelect: (state, action) => {
       state.storeSelect = action.payload;
-    }
+    },
   },
   extraReducers: builder => {
     builder.addCase(getStores.pending, (state, action) => {
@@ -71,8 +68,8 @@ const storesSlice = createSlice({
       }),
       builder.addCase(getPopularStores.rejected, (state, action) => {
         state.loading = false;
-      })
-  }
+      });
+  },
 });
 export const {setStoreSelect} = storesSlice.actions;
 export default storesSlice.reducer;

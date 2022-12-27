@@ -1,9 +1,9 @@
-import React, {useCallback, useState} from "react";
-import {RefreshControl, SafeAreaView, ScrollView, StyleSheet, Text} from "react-native";
+import React, {useCallback, useState} from 'react';
+import {RefreshControl, ScrollView, StyleSheet} from 'react-native';
 
-const wait = (timeout) => {
+const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
-}
+};
 
 const RefreshCall = ({children}) => {
   const [refreshing, setRefreshing] = useState(false);
@@ -18,17 +18,13 @@ const RefreshCall = ({children}) => {
       <ScrollView
         contentContainerStyle={styles.scrollView}
         refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }
-      >
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }>
         {children}
       </ScrollView>
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

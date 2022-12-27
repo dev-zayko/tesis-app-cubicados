@@ -1,13 +1,14 @@
-import React, {useCallback} from "react";
-import {Stack, VStack, Text, Divider, HStack, Image} from "native-base";
-import {Text as TextReact} from "react-native";
-import {useSelector} from "react-redux";
-import {colors} from "../../../../../colors";
-import {styles} from "../../../../../styles";
-import {useFocusEffect} from "@react-navigation/native";
+import React, {useCallback} from 'react';
+import {Divider, HStack, Image, Stack, Text, VStack} from 'native-base';
+import {Text as TextReact} from 'react-native';
+import {useSelector} from 'react-redux';
+import {styles} from '../../../../../styles';
+import {useFocusEffect} from '@react-navigation/native';
 
 const ResultSurface = props => {
-  const {count, m3, dosage, gravel, sand, water} = useSelector(state => ({...state.utility}));
+  const {count, m3, dosage, gravel, sand, water} = useSelector(state => ({
+    ...state.utility,
+  }));
 
   useFocusEffect(
     useCallback(() => {
@@ -68,24 +69,18 @@ const ResultSurface = props => {
         </HStack>
       </HStack>
       <Stack alignItems={'center'} w={'100%'}>
-        <TextReact style={styles.subtitleText}>Por cada Saco de 25 kg de Cemento, te recomendamos utilizar</TextReact>
+        <TextReact style={styles.subtitleText}>
+          Por cada Saco de 25 kg de Cemento, te recomendamos utilizar
+        </TextReact>
       </Stack>
       <VStack>
         <HStack space={12}>
-          <Text style={styles.textLarge}>
-            Grava
-          </Text>
+          <Text style={styles.textLarge}>Grava</Text>
           <HStack space={2}>
-            <Text style={styles.textLarge}>
-              Arena
-            </Text>
-            <Text fontSize={13}>
-              (5mm)
-            </Text>
+            <Text style={styles.textLarge}>Arena</Text>
+            <Text fontSize={13}>(5mm)</Text>
           </HStack>
-          <Text style={styles.textLarge}>
-            Agua
-          </Text>
+          <Text style={styles.textLarge}>Agua</Text>
         </HStack>
         <HStack space={20}>
           <Image
@@ -122,16 +117,22 @@ const ResultSurface = props => {
           }}
         />
         <Stack w={'100%'} alignItems={'center'}>
-          <TextReact style={[styles.subtitleText, styles.textMedium]}>Considera baldes de 10 litros</TextReact>
+          <TextReact style={[styles.subtitleText, styles.textMedium]}>
+            Considera baldes de 10 litros
+          </TextReact>
         </Stack>
         <Stack h={200}>
           <TextReact style={[styles.subtitleText, styles.textMedium]}>
-            **Las dosificaciones indicada y la cantidad de cemento calculada es una cantidad minima. No nos hacemos responsable por los resultados obtenidos luego de la aplicación de los productos ni por la calidad de áridos u otras materias primas utilizadas, condiciones de humedad existentes.
+            **Las dosificaciones indicada y la cantidad de cemento calculada es
+            una cantidad minima. No nos hacemos responsable por los resultados
+            obtenidos luego de la aplicación de los productos ni por la calidad
+            de áridos u otras materias primas utilizadas, condiciones de humedad
+            existentes.
           </TextReact>
         </Stack>
       </VStack>
     </Stack>
   );
-}
+};
 
 export default ResultSurface;

@@ -1,14 +1,5 @@
 import React, {useCallback} from 'react';
-import {
-  Box,
-  HStack,
-  Image,
-  Center,
-  Heading,
-  Text,
-  VStack,
-  Stack,
-} from 'native-base';
+import {Box, Center, Heading, HStack, Image, Stack, VStack} from 'native-base';
 import {FlatList, TouchableOpacity} from 'react-native';
 import {colors} from '../../colors';
 import {useDispatch, useSelector} from 'react-redux';
@@ -19,7 +10,6 @@ import {
   setConstructionTypeSelect,
 } from '../../../redux/features/ConstructionType/constructionTypeSlice';
 import {resetConstructions} from '../../../redux/features/Construction/constructionSlice';
-import {color} from 'react-native-reanimated';
 import {setTypeProduct} from '../../../redux/features/Quoter/quoterSlice';
 
 const ListConstructionType = ({navigation}) => {
@@ -36,8 +26,9 @@ const ListConstructionType = ({navigation}) => {
     }, []),
   );
 
-  const onNavigate = (constructionType) => {
-    constructionType.name === 'Superficie' && dispatch(setTypeProduct('Cemento'));
+  const onNavigate = constructionType => {
+    constructionType.name === 'Superficie' &&
+      dispatch(setTypeProduct('Cemento'));
     dispatch(setConstructionTypeSelect(constructionType));
     navigation.navigate('Construction', {
       params: {

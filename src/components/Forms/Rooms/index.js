@@ -1,14 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 //Formik for forms
 import {Formik} from 'formik';
 //Components Native Base
-import {
-  FormControl,
-  Input,
-  Text,
-  VStack,
-  WarningOutlineIcon,
-} from 'native-base';
+import {FormControl, Input, VStack, WarningOutlineIcon} from 'native-base';
 //Hook redux
 import {useDispatch, useSelector} from 'react-redux';
 //Slice Update project
@@ -19,7 +13,7 @@ import {Alert} from 'react-native';
 const FormRooms = props => {
   //#region Hooks
   const dispatch = useDispatch();
-  console.log(props?.project)
+  console.log(props?.project);
   //Esta constante user guarda el token que proviene del authSlice
   const {user} = useSelector(state => ({...state.auth}));
   //# endregion hooks
@@ -29,25 +23,27 @@ const FormRooms = props => {
     if (values.name === props?.room.name) {
       props.closeSubmit();
     } else {
-      console.log(props?.project)
-      dispatch(updateRoom({
-        token: user,
-        idProject: props?.project,
-        idRoom: props?.room.id,
-        name: values.name
-      })).then((response) => {
-        if (response.payload.status === 'duplicated') {
-          Alert.alert(
-            "Aviso",
-            "Recuerda el nombre de la habitación es unico, por favor escoge otro",
-            [
-              {text: "OK", onPress: () => props.cancelSubmit()}
-            ]
-          );
-        } else {
-          props.closeSubmit();
-        }
-      }).catch((error) => console.log(error.response.data));
+      console.log(props?.project);
+      dispatch(
+        updateRoom({
+          token: user,
+          idProject: props?.project,
+          idRoom: props?.room.id,
+          name: values.name,
+        }),
+      )
+        .then(response => {
+          if (response.payload.status === 'duplicated') {
+            Alert.alert(
+              'Aviso',
+              'Recuerda el nombre de la habitación es unico, por favor escoge otro',
+              [{text: 'OK', onPress: () => props.cancelSubmit()}],
+            );
+          } else {
+            props.closeSubmit();
+          }
+        })
+        .catch(error => console.log(error.response.data));
     }
   };
 

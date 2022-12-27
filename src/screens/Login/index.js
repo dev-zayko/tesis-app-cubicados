@@ -1,8 +1,6 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
-import {Flex, HStack, Image, Text} from 'native-base';
+import {Flex, Image} from 'native-base';
 import Background from '../../components/Background';
-import {colors} from '../../components/colors';
 import FormLogin from '../../components/Forms/Login';
 
 const Login = ({navigation}) => {

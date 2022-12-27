@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import ApiClient from '../../../services/connection/ApiClient';
 
 export const getRegions = createAsyncThunk(
@@ -23,48 +23,56 @@ export const getCommunes = createAsyncThunk(
   'communes/get',
   async ({region, store, toast}, {rejectedWithValue}) => {
     try {
-      const response = await ApiClient.post(`city/${(store).toLowerCase()}`, {}, {
-        params: {
-          region: region
-        }
-      });
+      const response = await ApiClient.post(
+        `city/${store.toLowerCase()}`,
+        {},
+        {
+          params: {
+            region: region,
+          },
+        },
+      );
       const {data, status} = response.data;
       if (status !== 'empty') {
         return {data: data, status: status};
       } else {
         toast.show({
-          description: 'No hay tiendas en esta región'
-        })
+          description: 'No hay tiendas en esta región',
+        });
         return {data: 0, status: status};
       }
     } catch (error) {
       console.log(error);
       return rejectedWithValue(error.response.data);
     }
-  }
-)
+  },
+);
 
 export const matchCommune = createAsyncThunk(
   'communes/match',
   async ({commune}, {rejectedWithValue}) => {
     try {
-      const response = await ApiClient.post('communes/match', {}, {
-        params: {
-          name: commune
-        }
-      })
+      const response = await ApiClient.post(
+        'communes/match',
+        {},
+        {
+          params: {
+            name: commune,
+          },
+        },
+      );
       const {status, data} = response.data;
       if (status === 'success') {
-        return {data: data}
+        return {data: data};
       } else {
-        return {data: null}
+        return {data: null};
       }
     } catch (error) {
       console.log(error.response.data);
       return rejectedWithValue(error.response.data);
     }
-  }
-)
+  },
+);
 
 const locationSlice = createSlice({
   name: 'location',
@@ -76,7 +84,7 @@ const locationSlice = createSlice({
     loadingCommunes: false,
     loadingCommuneSelect: false,
     statusRegions: '',
-    statusCommunes: ''
+    statusCommunes: '',
   },
   extraReducers: builder => {
     builder.addCase(getRegions.pending, (state, action) => {
@@ -108,9 +116,8 @@ const locationSlice = createSlice({
       }),
       builder.addCase(matchCommune.rejected, (state, action) => {
         state.loadingCommuneSelect = false;
-      })
-  }
+      });
+  },
 });
 
 export default locationSlice.reducer;
-

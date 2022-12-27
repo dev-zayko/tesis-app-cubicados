@@ -1,5 +1,5 @@
 import React from 'react';
-import {Flex, Stack, Text, Box} from 'native-base';
+import {Box, Flex, Stack, Text} from 'native-base';
 import Background from '../../components/Background';
 import {styles} from '../../components/styles';
 import {colors} from '../../components/colors';
@@ -26,8 +26,8 @@ const Cubicator = () => {
               {constructionTypeSelect === 0
                 ? 'Construcción'
                 : constructionTypeSelect.id === 1
-                  ? 'Superficie'
-                  : 'Revestimiento'}
+                ? 'Superficie'
+                : 'Revestimiento'}
             </Text>
             <TextReact style={styles.subtitleText}>
               Escoge el tipo de construcción

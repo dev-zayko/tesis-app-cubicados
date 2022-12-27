@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Background from '../../components/Background';
 import {Flex} from 'native-base';
 import FormSignUp from '../../components/Forms/SignUp';
+
 const SignUp = ({navigation}) => {
   return (
     <Background>

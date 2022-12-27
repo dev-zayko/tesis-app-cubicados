@@ -15,7 +15,7 @@ const signIn = async () => {
     console.log(error);
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
       // user cancelled the login flow
-      console.log('Se cancelo el usuario')
+      console.log('Se cancelo el usuario');
     } else if (error.code === statusCodes.IN_PROGRESS) {
       // operation (e.g. sign in) is in progress already
     } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
@@ -40,11 +40,11 @@ const isSignedIn = async () => {
 
 const getCurrentUser = async () => {
   return await GoogleSignin.getCurrentUser();
-}
+};
 
 export default {
   signIn,
   signOut,
   isSignedIn,
-  getCurrentUser
+  getCurrentUser,
 };

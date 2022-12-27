@@ -1,17 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {AlertDialog, Button, Center, useToast} from 'native-base';
 import {useDispatch, useSelector} from 'react-redux';
 import {deleteProject} from '../../../redux/features/Projects/projectSlice';
+import {ActivityIndicator} from 'react-native';
 
 const AlertDelete = props => {
   const dispatch = useDispatch();
   const {user} = useSelector(state => ({...state.auth}));
   const {loading} = useSelector(state => ({...state.project}));
   const toast = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onDeleteProject = () => {
+    setIsSubmitting(true);
     dispatch(deleteProject({id: props.projectSelect.id, token: user}))
       .then(() => {
+        setIsSubmitting(false);
         props.onClose();
         props.update();
       })
@@ -44,18 +48,22 @@ const AlertDelete = props => {
                 ref={props.cancelRef}>
                 Cancelar
               </Button>
-              {loading === true ?
+              {isSubmitting === true ? (
                 <>
                   <Button colorScheme="danger" disabled={true}>
                     <ActivityIndicator size={'small'} color={'white'} />
                   </Button>
-                </> :
+                </>
+              ) : (
                 <>
-                  <Button colorScheme="danger" onPress={() => onDeleteProject()}>
+                  <Button
+                    colorScheme="danger"
+                    onPress={() => onDeleteProject()}>
                     Eliminar
                   </Button>
                 </>
-              }            </Button.Group>
+              )}
+            </Button.Group>
           </AlertDialog.Footer>
         </AlertDialog.Content>
       </AlertDialog>

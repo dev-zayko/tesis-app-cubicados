@@ -12,13 +12,21 @@ const AlertDelete = props => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onDeleteCubages = () => {
-    setIsSubmitting(true)
-    dispatch(deleteCubage({token: user, idCubage: props.idCubage, idMaterial: props.idMaterial, idProject: props.idProject, idRoom: props.idRoom})).then(() => {
+    setIsSubmitting(true);
+    dispatch(
+      deleteCubage({
+        token: user,
+        idCubage: props.idCubage,
+        idMaterial: props.idMaterial,
+        idProject: props.idProject,
+        idRoom: props.idRoom,
+      }),
+    ).then(() => {
       setIsSubmitting(false);
       props.update();
       props.onCloseAll();
       toast.show({
-        description: 'Cubicación Eliminada'
+        description: 'Cubicación Eliminada',
       });
     });
   };
@@ -44,18 +52,21 @@ const AlertDelete = props => {
                 ref={props.cancelRef}>
                 Cancelar
               </Button>
-              {isSubmitting === true ?
+              {isSubmitting === true ? (
                 <>
                   <Button colorScheme="danger" disabled={true}>
                     <ActivityIndicator size={'small'} color={'white'} />
                   </Button>
-                </> :
+                </>
+              ) : (
                 <>
-                  <Button colorScheme="danger" onPress={() => onDeleteCubages()}>
+                  <Button
+                    colorScheme="danger"
+                    onPress={() => onDeleteCubages()}>
                     Eliminar
                   </Button>
                 </>
-              }
+              )}
             </Button.Group>
           </AlertDialog.Footer>
         </AlertDialog.Content>

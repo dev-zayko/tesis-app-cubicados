@@ -1,4 +1,4 @@
-import {Stack, FlatList} from 'native-base';
+import {FlatList, Stack} from 'native-base';
 import React, {useState} from 'react';
 import CollapsibleRooms from '../../Collapsible/Rooms';
 import {useDispatch, useSelector} from 'react-redux';
@@ -14,11 +14,10 @@ const ListRooms = props => {
   const dispatch = useDispatch();
 
   const onNavigateAdd = (idRoom, countCubages) => {
-    console.log(userData.membership_id)
+    console.log(userData.membership_id);
     if (userData.membership_id === 1) {
       if (countCubages >= 2) {
-        props.alertLimited('limited', 'Cubicaciones')
-
+        props.alertLimited('limited', 'Cubicaciones');
       } else {
         dispatch(setRoomSelect(idRoom));
         navigation.navigate('Cubicator');
@@ -27,14 +26,27 @@ const ListRooms = props => {
       dispatch(setRoomSelect(idRoom));
       navigation.navigate('Cubicator');
     }
-
   };
   return (
     <Stack space={5} marginTop={5}>
       <FlatList
         data={props.rooms}
         renderItem={({item}) => (
-          <CollapsibleRooms collapsed={collapsed} rooms={item} updateRooms={() => props.update()} delete={() => props.delete()} roomSelect={(roomSelect) => props.roomSelect(roomSelect)} edit={() => props.edit()} project={props.project} onNavigate={(idRoom, countCubages) => onNavigateAdd(idRoom, countCubages)} />
+          <CollapsibleRooms
+            collapsed={collapsed}
+            rooms={item}
+            isOpenAlertPr={() => {
+              props.isOpenAlertPr();
+            }}
+            updateRooms={() => props.update()}
+            delete={() => props.delete()}
+            roomSelect={roomSelect => props.roomSelect(roomSelect)}
+            edit={() => props.edit()}
+            project={props.project}
+            onNavigate={(idRoom, countCubages) =>
+              onNavigateAdd(idRoom, countCubages)
+            }
+          />
         )}
         keyExtractor={(value, index) => index.toString()}
       />

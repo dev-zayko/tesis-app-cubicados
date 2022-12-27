@@ -4,16 +4,7 @@ import moment from 'moment';
 //Components React Native
 import {FlatList, TouchableOpacity} from 'react-native';
 //Components and hooks Native Base
-import {
-  Box,
-  Center,
-  Heading,
-  HStack,
-  Image,
-  Stack,
-  Text,
-  VStack,
-} from 'native-base';
+import {Box, Center, Heading, HStack, Image, Text, VStack} from 'native-base';
 //Colors
 import {colors} from '../../colors';
 
@@ -52,8 +43,7 @@ const ListProjects = props => {
               _web={{
                 shadow: 2,
                 borderWidth: 1,
-              }}
-            >
+              }}>
               <HStack>
                 <Box>
                   <Image
@@ -100,7 +90,12 @@ const ListProjects = props => {
                         h={6}
                       />
                       <Heading size="md" ml="-1" color={'light.700'}>
-                        {item.total_price === 0 ? item.total_price : ((item.total_price.toFixed(0)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.'))}
+                        {item.total_price === 0
+                          ? item.total_price
+                          : item.total_price
+                              .toFixed(0)
+                              .toString()
+                              .replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
                       </Heading>
                     </HStack>
                   </VStack>
