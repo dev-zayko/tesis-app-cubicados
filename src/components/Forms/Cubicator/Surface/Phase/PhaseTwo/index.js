@@ -42,7 +42,6 @@ const ResultSurface = props => {
       <VStack>
         <HStack space={20}>
           <Text style={styles.textLarge}>Necesitas</Text>
-          <Text style={styles.textLarge}>Rendimiento</Text>
         </HStack>
         <Divider
           my="2"
@@ -63,9 +62,6 @@ const ResultSurface = props => {
             h={10}
           />
           <TextReact style={styles.textLarge}>{count} sacos aprox.</TextReact>
-        </HStack>
-        <HStack>
-          <TextReact style={styles.textLarge}>{dosage} m3/saco</TextReact>
         </HStack>
       </HStack>
       <Stack alignItems={'center'} w={'100%'}>

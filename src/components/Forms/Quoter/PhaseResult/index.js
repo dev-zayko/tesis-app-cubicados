@@ -183,7 +183,7 @@ const PhaseQuoterResult = props => {
               constructionTypeSelect.id === 1
                 ? require('../../../../assets/icon-cubic-result.png')
                 : constructionTypeSelect.id === 2 &&
-                  require('../../../../assets/icon-area-m2.png')
+                require('../../../../assets/icon-area-m2.png')
             }
             alt="logo-m3"
             w={10}
@@ -207,7 +207,6 @@ const PhaseQuoterResult = props => {
                 ? 'Necesitas'
                 : constructionTypeSelect.id === 2 && 'Tipo de Pintura'}
             </Text>
-            <Text style={styles.textLarge}>Rendimiento</Text>
           </HStack>
           <Divider
             my="2"
@@ -226,7 +225,7 @@ const PhaseQuoterResult = props => {
                 constructionTypeSelect.id === 1
                   ? require('../../../../assets/icon-saco.png')
                   : constructionTypeSelect.id === 2 &&
-                    require('../../../../assets/icon-bote.png')
+                  require('../../../../assets/icon-bote.png')
               }
               alt="logo-saco"
               w={10}
@@ -236,14 +235,6 @@ const PhaseQuoterResult = props => {
               {constructionTypeSelect.id === 1
                 ? `${count} sacos aprox.`
                 : constructionTypeSelect.id === 2 && `${typePainting}`}
-            </TextReact>
-          </HStack>
-          <HStack>
-            <TextReact style={styles.textLarge}>
-              {constructionTypeSelect.id === 1
-                ? `${dosage} m3/saco`
-                : constructionTypeSelect.id === 2 &&
-                  `${performancePainting} m2/Litro`}{' '}
             </TextReact>
           </HStack>
         </HStack>

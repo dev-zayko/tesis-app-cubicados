@@ -48,7 +48,7 @@ const ResultPhaseThree = props => {
       <VStack>
         <HStack space={20}>
           <Text style={styles.textLarge}>Tipo de pintura</Text>
-          <Text style={styles.textLarge}>Rendimiento</Text>
+
         </HStack>
         <Divider
           my="1"
@@ -69,11 +69,6 @@ const ResultPhaseThree = props => {
             h={10}
           />
           <TextReact style={styles.textLarge}>{typePainting}</TextReact>
-        </HStack>
-        <HStack justifyContent={'center'}>
-          <TextReact style={styles.textLarge}>
-            {performancePainting} m2/Litro
-          </TextReact>
         </HStack>
       </HStack>
       <VStack>
@@ -134,7 +129,7 @@ const ResultPhaseThree = props => {
           {tool.id === 1
             ? `${countDiluent} cm3 equivale al 5% de diluyente por la cantidad de pintura`
             : tool.id === 2 &&
-              `${countDiluent} cm3 equivale al 10% de diluyente por la cantidad de pintura`}
+            `${countDiluent} cm3 equivale al 10% de diluyente por la cantidad de pintura`}
         </TextReact>
       </Stack>
     </Stack>
