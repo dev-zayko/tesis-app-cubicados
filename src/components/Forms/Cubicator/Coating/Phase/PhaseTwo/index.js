@@ -95,10 +95,7 @@ const FormPhaseTwo = props => {
           id: tool,
           name: tool === 1 ? 'Brocha o Rodillo' : 'Pistola',
         },
-        countPainting:
-          countPainting < 1
-            ? countPainting.toFixed(2)
-            : Math.round(countPainting),
+        countPainting: Math.round(countPainting),
         countDiluent: Math.round(countDiluent),
         performancePainting: performancePainting,
       }),
