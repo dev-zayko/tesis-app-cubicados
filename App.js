@@ -16,8 +16,10 @@ import {StatusBar} from 'react-native';
 import {theme} from './src/components/Theme/theme';
 //FirebaseService servicio que envia el token del dispositivo
 import firebaseService from './src/services/firebase/firebaseService';
+import {LogBox} from 'react-native';
 
 const App = () => {
+  LogBox.ignoreAllLogs(true);
   return (
     <StoreProvider store={store}>
       <SafeAreaProvider style={{flex: 1}}>

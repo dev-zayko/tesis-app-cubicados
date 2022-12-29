@@ -9,7 +9,7 @@ import {
   Text,
   VStack,
 } from 'native-base';
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import {
   BackHandler,
   Linking,
@@ -44,7 +44,7 @@ const Home = ({navigation}) => {
   const [coatingPopular, setCoatingPopular] = useState('');
 
   useFocusEffect(
-    useCallback(() => {
+    React.useCallback(() => {
       const backAction = () => {
         BackHandler.exitApp();
         return true;
@@ -399,10 +399,6 @@ const Home = ({navigation}) => {
                     {storePopular[1]?.name}: {storePopular[1]?.count}{' '}
                     cotizaciones
                   </Text>
-                  <Text fontSize={18} color={'white'}>
-                    {storePopular[0]?.name}: {storePopular[0]?.count}{' '}
-                    cotizaciones
-                  </Text>
                 </Stack>
                 <Stack
                   w={'100%'}
@@ -429,7 +425,7 @@ const Home = ({navigation}) => {
                 </Stack>
               </Stack>
             )}
-            <Stack w={'100%'} h={250}>
+            <Stack w={'100%'} h={270}>
               <Stack h={50} justifyContent={'center'} left={5}>
                 <Text fontSize={20} color={'white'}>
                   Marcas Populares

@@ -168,7 +168,7 @@ const ListProducts = () => {
                     renderItem={({item}) => (
                       <>
                         {typeProduct !== 'Cemento' &&
-                        !item.title.match(/(litros)|(5)|(4)/) ? (
+                        !item.title.match(/(litros)|(5)|(4)|(400)/) ? (
                           <CollapsibleProducts
                             products={item}
                             showItem={link => onViewProduct(link)}

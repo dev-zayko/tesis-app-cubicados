@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 //Backgrund Image
 import Background from '../../components/Background';
 //Components native base
@@ -33,13 +33,13 @@ const UserAccount = ({navigation}) => {
   const dispatch = useDispatch();
 
   useFocusEffect(
-    useCallback(() => {
+    React.useCallback(() => {
       dispatch(getCount({token: user})).then(response => {
         const {projects, cubages, rooms} = response.payload.data;
         ProgressCircleFormat(cubages, projects, rooms);
       });
       dispatch(getDays({token: user}));
-    }, [circleProgress.cubages]),
+    }, []),
   );
 
   const ProgressCircleFormat = (countCubages, countProjects, countRooms) => {

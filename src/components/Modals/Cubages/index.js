@@ -58,7 +58,7 @@ const ModalCubages = props => {
         idCubages: cubageSelect.id,
       }),
     ).then(() => {
-      props.updateList();
+      props.update();
     });
   };
   const onCloseAlertDl = () => setIsOpenAlertDl(false);
@@ -238,7 +238,7 @@ const ModalCubages = props => {
         <h1 style="color: ${colors.orange}">TOTAL: $ ${priceFormat(
           materials.price * cubageSelect.count,
         )}</h1>
-         <h3 style="color: ${colors.orange}">IVA: ${priceFormat(
+         <h3 style="color: ${colors.orange}">IVA: $ ${priceFormat(
           materials.price * cubageSelect.count * 0.19,
         )}</h3>
     </div>
@@ -491,7 +491,7 @@ const ModalCubages = props => {
                 IVA /19%
               </Text>
               <Text color="green.500" fontSize={'lg'}>
-                {priceFormat(materials.price * cubageSelect.count * 0.19)}
+                $ {priceFormat(materials.price * cubageSelect.count * 0.19)}
               </Text>
             </HStack>
             <HStack justifyContent={'center'} space={5}>
@@ -518,17 +518,15 @@ const ModalCubages = props => {
                 }>
                 {cubageSelect.finalized === true ? 'Finalizado' : 'Finalizar'}
               </Button>
-              {memberships.id !== 1 && (
-                <Button
-                  size="md"
-                  onPress={() => checkPermission()}
-                  colorScheme="danger"
-                  leftIcon={
-                    <Icon as={FontAwesome} name="file-pdf-o" size="sm" />
-                  }>
-                  Exportar a PDF
-                </Button>
-              )}
+              <Button
+                size="md"
+                onPress={() => checkPermission()}
+                colorScheme="danger"
+                leftIcon={
+                  <Icon as={FontAwesome} name="file-pdf-o" size="sm" />
+                }>
+                Exportar a PDF
+              </Button>
             </HStack>
           </VStack>
         </Modal.Body>

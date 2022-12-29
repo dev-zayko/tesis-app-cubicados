@@ -6,7 +6,10 @@ import {useDisclose, useToast} from 'native-base';
 import MainMenu from '../../components/MainMenu';
 import ProfileStackScreen from '../Profile/ProfileStackScreen';
 import CubicStackScreen from '../Cubicator';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
+import {useFocusEffect} from '@react-navigation/native';
+import {getState} from '../../redux/features/Auth/authSlice';
+import {Alert} from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -17,34 +20,37 @@ const TabBar = ({navigation}) => {
   const toast = useToast();
   const [reset, setReset] = useState(false);
   //Slice
-  // const { user } = useSelector((state) => ({ ...state.auth }));
+  const {user} = useSelector(state => ({...state.auth}));
   //# endregion
   function chargeMenu() {
     return <MainMenu open={isOpen} toggle={onToggle} navigator={navigation} />;
   }
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     if (currentToken !== null)
-  //       dispatch(stateUser(currentToken)).then(
-  //         (response) => {
-  //           const { description, id } = response;
-  //           if (id > 2) {
-  //             Alert.alert("Aviso", `Has sido ${description} avisanos si tienes consultas`);
-  //             navigation.navigate("LoginScreen");
-  //           }
-  //           setTimeout(() => {
-  //             setReset(!reset);
-  //           }, 5000);
-  //         },
-  //       ).catch((error) => {
-  //         console.log(error);
-  //         toast.show({
-  //           description: "Ocurrio un error",
-  //         });
-  //       });
-  //   }, [reset]),
-  // );
+  useFocusEffect(
+    React.useCallback(() => {
+      if (user !== null) {
+        dispatch(getState({tokenUs: user}))
+          .then(response => {
+            const {description, id} = response;
+            if (id > 2) {
+              Alert.alert(
+                'Aviso',
+                `Has sido ${description} avisanos si tienes consultas`,
+              );
+              navigation.navigate('LoginScreen');
+            }
+            setTimeout(() => {
+              setReset(!reset);
+            }, 8000);
+          })
+          .catch(error => {
+            toast.show({
+              description: 'Ocurrio un error',
+            });
+          });
+      }
+    }, [reset]),
+  );
   return (
     <Tab.Navigator
       tabBar={chargeMenu}

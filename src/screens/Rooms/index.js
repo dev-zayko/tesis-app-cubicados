@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, { useRef, useState} from 'react';
 //Components Native base
 import {
   CheckIcon,
@@ -63,7 +63,7 @@ const Rooms = ({route, navigation}) => {
   const onCloseAlertDl = () => setIsOpenDl(false);
 
   useFocusEffect(
-    useCallback(() => {
+    React.useCallback(() => {
       dispatch(getRoomsByProject({token: user, idProject: project.id})).then(
         response => {
           setFullData(response.payload);

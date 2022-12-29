@@ -74,11 +74,12 @@ export const login = createAsyncThunk(
                     },
                     {
                       text: 'OK',
-                      onPress: () => navigation.navigate('TabBar'),
+                      onPress: () => console.log('ok pressed'),
                     },
                   ],
                 );
                 return {user: token};
+                break;
               case 3:
                 Alert.alert(
                   'Aviso',
@@ -91,11 +92,12 @@ export const login = createAsyncThunk(
                     },
                     {
                       text: 'OK',
-                      onPress: () => navigation.navigate('TabBar'),
+                      onPress: () => console.log('Cancel Pressed'),
                     },
                   ],
                 );
             }
+            return {user: token};
             break;
           case 'isAdmin':
             break;
@@ -117,7 +119,27 @@ export const login = createAsyncThunk(
     }
   },
 );
-
+export const getState = createAsyncThunk(
+  'auth/state',
+  async ({tokenUs}, {rejectWithValue}) => {
+    try {
+      const response = await ApiClient.post(
+        'state/get',
+        {},
+        {
+          headers: {Authorization: `Bearer ${tokenUs}`},
+        },
+      );
+      const {status, token, verified} = response.data;
+      const decoded = jwt_decode(token);
+      let id = decoded.user.user_status_id;
+      return {idUserStatus: id};
+    } catch (error) {
+      console.log(error.response.data);
+      rejectWithValue(error.response.data);
+    }
+  },
+);
 export const register = createAsyncThunk(
   'auth/register',
   async ({navigation, newUser, toast}, {rejectWithValue}) => {

@@ -20,6 +20,7 @@ export const getProducts = createAsyncThunk(
         },
       );
       const {data, status} = response.data;
+      console.log('Productos ', response.data);
       if (status !== 'empty') {
         return {data: data};
       } else {

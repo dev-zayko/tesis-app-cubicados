@@ -131,22 +131,18 @@ const CollapsibleRooms = props => {
                     onPressIn={() => props.onNavigate(id, countCubages)}>
                     Cubicar
                   </Menu.Item>
-                  {userData.membership_id !== 1 && (
-                    <>
-                      <Divider mt="1" w="100%" />
-                      <Menu.Item
-                        onPressIn={() => {
-                          props.edit();
-                          props.roomSelect(props?.rooms);
-                        }}>{`Editar ${name}`}</Menu.Item>
-                      <Divider mt="1" w="100%" />
-                      <Menu.Item
-                        onPressIn={() => {
-                          props.delete();
-                          props.roomSelect(props?.rooms);
-                        }}>{`Eliminar ${name}`}</Menu.Item>
-                    </>
-                  )}
+                  <Divider mt="1" w="100%" />
+                  <Menu.Item
+                    onPressIn={() => {
+                      props.edit();
+                      props.roomSelect(props?.rooms);
+                    }}>{`Editar ${name}`}</Menu.Item>
+                  <Divider mt="1" w="100%" />
+                  <Menu.Item
+                    onPressIn={() => {
+                      props.delete();
+                      props.roomSelect(props?.rooms);
+                    }}>{`Eliminar ${name}`}</Menu.Item>
                 </Menu>
               </Box>
             </Stack>

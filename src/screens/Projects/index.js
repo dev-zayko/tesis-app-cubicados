@@ -1,4 +1,4 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 //Components Native base
 import {
   CheckIcon,
@@ -66,10 +66,11 @@ const Projects = ({navigation}) => {
   const cancelRef = useRef(null);
 
   useFocusEffect(
-    useCallback(() => {
+    React.useCallback(() => {
       setSelectYear('');
       setSelectMonth('');
       dispatch(getProjectByUser({token: user, toast: toast})).then(response => {
+        console.log('ok')
         setFullData(response.payload.data);
       });
     }, [update]),

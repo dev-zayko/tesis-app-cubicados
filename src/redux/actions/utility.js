@@ -9,11 +9,12 @@ export const getCount = token => dispatch => {
 export const stateUser = token => dispatch => {
   return UtilityService.stateUser(token).then(
     response => {
-      const {user_status} = response.data;
+      const {user_status} = response;
       dispatch({
         type: LOGIN_SUCCESS,
         payload: {user: response.data},
       });
+
       return Promise.resolve(user_status);
     },
     error => {

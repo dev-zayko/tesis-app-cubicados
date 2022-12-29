@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import {WebView} from 'react-native-webview';
 import {useFocusEffect} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -17,11 +17,12 @@ const Webpay = ({route, navigation}) => {
   const toast = useToast();
 
   useFocusEffect(
-    useCallback(() => {
+    React.useCallback(() => {
       dispatch(createTransaction({token: user, amount: amount})).then(
         response => {
           const {url, token} = response.payload.data;
           setUrl(url);
+          console.log(url);
           setTokenWs(token);
         },
       );
