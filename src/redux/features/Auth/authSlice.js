@@ -133,7 +133,15 @@ export const getState = createAsyncThunk(
       const {status, token, verified} = response.data;
       const decoded = jwt_decode(token);
       let id = decoded.user.user_status_id;
-      return {idUserStatus: id};
+      let description;
+      if (id === 2) {
+        description = 'Baneado';
+      } else if (id === 3) {
+        description = 'Suspendido';
+      } else if (id === 4) {
+        description = 'Bloqueado';
+      }
+      return {idUserStatus: id, description: description};
     } catch (error) {
       console.log(error.response.data);
       rejectWithValue(error.response.data);

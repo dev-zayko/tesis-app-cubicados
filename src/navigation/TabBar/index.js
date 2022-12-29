@@ -10,6 +10,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useFocusEffect} from '@react-navigation/native';
 import {getState} from '../../redux/features/Auth/authSlice';
 import {Alert} from 'react-native';
+import {logout} from '../../redux/actions/auth';
 
 const Tab = createBottomTabNavigator();
 
@@ -31,8 +32,9 @@ const TabBar = ({navigation}) => {
       if (user !== null) {
         dispatch(getState({tokenUs: user}))
           .then(response => {
-            const {description, id} = response;
-            if (id > 2) {
+            const {description, idUserStatus} = response.payload;
+
+            if (idUserStatus > 2) {
               Alert.alert(
                 'Aviso',
                 `Has sido ${description} avisanos si tienes consultas`,
@@ -44,9 +46,7 @@ const TabBar = ({navigation}) => {
             }, 8000);
           })
           .catch(error => {
-            toast.show({
-              description: 'Ocurrio un error',
-            });
+            console.log(error);
           });
       }
     }, [reset]),
